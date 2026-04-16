@@ -1,0 +1,105 @@
+<section class="dual-marquee section-space-two">
+
+  <!-- Top Marquee -->
+ <div class="marquee marquee--light">
+  <div class="marquee__track marquee__track--ltr">
+    {% assign top_items = section.blocks | where: 'type', 'top_item' %}
+
+    {% for i in (1..section.settings.sequence_repeat) %}
+      {% for block in top_items %}
+        <span>
+          {% if block.settings.link != blank %}
+            <a href="{{ block.settings.link }}">
+              {{ block.settings.text }}
+            </a>
+          {% else %}
+            {{ block.settings.text }}
+          {% endif %}
+        </span>
+      {% endfor %}
+    {% endfor %}
+  </div>
+</div>
+
+  <!-- Bottom Marquee -->
+  <div class="marquee marquee--green">
+  <div class="marquee__track marquee__track--rtl">
+    {% assign bottom_items = section.blocks | where: 'type', 'bottom_item' %}
+
+    {% for i in (1..section.settings.sequence_repeat) %}
+      {% for block in bottom_items %}
+        <span>
+          {% if block.settings.link != blank %}
+            <a href="{{ block.settings.link }}">
+              {{ block.settings.text }}
+            </a>
+          {% else %}
+            {{ block.settings.text }}
+          {% endif %}
+        </span>
+      {% endfor %}
+    {% endfor %}
+  </div>
+</div>
+
+
+</section>
+
+{% schema %}
+{
+  "name": "Dual Marquee",
+  "settings": [
+    {
+      "type": "range",
+      "id": "sequence_repeat",
+      "label": "Repeat marquee sequence",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    }
+  ],
+  "blocks": [
+    {
+      "type": "top_item",
+      "name": "Top Marquee Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Extended Warranty"
+        },
+        {
+        "type": "url",
+        "id": "link",
+        "label": "Link"
+      }
+      ]
+    },
+    {
+      "type": "bottom_item",
+      "name": "Bottom Marquee Text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "10-Day Free Trial"
+        },
+        {
+        "type": "url",
+        "id": "link",
+        "label": "Link"
+      }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Dual Marquee"
+    }
+  ]
+}
+{% endschema %}
+

@@ -1,0 +1,384 @@
+{%- comment -%} Assign: Preview section js fix {%- endcomment -%}
+{%- assign section_id = section.id | replace: '+', '' -%}
+
+{%- comment -%} Images: all placeholders {%- endcomment -%}
+{%- assign placeholder_image_id = 'RbbdzZBKRDY' -%}
+{%- assign placeholder_image_id_2 = 'DBtgQI-9XdM' -%}
+
+{% comment %} Images: responsive image widths {% endcomment %}
+{%- assign widths = '180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 1950, 2100, 2260, 2450, 2700, 3000, 3350, 3750, 4100' -%}
+
+{%- comment -%} Layout: has user entered measurement value into max-width field? {%- endcomment -%}
+{%- if section.settings.max_width contains 'px' or section.settings.max_width contains '%' -%}
+  {%- assign max_width = section.settings.max_width -%}
+{%- else -%}
+  {%- assign max_width = section.settings.max_width | append: 'px' -%}
+{%- endif -%}
+
+{%- capture minify -%}
+{%- comment -%} CSS {%- endcomment -%}
+<style>
+
+</style>
+
+<section id="DP--{{ section_id }}" class="DP--{{ section_id }} wsp-section__main wsp-section__section page-width">
+   {%- if section.settings.anchor_id != blank -%}
+   <div id="{{ section.settings.anchor_id | remove: '#' | handleize }}" class="wsp-section__anchor-id" style="height: 0; overflow: hidden;"></div>
+   {%- endif -%}
+   {% comment %} <div class="wsp-comparion-main-content">
+      <!-- LEFT: Product -->
+      <div class="wsp-section__product-column">
+          {% assign product = section.settings.product %}
+          {% if product %}
+          <div class="wsp-product-card">
+            <!-- Product image slider -->
+            <div class="wsp-product-gallery">
+                <button class="wsp-gallery-arrow wsp-gallery-arrow--prev" aria-label="Previous">‹</button>
+                <div class="wsp-product-gallery-track">
+                  {% for media in product.media %}
+                  {% if media.media_type == 'image' %}
+                  <div class="wsp-product-gallery__item">
+                      {{ media | image_url: width: 800 | image_tag }}
+                  </div>
+                  {% endif %}
+                  {% endfor %}
+                </div>
+                <button class="wsp-gallery-arrow wsp-gallery-arrow--next" aria-label="Next">›</button>
+            </div>
+            <div class="wsp-product-details">
+                <!-- Product info -->
+                <h3 class="wsp-product-title">{{ product.title }}</h3>
+                <div class="wsp-product-price">
+                  <span class="price-label">Price:</span>
+                  {% if product.compare_at_price > product.price %}
+                  <span class="compare">{{ product.compare_at_price | money }}</span>
+                  {% endif %}
+                  <span class="price">{{ product.price | money }}</span>
+                </div>
+                <div class="wsp-product-desc">
+                  <span class="product-style"><strong>Style: </strong>{{ section.settings.product_style }}</span>
+                  <span class="product-style"><strong>Technology: </strong>{{ section.settings.product_technology }}</span>
+                  <span class="product-style"><strong>Battery: </strong>{{ section.settings.product_battery }}</span>
+                </div>
+                <a href="{{ product.url }}" class="btn-primary">
+                View Product
+                </a>
+            </div>
+          </div>
+          {% endif %}
+      </div>
+      <!-- right comparision slider -->
+      <div class="wsp-section__background">
+          <div class="wsp-section__sizer wsp-section__grid wsp-section__grid--main">
+            <div class="wsp-section__comparison-wrapper">
+                <div class="wsp-section__compare">
+                  <div class="wsp-section__comparison__image wsp-section__comparison__image--right wsp-section__caption--right">
+                      {%- if section.settings.right_image -%}
+                      {%- capture sizes -%}
+                      {{ section.settings.base_width }}vw
+                      {%- endcapture -%}
+                      {{ section.settings.right_image | image_url: width: 5000 | image_tag:  widths: widths, sizes: sizes }}
+                      {%- else -%}
+                      <img src="https://cdn.shopify.com/s/files/1/0577/7673/4361/files/{{ placeholder_image_id }}_1200x.jpg"
+                        alt=""
+                        loading="lazy"
+                        width="1200"
+                        height="800">
+                      {%- endif -%}
+                      {%- if section.settings.right_caption != blank -%}
+                      <span class="wsp-section__caption wsp-section__caption--right">{{ section.settings.right_caption }}</span>
+                      {%- endif -%}
+                  </div>
+                  <div class="wsp-section__comparison__slider">
+                      {%- if section.settings.handle_image -%}
+                      {{ section.settings.handle_image | image_url: width: 800 | image_tag: loading: 'lazy' }}
+                      {%- else -%}
+                      <div class="wsp-section__comparison__slider-handle">
+                        <svg width="24" height="16" viewBox="0 0 24 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_1000_746)">
+                              <path d="M10 12L6 8L10 4" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                            </g>
+                            <g clip-path="url(#clip1_1000_746)">
+                              <path d="M14 12L18 8L14 4" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                            </g>
+                            <defs>
+                              <clipPath id="clip0_1000_746">
+                                  <rect width="16" height="16" fill="white"/>
+                              </clipPath>
+                              <clipPath id="clip1_1000_746">
+                                  <rect width="16" height="16" fill="white" transform="translate(8)"/>
+                              </clipPath>
+                            </defs>
+                        </svg>
+                      </div>
+                      {%- endif -%}
+                  </div>
+                  <div class="wsp-section__comparison__image wsp-section__comparison__overlay wsp-section__comparison__image--left">
+                      {%- if section.settings.left_image -%}
+                      {%- capture sizes -%}
+                      {{ section.settings.base_width }}vw
+                      {%- endcapture -%}
+                      {{ section.settings.left_image | image_url: width: 5000 | image_tag:  widths: widths, sizes: sizes }}
+                      {%- else -%}
+                      <img src="https://cdn.shopify.com/s/files/1/0577/7673/4361/files/{{ placeholder_image_id_2 }}.jpg"
+                        alt=""
+                        loading="lazy"
+                        width="1200"
+                        height="800">
+                      {%- endif -%}
+                      {%- if section.settings.left_caption != blank -%}
+                      <span class="wsp-section__caption wsp-section__caption--left">{{ section.settings.left_caption }}</span>
+                      {%- endif -%}
+                  </div>
+                </div>
+            </div>
+          </div>
+      </div>
+   </div> {% endcomment %}
+
+
+   <div class="wsp-tabs">
+
+  <!-- TAB NAVIGATION -->
+  <div class="wsp-tabs__nav">
+    {% for block in section.blocks %}
+      <button
+        class="wsp-tabs__btn {% if forloop.first %}is-active{% endif %}"
+        data-tab="tab-{{ block.id }}"
+        {{ block.shopify_attributes }}
+      >
+        {{ block.settings.tab_title }}
+      </button>
+    {% endfor %}
+  </div>
+
+  <!-- TAB PANELS -->
+  <div class="wsp-tabs__content">
+    {% for block in section.blocks %}
+      <div
+        id="tab-{{ block.id }}"
+        class="wsp-tabs__panel {% if forloop.first %}is-active{% endif %}"
+      >
+        <!-- TEMP CONTENT -->
+        <div style="padding: 40px; background: #f5f5f5;">
+          <strong>{{ block.settings.tab_title }}</strong>
+          <p>Tab content will go here</p>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+</div>
+
+</section>
+{%- endcapture -%}
+{{ minify | strip_newlines }}
+
+{% schema %}
+{
+  "name": "Comparison Tabs",
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tab_title",
+          "label": "Tab title",
+          "default": "Product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Comparison Tabs",
+      "blocks": [
+        { "type": "tab" },
+        { "type": "tab" }
+      ]
+    }
+  ]
+}
+
+{% endschema %}
+
+{%- comment -%} JSON Settings {%- endcomment -%}
+<script type="application/json" data-wsp-section="{{ section_id }}">
+  {
+    "id": {{ section_id | json }},
+    "animation": {{ section.settings.animation | json }}
+  }
+</script>
+
+{%- comment -%} JavaScript {%- endcomment -%}
+<script
+  data-wsp-section-js="{{ section_id }}"
+  type="module"
+  defer
+>
+  (function(){
+
+    const webPack = {
+      settings: {},
+
+      // ==========================
+      // ✅ ADDED: Product gallery slider
+      // ==========================
+      initProductGallery: function(section) {
+        const gallery = section.querySelector('.wsp-product-gallery');
+        if (!gallery) return;
+
+        const track = gallery.querySelector('.wsp-product-gallery-track');
+        const slides = gallery.querySelectorAll('.wsp-product-gallery__item');
+        const prev = gallery.querySelector('.wsp-gallery-arrow--prev');
+        const next = gallery.querySelector('.wsp-gallery-arrow--next');
+
+        if (!track || slides.length <= 1) return;
+
+        let index = 0;
+
+        function update() {
+          track.style.transform = `translateX(-${index * 100}%)`;
+        }
+
+        prev?.addEventListener('click', () => {
+          index = index > 0 ? index - 1 : slides.length - 1;
+          update();
+        });
+
+        next?.addEventListener('click', () => {
+          index = index < slides.length - 1 ? index + 1 : 0;
+          update();
+        });
+      },
+
+      load: function(section){
+
+        let isClicked = false;
+
+        const image = section.querySelector('.wsp-section__comparison__overlay');
+        const slider = section.querySelector('.wsp-section__comparison__slider');
+        const fullImage = section.querySelector('.wsp-section__compare');
+
+        if (!image || !slider || !fullImage) return;
+
+        const width = fullImage.offsetWidth;
+        const height = fullImage.offsetHeight;
+
+        function compare() {
+
+          image.style.width = '50%';
+
+          slider.addEventListener('mousedown', onSlideStart);
+          slider.addEventListener('touchstart', onSlideStart);
+
+          section.addEventListener('mouseup', () => (isClicked = false));
+          section.addEventListener('touchend', () => (isClicked = false));
+
+          section.addEventListener('mousemove', onSlideMove);
+          section.addEventListener('touchmove', onSlideMove);
+        }
+
+        function doSlide(x) {
+          image.style.width = x + 'px';
+          slider.style.left = image.offsetWidth - slider.offsetWidth / 2 + 'px';
+        }
+
+        function onSlideStart(event) {
+          event.preventDefault();
+          isClicked = true;
+        }
+
+        function onSlideMove(event) {
+          if (!isClicked) return;
+          doSlide(currentPosition(event));
+        }
+
+        function currentPosition(event = window.event) {
+          let pageX = event.pageX;
+
+          if (event.touches && event.touches.length) {
+            pageX = event.touches[0].pageX;
+          }
+
+          const rect = fullImage.getBoundingClientRect();
+          let x = pageX - rect.left;
+
+          if (x < 0) x = 0;
+          if (x > width) x = width;
+
+          return x;
+        }
+
+        compare();
+
+        // ==========================
+        // ✅ ADDED: Init product gallery
+        // ==========================
+        webPack.initProductGallery(section);
+
+        // --- existing optional features (untouched) ---
+        if (this.settings.animation !== 'none'){
+          const options = {
+            root: null,
+            rootMargin: '0px',
+            threshold: [0, 0.25, 0.5, 0.75, 1]
+          };
+          const observer = new IntersectionObserver(this.animateSection, options);
+          if (section) observer.observe(section);
+        }
+
+        const countdownTimer = section.querySelector('.wsp-section__clock');
+        if (countdownTimer){
+          webPack.initializeAndEnableClock(section);
+        }
+
+        const sliderBlock = section.querySelector('.wsp-section__slider-block');
+        if (sliderBlock){
+          webPack.enableSliderBlock(section);
+        }
+      },
+
+      unload: function(section){
+        section.classList.remove('wsp-section__animation-applied');
+      }
+    };
+
+    window.addEventListener('shopify:section:unload', function (e) {
+      const section = document.querySelector(`#DP--${e.detail.sectionId}`);
+      if (section) webPack.unload(section);
+    });
+
+    webPack.settings = JSON.parse(
+      document.querySelector('[data-wsp-section="{{ section_id }}"]').innerHTML
+    );
+
+    const sectionId = {{ section.id | json }};
+    const section = document.querySelector(`#DP--${sectionId}`);
+
+    if (sectionId === webPack.settings.id){
+      webPack.load(section);
+    }
+
+  })()
+
+  document.addEventListener('click', function (e) {
+  const btn = e.target.closest('.wsp-tabs__btn');
+  if (!btn) return;
+
+  const wrapper = btn.closest('.wsp-tabs');
+  const tabId = btn.dataset.tab;
+
+  wrapper.querySelectorAll('.wsp-tabs__btn').forEach(b =>
+    b.classList.remove('is-active')
+  );
+  wrapper.querySelectorAll('.wsp-tabs__panel').forEach(p =>
+    p.classList.remove('is-active')
+  );
+
+  btn.classList.add('is-active');
+  wrapper.querySelector('#' + tabId).classList.add('is-active');
+});
+</script>

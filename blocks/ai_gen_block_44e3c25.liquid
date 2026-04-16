@@ -1,0 +1,1263 @@
+{% doc %}
+  @prompt
+    Create a custom Shopify Dawn theme section named “Social Media Video Tabs (Embed)”.
+    
+    Section Layout:
+    • Center-aligned heading and subheading
+    • Pill-style tab switcher with three tabs:
+    – Instagram
+    – TikTok
+    – YouTube
+    
+    Tab Behavior:
+    • Switching tabs updates content without page reload
+    • Each tab displays videos belonging only to that social platform
+    
+    Video Card Design:
+    • Vertical reel-style cards (9:16 ratio)
+    • Rounded corners
+    • Soft shadow
+    • Category badge at top-left
+    • Title text at bottom
+    • Centered play icon overlay on thumbnail
+    
+    Video Interaction (IMPORTANT):
+    • On clicking the play icon:
+    – Replace the thumbnail inside the same card with the platform’s embedded player
+    – Use iframe embeds (Instagram, TikTok, YouTube)
+    – Video must play inside the same card area on the same page
+    – No popup, no modal, no page redirect
+    • Only one video can play at a time
+    • When another video is played or tab is changed, the previous embed is removed or stopped
+    
+    Carousel Behavior:
+    • Display 3 video cards at a time on desktop
+    • Horizontal carousel with left/right arrows
+    • Pagination dots below
+    • Swipe enabled on mobile
+    
+    Technical Requirements:
+    • Fully compatible with Shopify Dawn theme
+    • Use vanilla JavaScript only (no jQuery, no external libraries)
+    • Use iframe embeds following each platform’s official embed guidelines
+    • Lazy-load embeds only on play click (do not load iframes on page load)
+    • Fully responsive across devices
+    
+    Theme Editor Settings:
+    • Heading text
+    • Subheading text
+    • Platform selector per video (Instagram / TikTok / YouTube)
+    • Embed URL input per video
+    • Poster / thumbnail image
+    • Badge text
+    • Video title
+    
+    Styling Requirements:
+    • Premium, modern UI similar to social media story sections
+    • Smooth transitions when switching tabs and playing videos
+    • Play icon fades out when embed loads
+    • Layout and spacing should closely match high-end social video galleries
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-social-video-tabs-{{ ai_gen_id }} {
+    display: block;
+    width: 100%;
+    padding: 100px 0;
+    background-color: var(--color-cream);
+  }
+
+  .ai-social-video-tabs__container-{{ ai_gen_id }} {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .ai-social-video-tabs__header-{{ ai_gen_id }} {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .ai-social-video-tabs__heading-{{ ai_gen_id }} {
+    font-size: 60px;
+    color: var(--color-text-primary);
+    margin: 0 0 12px;
+    font-weight: 600;
+  }
+
+  .ai-social-video-tabs__subheading-{{ ai_gen_id }} {
+    font-size: var(--font-size-base);
+    color: var(--color-text-primary);
+    margin: 0;
+  }
+
+  .ai-social-video-tabs__tabs-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    width: max-content;
+    background-color: #FFFFFF;
+    padding: 8px;
+    font-family: var(--font-body-family) !important;
+    border-radius: 50px;
+    margin: 0 auto 40px auto;
+    -webkit-box-shadow: 0px 1px 10px 0px rgba(0,0,0,0.3); 
+  box-shadow: 0px 1px 10px 0px rgba(0,0,0,0.3);
+  }
+
+  .ai-social-video-tabs__tab-{{ ai_gen_id }} {
+    background: #fff;
+    border-radius: 30px;
+    font-family: var(--font-body-family) !important;
+    padding: 7px 30px;
+    border:none;
+    font-weight: 500;
+    font-size: var(--font-size-base);
+    color:#767676;
+  }
+
+  .ai-social-video-tabs__tab-{{ ai_gen_id }}:hover {
+    font-size: var(--font-size-base);
+    color:var(--color-text-primary);
+    background: #EFEDED;
+  }
+
+  .ai-social-video-tabs__tab-{{ ai_gen_id }}.active {
+   font-size: var(--font-size-base);
+    color:var(--color-text-primary);
+    background: #EFEDED;
+    -webkit-box-shadow: 0px 1px 10px 0px rgba(0,0,0,0.1); 
+    box-shadow: 0px 1px 10px 0px rgba(0,0,0,0.1);
+  }
+
+  .ai-social-video-tabs__content-{{ ai_gen_id }} {
+    position: relative;
+  }
+
+  .ai-social-video-tabs__panel-{{ ai_gen_id }} {
+    display: none;
+  }
+
+  .ai-social-video-tabs__panel-{{ ai_gen_id }}.active {
+    display: block;
+  }
+
+  .ai-social-video-tabs__carousel-{{ ai_gen_id }} {
+    position: relative;
+    overflow: hidden;
+    padding: 0 50px;
+  }
+
+  .ai-social-video-tabs__track-{{ ai_gen_id }} {
+    display: flex;
+    gap: 20px;
+    transition: transform 0.4s ease;
+  }
+
+  .ai-social-video-tabs__card-{{ ai_gen_id }} {
+    flex: 0 0 calc(33.333% - 14px);
+    height:450px;
+    position: relative;
+    border-radius: {{ block.settings.card_border_radius }}px;
+    overflow: hidden;
+    background-color: #f5f5f5;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .ai-social-video-tabs__card-{{ ai_gen_id }}:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  .ai-social-video-tabs__card-inner-{{ ai_gen_id }} {
+    position: relative;
+    width: 100%;
+    padding-bottom: 127.78%;
+    background-color: #000;
+  }
+
+  .ai-social-video-tabs__thumbnail-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .ai-social-video-tabs__badge-{{ ai_gen_id }} {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 6px 18px;
+    background-color:var(--color-cream);
+    color: var(--color-text-primary);
+    border-radius: 0 10px 0 10px;
+    font-size: 12px;
+    font-weight: 600;
+    z-index: 2;
+  }
+
+  .ai-social-video-tabs__play-overlay-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.3);
+    transition: opacity 0.3s ease;
+    z-index: 1;
+  }
+
+  .ai-social-video-tabs__play-icon-{{ ai_gen_id }} {
+    width: 64px;
+    height: 64px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+  }
+
+  .ai-social-video-tabs__card-{{ ai_gen_id }}:hover .ai-social-video-tabs__play-icon-{{ ai_gen_id }} {
+    transform: scale(1.1);
+  }
+
+  .ai-social-video-tabs__play-icon-{{ ai_gen_id }} svg {
+    width: 28px;
+    height: 28px;
+    fill: #121212;
+    margin-left: 4px;
+  }
+
+  .ai-social-video-tabs__title-{{ ai_gen_id }} {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 16px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 2;
+  }
+
+  .ai-social-video-tabs__iframe-{{ ai_gen_id }} {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .ai-social-video-tabs__arrow-{{ ai_gen_id }} {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background-color: #fff;
+    color: var(--color-text-primary);
+    -webkit-box-shadow: 0px 1px 10px 0px rgba(0,0,0,0.3); 
+  box-shadow: 0px 1px 10px 0px rgba(0,0,0,0.3);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+  }
+
+  .ai-social-video-tabs__arrow-{{ ai_gen_id }}:hover {
+    background-color: {{ block.settings.arrow_hover_bg }};
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  .ai-social-video-tabs__arrow-{{ ai_gen_id }}:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .ai-social-video-tabs__arrow-{{ ai_gen_id }}:disabled:hover {
+    transform: translateY(-50%) scale(1);
+  }
+
+  .ai-social-video-tabs__arrow--left-{{ ai_gen_id }} {
+    left: 0;
+  }
+
+  .ai-social-video-tabs__arrow--right-{{ ai_gen_id }} {
+    right: 0;
+  }
+
+  .ai-social-video-tabs__arrow-{{ ai_gen_id }} svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+  }
+
+  .ai-social-video-tabs__pagination-{{ ai_gen_id }} {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 24px;
+  }
+
+  .ai-social-video-tabs__dot-{{ ai_gen_id }} {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: {{ block.settings.dot_inactive_color }};
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+  }
+
+  .ai-social-video-tabs__dot-{{ ai_gen_id }}.active {
+    background-color: {{ block.settings.dot_active_color }};
+    width: 24px;
+    border-radius: 4px;
+  }
+
+  .ai-social-video-tabs__empty-{{ ai_gen_id }} {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+    font-size: 16px;
+  }
+
+  @media screen and (max-width: 989px) {
+    .ai-social-video-tabs__card-{{ ai_gen_id }} {
+      flex: 0 0 calc(50% - 10px);
+    }
+  .ai-social-video-tabs__heading-{{ ai_gen_id }} {
+    font-size: 42px;    
+  }
+    .ai-social-video-tabs__carousel-{{ ai_gen_id }} {
+      padding: 0 40px;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-social-video-tabs-{{ ai_gen_id }} {
+      padding: 40px 16px;
+    }
+
+    .ai-social-video-tabs__heading-{{ ai_gen_id }} {
+      font-size: {{ block.settings.heading_size | times: 0.8 }}px;
+    }
+
+    .ai-social-video-tabs__subheading-{{ ai_gen_id }} {
+      font-size: {{ block.settings.subheading_size | times: 0.9 }}px;
+    }
+
+    .ai-social-video-tabs__card-{{ ai_gen_id }} {
+      flex: 0 0 100%;
+    }
+
+    .ai-social-video-tabs__carousel-{{ ai_gen_id }} {
+      padding: 0 35px;
+    }
+
+    .ai-social-video-tabs__arrow-{{ ai_gen_id }} {
+      width: 32px;
+      height: 32px;
+    }
+
+    .ai-social-video-tabs__arrow-{{ ai_gen_id }} svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+{% endstyle %}
+
+<social-video-tabs-{{ ai_gen_id }} class="ai-social-video-tabs-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-social-video-tabs__container-{{ ai_gen_id }}">
+    {% if block.settings.heading != blank or block.settings.subheading != blank %}
+      <div class="ai-social-video-tabs__header-{{ ai_gen_id }}">
+        {% if block.settings.heading != blank %}
+          <h2 class="heading">{{ block.settings.heading }}</h2>
+        {% endif %}
+        {% if block.settings.subheading != blank %}
+          <p class="ai-social-video-tabs__subheading-{{ ai_gen_id }}">{{ block.settings.subheading }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="ai-social-video-tabs__tabs-{{ ai_gen_id }}">
+      <button class="ai-social-video-tabs__tab-{{ ai_gen_id }} active" data-tab="instagram">
+        Instagram
+      </button>
+      <button class="ai-social-video-tabs__tab-{{ ai_gen_id }}" data-tab="tiktok">
+        TikTok
+      </button>
+      <button class="ai-social-video-tabs__tab-{{ ai_gen_id }}" data-tab="youtube">
+        YouTube
+      </button>
+    </div>
+
+    <div class="ai-social-video-tabs__content-{{ ai_gen_id }}">
+      {% assign platforms = 'instagram,tiktok,youtube' | split: ',' %}
+      {% for platform in platforms %}
+        <div class="ai-social-video-tabs__panel-{{ ai_gen_id }} {% if platform == 'instagram' %}active{% endif %}" data-panel="{{ platform }}">
+          {% assign has_videos = false %}
+          {% for i in (1..9) %}
+            {% assign platform_key = 'video_' | append: i | append: '_platform' %}
+            {% if block.settings[platform_key] == platform %}
+              {% assign has_videos = true %}
+              {% break %}
+            {% endif %}
+          {% endfor %}
+
+          {% if has_videos %}
+            <div class="ai-social-video-tabs__carousel-{{ ai_gen_id }}">
+              <button class="ai-social-video-tabs__arrow-{{ ai_gen_id }} ai-social-video-tabs__arrow--left-{{ ai_gen_id }}" data-direction="prev" aria-label="Previous">
+                <svg viewBox="0 0 24 24">
+                  <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                </svg>
+              </button>
+
+              <div class="ai-social-video-tabs__track-{{ ai_gen_id }}">
+                {% for i in (1..9) %}
+                  {% assign platform_key = 'video_' | append: i | append: '_platform' %}
+                  {% assign url_key = 'video_' | append: i | append: '_url' %}
+                  {% assign thumbnail_key = 'video_' | append: i | append: '_thumbnail' %}
+                  {% assign badge_key = 'video_' | append: i | append: '_badge' %}
+                  {% assign title_key = 'video_' | append: i | append: '_title' %}
+
+                  {% if block.settings[platform_key] == platform and block.settings[url_key] != blank %}
+                    <div class="ai-social-video-tabs__card-{{ ai_gen_id }}" data-video-url="{{ block.settings[url_key] }}" data-platform="{{ platform }}">
+                      <div class="ai-social-video-tabs__card-inner-{{ ai_gen_id }}">
+                        {% if block.settings[thumbnail_key] %}
+                          <img
+                            src="{{ block.settings[thumbnail_key] | image_url: width: 600 }}"
+                            alt="{{ block.settings[title_key] | escape }}"
+                            class="ai-social-video-tabs__thumbnail-{{ ai_gen_id }}"
+                            loading="lazy"
+                          >
+                        {% else %}
+                          <div class="ai-social-video-tabs__thumbnail-{{ ai_gen_id }}" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                        {% endif %}
+
+                        {% if block.settings[badge_key] != blank %}
+                          <div class="ai-social-video-tabs__badge-{{ ai_gen_id }}">{{ block.settings[badge_key] }}</div>
+                        {% endif %}
+
+                        <div class="ai-social-video-tabs__play-overlay-{{ ai_gen_id }}">
+                          <div class="ai-social-video-tabs__play-icon-{{ ai_gen_id }}">
+                            <svg viewBox="0 0 24 24">
+                              <path d="M8 5v14l11-7z"/>
+                            </svg>
+                          </div>
+                        </div>
+
+                        {% if block.settings[title_key] != blank %}
+                          <div class="ai-social-video-tabs__title-{{ ai_gen_id }}">{{ block.settings[title_key] }}</div>
+                        {% endif %}
+                      </div>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
+
+              <button class="ai-social-video-tabs__arrow-{{ ai_gen_id }} ai-social-video-tabs__arrow--right-{{ ai_gen_id }}" data-direction="next" aria-label="Next">
+                <svg viewBox="0 0 24 24">
+                  <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                </svg>
+              </button>
+            </div>
+
+            <div class="ai-social-video-tabs__pagination-{{ ai_gen_id }}"></div>
+          {% else %}
+            <div class="ai-social-video-tabs__empty-{{ ai_gen_id }}">
+              No {{ platform | capitalize }} videos added yet. Add videos in the theme editor.
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</social-video-tabs-{{ ai_gen_id }}>
+
+<script>
+(function() {
+  class SocialVideoTabs{{ ai_gen_id }} extends HTMLElement {
+    constructor() {
+      super();
+      this.currentTab = 'instagram';
+      this.carousels = {};
+      this.activeVideo = null;
+    }
+
+    connectedCallback() {
+      this.initTabs();
+      this.initCarousels();
+      this.setupSwipe();
+    }
+
+    initTabs() {
+      const tabs = this.querySelectorAll('.ai-social-video-tabs__tab-{{ ai_gen_id }}');
+      const panels = this.querySelectorAll('.ai-social-video-tabs__panel-{{ ai_gen_id }}');
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const tabName = tab.dataset.tab;
+
+          this.stopActiveVideo();
+
+          tabs.forEach(t => t.classList.remove('active'));
+          panels.forEach(p => p.classList.remove('active'));
+
+          tab.classList.add('active');
+          const panel = this.querySelector(`[data-panel="${tabName}"]`);
+          if (panel) {
+            panel.classList.add('active');
+            this.currentTab = tabName;
+            this.updateCarousel(tabName);
+          }
+        });
+      });
+    }
+
+    initCarousels() {
+      const panels = this.querySelectorAll('.ai-social-video-tabs__panel-{{ ai_gen_id }}');
+
+      panels.forEach(panel => {
+        const platform = panel.dataset.panel;
+        const track = panel.querySelector('.ai-social-video-tabs__track-{{ ai_gen_id }}');
+        const leftArrow = panel.querySelector('.ai-social-video-tabs__arrow--left-{{ ai_gen_id }}');
+        const rightArrow = panel.querySelector('.ai-social-video-tabs__arrow--right-{{ ai_gen_id }}');
+        const pagination = panel.querySelector('.ai-social-video-tabs__pagination-{{ ai_gen_id }}');
+        const cards = panel.querySelectorAll('.ai-social-video-tabs__card-{{ ai_gen_id }}');
+
+        if (!track || cards.length === 0) return;
+
+        const cardsPerView = this.getCardsPerView();
+        const totalPages = Math.ceil(cards.length / cardsPerView);
+
+        this.carousels[platform] = {
+          track,
+          leftArrow,
+          rightArrow,
+          pagination,
+          cards,
+          currentIndex: 0,
+          cardsPerView,
+          totalPages
+        };
+
+        this.createPagination(platform);
+        this.updateCarousel(platform);
+
+        if (leftArrow) {
+          leftArrow.addEventListener('click', () => this.navigate(platform, 'prev'));
+        }
+
+        if (rightArrow) {
+          rightArrow.addEventListener('click', () => this.navigate(platform, 'next'));
+        }
+
+        cards.forEach(card => {
+          card.addEventListener('click', (e) => {
+            if (!card.querySelector('.ai-social-video-tabs__iframe-{{ ai_gen_id }}')) {
+              this.playVideo(card);
+            }
+          });
+        });
+      });
+
+      window.addEventListener('resize', () => {
+        Object.keys(this.carousels).forEach(platform => {
+          const carousel = this.carousels[platform];
+          const newCardsPerView = this.getCardsPerView();
+          if (carousel.cardsPerView !== newCardsPerView) {
+            carousel.cardsPerView = newCardsPerView;
+            carousel.totalPages = Math.ceil(carousel.cards.length / newCardsPerView);
+            carousel.currentIndex = 0;
+            this.createPagination(platform);
+            this.updateCarousel(platform);
+          }
+        });
+      });
+    }
+
+    getCardsPerView() {
+      if (window.innerWidth <= 749) return 1;
+      if (window.innerWidth <= 989) return 2;
+      return 3;
+    }
+
+    createPagination(platform) {
+      const carousel = this.carousels[platform];
+      if (!carousel || !carousel.pagination) return;
+
+      carousel.pagination.innerHTML = '';
+
+      for (let i = 0; i < carousel.totalPages; i++) {
+        const dot = document.createElement('button');
+        dot.className = 'ai-social-video-tabs__dot-{{ ai_gen_id }}';
+        if (i === 0) dot.classList.add('active');
+        dot.setAttribute('aria-label', `Go to page ${i + 1}`);
+        dot.addEventListener('click', () => {
+          carousel.currentIndex = i;
+          this.updateCarousel(platform);
+        });
+        carousel.pagination.appendChild(dot);
+      }
+    }
+
+    navigate(platform, direction) {
+      const carousel = this.carousels[platform];
+      if (!carousel) return;
+
+      if (direction === 'prev' && carousel.currentIndex > 0) {
+        carousel.currentIndex--;
+      } else if (direction === 'next' && carousel.currentIndex < carousel.totalPages - 1) {
+        carousel.currentIndex++;
+      }
+
+      this.updateCarousel(platform);
+    }
+
+    updateCarousel(platform) {
+      const carousel = this.carousels[platform];
+      if (!carousel) return;
+
+      const cardWidth = carousel.cards[0].offsetWidth;
+      const gap = 20;
+      const offset = -(carousel.currentIndex * carousel.cardsPerView * (cardWidth + gap));
+
+      carousel.track.style.transform = `translateX(${offset}px)`;
+
+      if (carousel.leftArrow) {
+        carousel.leftArrow.disabled = carousel.currentIndex === 0;
+      }
+
+      if (carousel.rightArrow) {
+        carousel.rightArrow.disabled = carousel.currentIndex >= carousel.totalPages - 1;
+      }
+
+      const dots = carousel.pagination.querySelectorAll('.ai-social-video-tabs__dot-{{ ai_gen_id }}');
+      dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === carousel.currentIndex);
+      });
+    }
+
+    playVideo(card) {
+      this.stopActiveVideo();
+
+      const videoUrl = card.dataset.videoUrl;
+      const platform = card.dataset.platform;
+      const cardInner = card.querySelector('.ai-social-video-tabs__card-inner-{{ ai_gen_id }}');
+      const playOverlay = card.querySelector('.ai-social-video-tabs__play-overlay-{{ ai_gen_id }}');
+
+      if (!videoUrl || !cardInner) return;
+
+      const embedUrl = this.getEmbedUrl(videoUrl, platform);
+      if (!embedUrl) return;
+
+      const iframe = document.createElement('iframe');
+      iframe.className = 'ai-social-video-tabs__iframe-{{ ai_gen_id }}';
+      iframe.src = embedUrl;
+      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+      iframe.allowFullscreen = true;
+
+      if (playOverlay) {
+        playOverlay.style.opacity = '0';
+        setTimeout(() => {
+          playOverlay.style.display = 'none';
+        }, 300);
+      }
+
+      cardInner.appendChild(iframe);
+      this.activeVideo = { card, iframe, playOverlay };
+    }
+
+    stopActiveVideo() {
+      if (this.activeVideo) {
+        const { card, iframe, playOverlay } = this.activeVideo;
+
+        if (iframe && iframe.parentNode) {
+          iframe.remove();
+        }
+
+        if (playOverlay) {
+          playOverlay.style.display = 'flex';
+          setTimeout(() => {
+            playOverlay.style.opacity = '1';
+          }, 10);
+        }
+
+        this.activeVideo = null;
+      }
+    }
+
+    getEmbedUrl(url, platform) {
+      if (platform === 'youtube') {
+        const videoId = this.extractYouTubeId(url);
+        return videoId ? `https://www.youtube.com/embed/${videoId}?autoplay=1` : null;
+      } else if (platform === 'instagram') {
+        return `${url}embed/?autoplay=1`;
+      } else if (platform === 'tiktok') {
+        const videoId = this.extractTikTokId(url);
+        return videoId ? `https://www.tiktok.com/embed/v2/${videoId}?autoplay=1` : null;
+      }
+      return null;
+    }
+
+    extractYouTubeId(url) {
+      const patterns = [
+        /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\?\/]+)/,
+        /youtube\.com\/shorts\/([^&\?\/]+)/
+      ];
+
+      for (const pattern of patterns) {
+        const match = url.match(pattern);
+        if (match) return match[1];
+      }
+      return null;
+    }
+
+    extractTikTokId(url) {
+      const match = url.match(/\/video\/(\d+)/);
+      return match ? match[1] : null;
+    }
+
+    setupSwipe() {
+      const panels = this.querySelectorAll('.ai-social-video-tabs__panel-{{ ai_gen_id }}');
+
+      panels.forEach(panel => {
+        const track = panel.querySelector('.ai-social-video-tabs__track-{{ ai_gen_id }}');
+        if (!track) return;
+
+        let startX = 0;
+        let currentX = 0;
+        let isDragging = false;
+
+        track.addEventListener('touchstart', (e) => {
+          startX = e.touches[0].clientX;
+          isDragging = true;
+        });
+
+        track.addEventListener('touchmove', (e) => {
+          if (!isDragging) return;
+          currentX = e.touches[0].clientX;
+        });
+
+        track.addEventListener('touchend', () => {
+          if (!isDragging) return;
+          isDragging = false;
+
+          const diff = startX - currentX;
+          const platform = panel.dataset.panel;
+
+          if (Math.abs(diff) > 50) {
+            if (diff > 0) {
+              this.navigate(platform, 'next');
+            } else {
+              this.navigate(platform, 'prev');
+            }
+          }
+        });
+      });
+    }
+  }
+
+  customElements.define('social-video-tabs-{{ ai_gen_id }}', SocialVideoTabs{{ ai_gen_id }});
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Social media video tabs",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section header"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Watch Our Stories"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Follow us on social media"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "min": 20,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading size",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "subheading_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Subheading size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "subheading_color",
+      "label": "Subheading color",
+      "default": "#666666"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Tab style"
+    },
+    {
+      "type": "color",
+      "id": "tab_active_bg",
+      "label": "Active background",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "tab_active_text",
+      "label": "Active text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "tab_inactive_bg",
+      "label": "Inactive background",
+      "default": "#f3f3f3"
+    },
+    {
+      "type": "color",
+      "id": "tab_inactive_text",
+      "label": "Inactive text",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "tab_hover_bg",
+      "label": "Hover background",
+      "default": "#e0e0e0"
+    },
+    {
+      "type": "color",
+      "id": "tab_hover_text",
+      "label": "Hover text",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Card style"
+    },
+    {
+      "type": "range",
+      "id": "card_border_radius",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "badge_bg_color",
+      "label": "Badge background",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "color",
+      "id": "arrow_bg_color",
+      "label": "Arrow background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "arrow_icon_color",
+      "label": "Arrow icon",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "arrow_hover_bg",
+      "label": "Arrow hover background",
+      "default": "#f3f3f3"
+    },
+    {
+      "type": "color",
+      "id": "dot_active_color",
+      "label": "Active dot",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "dot_inactive_color",
+      "label": "Inactive dot",
+      "default": "#d0d0d0"
+    },
+    {
+      "type": "header",
+      "content": "Video 1"
+    },
+    {
+      "type": "select",
+      "id": "video_1_platform",
+      "label": "Platform",
+      "options": [
+        { "value": "instagram", "label": "Instagram" },
+        { "value": "tiktok", "label": "TikTok" },
+        { "value": "youtube", "label": "YouTube" }
+      ],
+      "default": "instagram"
+    },
+    {
+      "type": "url",
+      "id": "video_1_url",
+      "label": "Video URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_1_thumbnail",
+      "label": "Thumbnail"
+    },
+    {
+      "type": "text",
+      "id": "video_1_badge",
+      "label": "Badge text"
+    },
+    {
+      "type": "text",
+      "id": "video_1_title",
+      "label": "Title"
+    },
+    {
+      "type": "header",
+      "content": "Video 2"
+    },
+    {
+      "type": "select",
+      "id": "video_2_platform",
+      "label": "Platform",
+      "options": [
+        { "value": "instagram", "label": "Instagram" },
+        { "value": "tiktok", "label": "TikTok" },
+        { "value": "youtube", "label": "YouTube" }
+      ],
+      "default": "instagram"
+    },
+    {
+      "type": "url",
+      "id": "video_2_url",
+      "label": "Video URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_2_thumbnail",
+      "label": "Thumbnail"
+    },
+    {
+      "type": "text",
+      "id": "video_2_badge",
+      "label": "Badge text"
+    },
+    {
+      "type": "text",
+      "id": "video_2_title",
+      "label": "Title"
+    },
+    {
+      "type": "header",
+      "content": "Video 3"
+    },
+    {
+      "type": "select",
+      "id": "video_3_platform",
+      "label": "Platform",
+      "options": [
+        { "value": "instagram", "label": "Instagram" },
+        { "value": "tiktok", "label": "TikTok" },
+        { "value": "youtube", "label": "YouTube" }
+      ],
+      "default": "tiktok"
+    },
+    {
+      "type": "url",
+      "id": "video_3_url",
+      "label": "Video URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_3_thumbnail",
+      "label": "Thumbnail"
+    },
+    {
+      "type": "text",
+      "id": "video_3_badge",
+      "label": "Badge text"
+    },
+    {
+      "type": "text",
+      "id": "video_3_title",
+      "label": "Title"
+    },
+    {
+      "type": "header",
+      "content": "Video 4"
+    },
+    {
+      "type": "select",
+      "id": "video_4_platform",
+      "label": "Platform",
+      "options": [
+        { "value": "instagram", "label": "Instagram" },
+        { "value": "tiktok", "label": "TikTok" },
+        { "value": "youtube", "label": "YouTube" }
+      ],
+      "default": "tiktok"
+    },
+    {
+      "type": "url",
+      "id": "video_4_url",
+      "label": "Video URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_4_thumbnail",
+      "label": "Thumbnail"
+    },
+    {
+      "type": "text",
+      "id": "video_4_badge",
+      "label": "Badge text"
+    },
+    {
+      "type": "text",
+      "id": "video_4_title",
+      "label": "Title"
+    },
+    {
+      "type": "header",
+      "content": "Video 5"
+    },
+    {
+      "type": "select",
+      "id": "video_5_platform",
+      "label": "Platform",
+      "options": [
+        { "value": "instagram", "label": "Instagram" },
+        { "value": "tiktok", "label": "TikTok" },
+        { "value": "youtube", "label": "YouTube" }
+      ],
+      "default": "youtube"
+    },
+    {
+      "type": "url",
+      "id": "video_5_url",
+      "label": "Video URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_5_thumbnail",
+      "label": "Thumbnail"
+    },
+    {
+      "type": "text",
+      "id": "video_5_badge",
+      "label": "Badge text"
+    },
+    {
+      "type": "text",
+      "id": "video_5_title",
+      "label": "Title"
+    },
+    {
+      "type": "header",
+      "content": "Video 6"
+    },
+    {
+      "type": "select",
+      "id": "video_6_platform",
+      "label": "Platform",
+      "options": [
+        { "value": "instagram", "label": "Instagram" },
+        { "value": "tiktok", "label": "TikTok" },
+        { "value": "youtube", "label": "YouTube" }
+      ],
+      "default": "youtube"
+    },
+    {
+      "type": "url",
+      "id": "video_6_url",
+      "label": "Video URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_6_thumbnail",
+      "label": "Thumbnail"
+    },
+    {
+      "type": "text",
+      "id": "video_6_badge",
+      "label": "Badge text"
+    },
+    {
+      "type": "text",
+      "id": "video_6_title",
+      "label": "Title"
+    },
+    {
+      "type": "header",
+      "content": "Video 7"
+    },
+    {
+      "type": "select",
+      "id": "video_7_platform",
+      "label": "Platform",
+      "options": [
+        { "value": "instagram", "label": "Instagram" },
+        { "value": "tiktok", "label": "TikTok" },
+        { "value": "youtube", "label": "YouTube" }
+      ],
+      "default": "instagram"
+    },
+    {
+      "type": "url",
+      "id": "video_7_url",
+      "label": "Video URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_7_thumbnail",
+      "label": "Thumbnail"
+    },
+    {
+      "type": "text",
+      "id": "video_7_badge",
+      "label": "Badge text"
+    },
+    {
+      "type": "text",
+      "id": "video_7_title",
+      "label": "Title"
+    },
+    {
+      "type": "header",
+      "content": "Video 8"
+    },
+    {
+      "type": "select",
+      "id": "video_8_platform",
+      "label": "Platform",
+      "options": [
+        { "value": "instagram", "label": "Instagram" },
+        { "value": "tiktok", "label": "TikTok" },
+        { "value": "youtube", "label": "YouTube" }
+      ],
+      "default": "tiktok"
+    },
+    {
+      "type": "url",
+      "id": "video_8_url",
+      "label": "Video URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_8_thumbnail",
+      "label": "Thumbnail"
+    },
+    {
+      "type": "text",
+      "id": "video_8_badge",
+      "label": "Badge text"
+    },
+    {
+      "type": "text",
+      "id": "video_8_title",
+      "label": "Title"
+    },
+    {
+      "type": "header",
+      "content": "Video 9"
+    },
+    {
+      "type": "select",
+      "id": "video_9_platform",
+      "label": "Platform",
+      "options": [
+        { "value": "instagram", "label": "Instagram" },
+        { "value": "tiktok", "label": "TikTok" },
+        { "value": "youtube", "label": "YouTube" }
+      ],
+      "default": "youtube"
+    },
+    {
+      "type": "url",
+      "id": "video_9_url",
+      "label": "Video URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "video_9_thumbnail",
+      "label": "Thumbnail"
+    },
+    {
+      "type": "text",
+      "id": "video_9_badge",
+      "label": "Badge text"
+    },
+    {
+      "type": "text",
+      "id": "video_9_title",
+      "label": "Title"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Social media video tabs"
+    }
+  ]
+}
+{% endschema %}

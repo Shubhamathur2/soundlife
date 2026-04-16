@@ -1,0 +1,1069 @@
+<script src="{{ 'customer.js' | asset_url }}" defer></script>
+
+<!-- HEADER -->
+<div class="account-head-wrapper ">
+  <div class="page-width">
+    <div class="sl-account-header">
+      <!-- LEFT: Profile Image -->
+      <div class="sl-profile-img-wrap">
+        {% if customer.metafields.custom.profile_image %}
+          <img
+            src="{{ customer.metafields.custom.profile_image | image_url: width: 120 }}"
+            alt="Profile"
+            class="sl-profile-img"
+          >
+        {% else %}
+          <div class="sl-profile-placeholder">
+            {{ customer.first_name | slice: 0 }}
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- RIGHT: User Info -->
+      <div class="sl-profile-info">
+        <h2>
+          {{ customer.first_name }}
+          {{ customer.last_name }}
+        </h2>
+        <p>{{ customer.email }}</p>
+
+        {% if customer.tags contains 'premium' %}
+          <span class="sl-badge">Premium</span>
+        {% endif %}
+      </div>
+    </div>
+    <!-- STATS -->
+    <div class="sl-account-stats">
+      <div class="sl-stat active">
+        <strong>{{ customer.orders.size }}</strong>
+        <span>{{ section.settings.orders_label }}</span>
+      </div>
+
+      <div class="sl-stat">
+        <strong>{{ customer.addresses_count }}</strong>
+        <span>{{ section.settings.address_label }}</span>
+      </div>
+
+      <div class="sl-stat">
+        <strong
+          ><span class="swym-header-icon-count" data-swym-count>{{ WISHLIST_COUNT }}</span></strong
+        >
+        <span>{{ section.settings.wishlist_label }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sl-account ">
+  <!-- TABS -->
+  <div class="sl-tabs page-width">
+    <button class="active" data-tab="overview">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15.8334 17.5V15.8333C15.8334 14.9493 15.4822 14.1014 14.8571 13.4763C14.232 12.8512 13.3841 12.5 12.5001 12.5H7.50008C6.61603 12.5 5.76818 12.8512 5.14306 13.4763C4.51794 14.1014 4.16675 14.9493 4.16675 15.8333V17.5" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M10.0001 9.16667C11.841 9.16667 13.3334 7.67428 13.3334 5.83333C13.3334 3.99238 11.841 2.5 10.0001 2.5C8.15913 2.5 6.66675 3.99238 6.66675 5.83333C6.66675 7.67428 8.15913 9.16667 10.0001 9.16667Z" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      {{ section.settings.tab1 }}
+    </button>
+    <button data-tab="orders">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g opacity="0.6">
+        <path d="M9.16667 18.1084C9.42003 18.2547 9.70744 18.3317 10 18.3317C10.2926 18.3317 10.58 18.2547 10.8333 18.1084L16.6667 14.7751C16.9198 14.6289 17.13 14.4188 17.2763 14.1658C17.4225 13.9127 17.4997 13.6257 17.5 13.3334V6.66675C17.4997 6.37448 17.4225 6.08742 17.2763 5.83438C17.13 5.58134 16.9198 5.37122 16.6667 5.22508L10.8333 1.89175C10.58 1.74547 10.2926 1.66846 10 1.66846C9.70744 1.66846 9.42003 1.74547 9.16667 1.89175L3.33333 5.22508C3.08022 5.37122 2.86998 5.58134 2.72372 5.83438C2.57745 6.08742 2.5003 6.37448 2.5 6.66675V13.3334C2.5003 13.6257 2.57745 13.9127 2.72372 14.1658C2.86998 14.4188 3.08022 14.6289 3.33333 14.7751L9.16667 18.1084Z" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M10 18.3333V10" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M2.75 5.8335L9.16917 9.7785C9.42194 9.92385 9.70842 10.0003 10 10.0003C10.2916 10.0003 10.5781 9.92385 10.8308 9.7785L17.25 5.8335" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M6.25 3.55811L13.75 7.84977" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+      </svg>
+      {{ section.settings.tab2 }}
+    </button>
+    <button data-tab="addresses">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path opacity="0.6" d="M16.6666 8.33317C16.6666 12.494 12.0508 16.8273 10.5008 18.1657C10.3564 18.2742 10.1806 18.333 9.99992 18.333C9.81925 18.333 9.64348 18.2742 9.49909 18.1657C7.94909 16.8273 3.33325 12.494 3.33325 8.33317C3.33325 6.56506 4.03563 4.86937 5.28587 3.61913C6.53612 2.36888 8.23181 1.6665 9.99992 1.6665C11.768 1.6665 13.4637 2.36888 14.714 3.61913C15.9642 4.86937 16.6666 6.56506 16.6666 8.33317Z" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path opacity="0.6" d="M10 10.8335C11.3807 10.8335 12.5 9.71421 12.5 8.3335C12.5 6.95278 11.3807 5.8335 10 5.8335C8.61929 5.8335 7.5 6.95278 7.5 8.3335C7.5 9.71421 8.61929 10.8335 10 10.8335Z" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      {{ section.settings.tab3 }}
+    </button>
+    <button data-tab="wishlist">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15.8334 11.6667C17.0751 10.45 18.3334 8.99167 18.3334 7.08333C18.3334 5.86776 17.8505 4.70197 16.991 3.84243C16.1314 2.98289 14.9657 2.5 13.7501 2.5C12.2834 2.5 11.2501 2.91667 10.0001 4.16667C8.75008 2.91667 7.71675 2.5 6.25008 2.5C5.03451 2.5 3.86872 2.98289 3.00918 3.84243C2.14963 4.70197 1.66675 5.86776 1.66675 7.08333C1.66675 9 2.91675 10.4583 4.16675 11.6667L10.0001 17.5L15.8334 11.6667Z" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      {{ section.settings.tab4 }}
+    </button>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="sl-content page-width">
+    <!-- OVERVIEW -->
+    <div id="overview" class="sl-tab active">
+      <div class="sl-info-section">
+        <p class="eyebrow">ABOUT YOU</p>
+        <h2 class="heading heading-left">Personal Information</h2>
+
+        <!-- Row -->
+        <div class="sl-info-row">
+          <div class="sl-info-left">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path opacity="0.6" d="M17.4166 19.25V17.4167C17.4166 16.4442 17.0303 15.5116 16.3426 14.8239C15.655 14.1363 14.7224 13.75 13.7499 13.75H8.24992C7.27746 13.75 6.34483 14.1363 5.65719 14.8239C4.96956 15.5116 4.58325 16.4442 4.58325 17.4167V19.25" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path opacity="0.6" d="M10.9999 10.0833C13.025 10.0833 14.6666 8.44171 14.6666 6.41667C14.6666 4.39162 13.025 2.75 10.9999 2.75C8.97487 2.75 7.33325 4.39162 7.33325 6.41667C7.33325 8.44171 8.97487 10.0833 10.9999 10.0833Z" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Name</span>
+          </div>
+          <div class="sl-info-right">
+            {{ customer.first_name }}
+            {{ customer.last_name }}
+          </div>
+        </div>
+
+        <!-- Row -->
+        <div class="sl-info-row">
+          <div class="sl-info-left">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path opacity="0.6" d="M18.3333 3.6665H3.66659C2.65406 3.6665 1.83325 4.48732 1.83325 5.49984V16.4998C1.83325 17.5124 2.65406 18.3332 3.66659 18.3332H18.3333C19.3458 18.3332 20.1666 17.5124 20.1666 16.4998V5.49984C20.1666 4.48732 19.3458 3.6665 18.3333 3.6665Z" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path opacity="0.6" d="M20.1666 6.4165L11.9441 11.6415C11.6611 11.8188 11.3339 11.9128 10.9999 11.9128C10.666 11.9128 10.3388 11.8188 10.0558 11.6415L1.83325 6.4165" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Email</span>
+          </div>
+          <div class="sl-info-right">
+            {{ customer.email }}
+          </div>
+        </div>
+
+        <!-- Row -->
+        <div class="sl-info-row">
+          <div class="sl-info-left">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path opacity="0.6" d="M18.9808 14.4268V17.1768C18.9818 17.432 18.9295 17.6847 18.8272 17.9187C18.725 18.1526 18.575 18.3625 18.3868 18.5351C18.1987 18.7077 17.9766 18.8391 17.7348 18.9209C17.493 19.0027 17.2367 19.0331 16.9824 19.0101C14.1617 18.7036 11.4522 17.7397 9.07161 16.1959C6.85678 14.7885 4.979 12.9107 3.57161 10.6959C2.02242 8.30453 1.05833 5.58183 0.75744 2.74842C0.734533 2.49493 0.764659 2.23945 0.845899 1.99824C0.927139 1.75704 1.05771 1.53539 1.22931 1.34741C1.4009 1.15943 1.60976 1.00924 1.84258 0.906401C2.0754 0.803562 2.32709 0.750329 2.58161 0.750089H5.33161C5.77647 0.74571 6.20775 0.903244 6.54506 1.19333C6.88236 1.48341 7.10268 1.88625 7.16494 2.32676C7.28101 3.20682 7.49627 4.07092 7.80661 4.90259C7.92994 5.23069 7.95663 5.58726 7.88352 5.93006C7.81041 6.27286 7.64057 6.58752 7.39411 6.83676L6.22994 8.00092C7.53487 10.2958 9.43502 12.196 11.7299 13.5009L12.8941 12.3368C13.1433 12.0903 13.458 11.9205 13.8008 11.8473C14.1436 11.7742 14.5002 11.8009 14.8283 11.9243C15.6599 12.2346 16.524 12.4499 17.4041 12.5659C17.8494 12.6287 18.2561 12.853 18.5468 13.1961C18.8375 13.5392 18.9919 13.9772 18.9808 14.4268Z" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Phone</span>
+          </div>
+          <div class="sl-info-right">
+            {{ customer.phone | default: 'Not provided' }}
+          </div>
+        </div>
+
+        <!-- Row -->
+        <div class="sl-info-row">
+          <div class="sl-info-left">
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path opacity="0.6" d="M7.33325 1.8335V5.50016" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path opacity="0.6" d="M14.6667 1.8335V5.50016" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path opacity="0.6" d="M17.4167 3.6665H4.58333C3.57081 3.6665 2.75 4.48732 2.75 5.49984V18.3332C2.75 19.3457 3.57081 20.1665 4.58333 20.1665H17.4167C18.4292 20.1665 19.25 19.3457 19.25 18.3332V5.49984C19.25 4.48732 18.4292 3.6665 17.4167 3.6665Z" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path opacity="0.6" d="M2.75 9.1665H19.25" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Date Of Birth</span>
+          </div>
+          <div class="sl-info-right">
+            {{ customer.metafields.custom.dob | default: 'Not set' }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ORDERS -->
+    <div id="orders" class="sl-tab">
+      <p class="eyebrow">PURCHASE HISTORY</p>
+      <h2 class="heading heading-left">Your Orders</h2>
+
+      {% if customer.orders.size > 0 %}
+        {% for order in customer.orders %}
+          <div class="sl-order-card">
+            <!-- ORDER HEADER -->
+            <div class="sl-order-header" onclick="toggleOrder(this)">
+              <div class="sl-order-left">
+                <div class="sl-order-icon">
+                  <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g opacity="0.6">
+                    <path d="M11.9167 23.5409C12.246 23.7311 12.6197 23.8312 13 23.8312C13.3803 23.8312 13.754 23.7311 14.0833 23.5409L21.6667 19.2076C21.9957 19.0176 22.269 18.7444 22.4592 18.4155C22.6493 18.0865 22.7496 17.7133 22.75 17.3334V8.66672C22.7496 8.28677 22.6493 7.9136 22.4592 7.58465C22.269 7.2557 21.9957 6.98253 21.6667 6.79256L14.0833 2.45922C13.754 2.26906 13.3803 2.16895 13 2.16895C12.6197 2.16895 12.246 2.26906 11.9167 2.45922L4.33333 6.79256C4.00428 6.98253 3.73098 7.2557 3.54083 7.58465C3.35069 7.9136 3.25039 8.28677 3.25 8.66672V17.3334C3.25039 17.7133 3.35069 18.0865 3.54083 18.4155C3.73098 18.7444 4.00428 19.0176 4.33333 19.2076L11.9167 23.5409Z" stroke="#01AD01" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M13 23.8333V13" stroke="#01AD01" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M3.57495 7.5835L11.9199 12.712C12.2485 12.901 12.6209 13.0004 13 13.0004C13.379 13.0004 13.7514 12.901 14.08 12.712L22.425 7.5835" stroke="#01AD01" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M8.125 4.62598L17.875 10.2051" stroke="#01AD01" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </g>
+                  </svg>
+                </div>
+
+                <div>
+                  <strong class="order-id">{{ order.name }}</strong>
+                  {% assign status = order.fulfillment_status %}
+                  <span
+                    class="sl-badge {% if status == 'fulfilled' %}delivered {% elsif status == 'unfulfilled' %}processing {% else %}cancelled{% endif %} "
+                  >
+                    {% if status == 'fulfilled' %}
+                      Delivered
+                    {% elsif status == 'unfulfilled' %}
+                      Processing
+                    {% else %}
+                      Cancelled
+                    {% endif %}
+                  </span>
+                  <div class="sl-order-meta">
+                    {{ order.created_at | date: '%b %d, %Y' }} • {{ order.line_items.size }} Items
+                  </div>
+
+                  <!-- Status -->
+                </div>
+              </div>
+
+              <div class="sl-order-right">
+                <span>{{ order.total_price | money }}</span>
+                <span class="sl-arrow">
+                  <svg width="14" height="8" viewBox="0 0 14 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13 1L7 7L1 1" stroke="black" stroke-opacity="0.6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </span>
+              </div>
+            </div>
+
+            <!-- ORDER ITEMS -->
+            <div class="sl-order-items">
+              <p class="sl-items-title">Items</p>
+
+              {% for item in order.line_items %}
+                <div class="sl-item">
+                  <div class="sl-item-left">
+                    <img src="{{ item.image | image_url: width: 80 }}">
+
+                    <div>
+                      <p class="sl-item-category">
+                        {{ item.product.collections.first.title }}
+                      </p>
+                      <p class="sl-item-title">{{ item.title }}</p>
+                      <p class="sl-item-price">{{ item.final_price | money }}</p>
+                      <span class="sl-qty">Qty: {{ item.quantity }}</span>
+                    </div>
+                  </div>
+
+                  <div class="sl-buy-again">
+                    <a href="/cart/add?id={{ item.variant_id }}&quantity=1">
+                      <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0_3817_22221)">
+                        <path d="M1.5 6.5C1.5 7.39002 1.76392 7.76004 2.25839 8.50007C2.75285 9.24009 3.45566 9.81686 4.27792 10.1575C5.10019 10.4981 6.00499 10.5872 6.87791 10.4135C7.75082 10.2399 8.55264 9.81132 9.18198 9.18198C9.81132 8.55264 10.2399 7.75082 10.4135 6.87791C10.5872 6.00499 10.4981 5.10019 10.1575 4.27792C9.81686 3.45566 9.24009 2.75285 8.50007 2.25839C7.76004 1.76392 6.89002 1.5 6 1.5C4.74198 1.50473 3.53448 1.99561 2.63 2.87L1.5 4" stroke="#01AD01" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M1 2V4.5H3.5" stroke="#01AD01" stroke-linecap="round" stroke-linejoin="round"/>
+                        </g>
+                        <defs>
+                        <clipPath id="clip0_3817_22221">
+                        <rect width="12" height="12" fill="white"/>
+                        </clipPath>
+                        </defs>
+                      </svg>
+                      Buy Again
+                    </a>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        {% endfor %}
+
+      {% else %}
+        <p>No orders found</p>
+      {% endif %}
+    </div>
+
+    <!-- ADDRESSES -->
+    <div id="addresses" class="sl-tab">
+      <div class="address-top">
+        <h3>Addresses</h3>
+      </div>
+      {%- paginate customer.addresses by 5 -%}
+        <div class="customer addresses section-{{ section.id }}-padding" data-customer-addresses>
+          <div data-address>
+            <button
+              type="button"
+              aria-expanded="false"
+              aria-controls="AddAddress"
+              class="hear-btn-secondary"
+            >
+              {{ 'customer.addresses.add_new' | t }}
+            </button>
+            <div id="AddAddress">
+              {% comment %} <h2 id="AddressNewHeading">{{ 'customer.addresses.add_new' | t }}</h2> {% endcomment %}
+              {%- form 'customer_address', customer.new_address, aria-labelledBy: 'AddressNewHeading' -%}
+                <div class="field">
+                  <input
+                    type="text"
+                    id="AddressFirstNameNew"
+                    name="address[first_name]"
+                    value="{{ form.first_name }}"
+                    autocomplete="given-name"
+                    placeholder="{{ 'customer.addresses.first_name' | t }}"
+                  >
+                  <label for="AddressFirstNameNew">{{ 'customer.addresses.first_name' | t }}</label>
+                </div>
+                <div class="field">
+                  <input
+                    type="text"
+                    id="AddressLastNameNew"
+                    name="address[last_name]"
+                    value="{{ form.last_name }}"
+                    autocomplete="family-name"
+                    placeholder="{{ 'customer.addresses.last_name' | t }}"
+                  >
+                  <label for="AddressLastNameNew">{{ 'customer.addresses.last_name' | t }}</label>
+                </div>
+                <div class="field">
+                  <input
+                    type="text"
+                    id="AddressCompanyNew"
+                    name="address[company]"
+                    value="{{ form.company }}"
+                    autocomplete="organization"
+                    placeholder="{{ 'customer.addresses.company' | t }}"
+                  >
+                  <label for="AddressCompanyNew">{{ 'customer.addresses.company' | t }}</label>
+                </div>
+                <div class="field">
+                  <input
+                    type="text"
+                    id="AddressAddress1New"
+                    name="address[address1]"
+                    value="{{ form.address1 }}"
+                    autocomplete="address-line1"
+                    placeholder="{{ 'customer.addresses.address1' | t }}"
+                  >
+                  <label for="AddressAddress1New">{{ 'customer.addresses.address1' | t }}</label>
+                </div>
+                <div class="field">
+                  <input
+                    type="text"
+                    id="AddressAddress2New"
+                    name="address[address2]"
+                    value="{{ form.address2 }}"
+                    autocomplete="address-line2"
+                    placeholder="{{ 'customer.addresses.address2' | t }}"
+                  >
+                  <label for="AddressAddress2New">{{ 'customer.addresses.address2' | t }}</label>
+                </div>
+                <div class="field">
+                  <input
+                    type="text"
+                    id="AddressCityNew"
+                    name="address[city]"
+                    value="{{ form.city }}"
+                    autocomplete="address-level2"
+                    placeholder="{{ 'customer.addresses.city' | t }}"
+                  >
+                  <label for="AddressCityNew">{{ 'customer.addresses.city' | t }}</label>
+                </div>
+                <div>
+                  <label for="AddressCountryNew">{{ 'customer.addresses.country' | t }}</label>
+                  <div class="select">
+                    <select
+                      id="AddressCountryNew"
+                      name="address[country]"
+                      data-default="{{ form.country }}"
+                      autocomplete="country"
+                    >
+                      {{ all_country_option_tags }}
+                    </select>
+                    <span class="svg-wrapper">
+                      {{- 'icon-caret.svg' | inline_asset_content -}}
+                    </span>
+                  </div>
+                </div>
+                <div id="AddressProvinceContainerNew" style="display: none">
+                  <label for="AddressProvinceNew">{{ 'customer.addresses.province' | t }}</label>
+                  <div class="select">
+                    <select
+                      id="AddressProvinceNew"
+                      name="address[province]"
+                      data-default="{{ form.province }}"
+                      autocomplete="address-level1"
+                    ></select>
+                    <span class="svg-wrapper">
+                      {{- 'icon-caret.svg' | inline_asset_content -}}
+                    </span>
+                  </div>
+                </div>
+                <div class="field">
+                  <input
+                    type="text"
+                    id="AddressZipNew"
+                    name="address[zip]"
+                    value="{{ form.zip }}"
+                    autocapitalize="characters"
+                    autocomplete="postal-code"
+                    placeholder="{{ 'customer.addresses.zip' | t }}"
+                  >
+                  <label for="AddressZipNew">{{ 'customer.addresses.zip' | t }}</label>
+                </div>
+                <div class="field">
+                  <input
+                    type="tel"
+                    id="AddressPhoneNew"
+                    name="address[phone]"
+                    value="{{ form.phone }}"
+                    autocomplete="tel"
+                    placeholder="{{ 'customer.addresses.phone' | t }}"
+                  >
+                  <label for="AddressPhoneNew">{{ 'customer.addresses.phone' | t }}</label>
+                </div>
+                <div>
+                  {{ form.set_as_default_checkbox }}
+                  <label for="address_default_address_new">{{ 'customer.addresses.set_default' | t }}</label>
+                </div>
+                <div>
+                  <button class="btn-primary">{{ 'customer.addresses.add' | t }}</button>
+                  <button type="reset" class="hear-btn-secondary">{{ 'customer.addresses.cancel' | t }}</button>
+                </div>
+              {%- endform -%}
+            </div>
+          </div>
+        </div>
+      {%- endpaginate -%}
+      <div class="address-grid">
+        {% for address in customer.addresses %}
+          <div class="address-card">
+            {% if address.id == customer.default_address.id %}
+              <span class="default-badge">Default</span>
+            {% endif %}
+            <p class="address-name">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13.3334 6.66634C13.3334 9.99501 9.64075 13.4617 8.40075 14.5323C8.28523 14.6192 8.14461 14.6662 8.00008 14.6662C7.85555 14.6662 7.71493 14.6192 7.59941 14.5323C6.35941 13.4617 2.66675 9.99501 2.66675 6.66634C2.66675 5.25185 3.22865 3.8953 4.22885 2.89511C5.22904 1.89491 6.58559 1.33301 8.00008 1.33301C9.41457 1.33301 10.7711 1.89491 11.7713 2.89511C12.7715 3.8953 13.3334 5.25185 13.3334 6.66634Z" stroke="#2FB215" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M8 8.66699C9.10457 8.66699 10 7.77156 10 6.66699C10 5.56242 9.10457 4.66699 8 4.66699C6.89543 4.66699 6 5.56242 6 6.66699C6 7.77156 6.89543 8.66699 8 8.66699Z" stroke="#2FB215" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              {{ address.name }}
+            </p>
+            <p>{{ address.address1 }}</p>
+            <p>{{ address.city }}, {{ address.country }}</p>
+            <p class="address-no">{{ address.phone | default: 'Not provided' }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- WISHLIST -->
+    <div id="wishlist" class="sl-tab">
+      <h3>Wishlist</h3>
+      <p>Wishlist feature coming soon</p>
+      <div id="custom-wishlist-container"></div>
+    </div>
+  </div>
+</div>
+
+<style>
+    .account-head-wrapper{
+    background: linear-gradient(180deg, #F7F6F2 0%, #F7F6F2 100%);
+  }
+        .sl-account-header {
+        	margin-bottom: 20px;
+        	display: flex;
+        	gap: 10px;
+        }
+
+        .sl-profile-placeholder {
+        	background: aliceblue;
+        	border-radius: 50px;
+        	height: 40px;
+        	width: 40px;
+        	border-radius: 20px;
+        	display: flex;
+        	justify-content: center;
+        	align-items: center;
+        	padding: 10px;
+        }
+
+        .sl-account-stats {
+        	display: flex;
+        	gap: 10px;
+        	margin-bottom: 20px;
+        }
+         .sl-stat.active{
+          background: linear-gradient(180deg, #2FB215 0%, #4BCD32 100%);
+
+        }
+        .sl-stat {
+        	flex: 1;
+        	background: #fff;
+        	padding: 15px;
+        	border-radius: 10px;
+        	text-align: center;
+        }
+
+        .sl-tabs {
+        	margin-bottom: 20px;
+        	width: fit-content;
+        	margin: 0 auto;
+        	background: #fff;
+        	box-shadow: 0px 1px 10px 0px #0000004D;
+        	border-radius: 50px;
+        	padding: 6px;
+        }
+
+        .sl-tabs button {
+        	padding: 8px 14px;
+        	border: none;
+        	background: #fff;
+        	cursor: pointer;
+        	border-radius: 20px;
+        }
+
+        .sl-tabs button svg {
+        	vertical-align: bottom;
+        }
+
+        .sl-tabs button.active {
+        	background: #EFEDED;
+        	color: var(--color-para-text);
+        	box-shadow: 0px 1px 4px 0px #00000033;
+        }
+
+        .sl-item-category {
+        	font-weight: 600;
+        	font-size: 10px;
+        	letter-spacing: 0.5px;
+        	text-transform: uppercase;
+        	color: #01AD01;
+        }
+
+        .sl-tab {
+        	display: none;
+        }
+
+        .sl-tab.active {
+        	display: block;
+        }
+        .address-top {
+      	display: flex;
+      	justify-content: space-between;
+      	align-items: center;
+        }
+
+      .customer:not(.account):not(.order) {
+      	margin: 0;
+            max-width: 100%;
+            text-align: end;
+            padding:0;
+        }
+
+      .customer button {
+      	margin: 0;
+      }
+
+      .address-grid {
+      	display: grid;
+      	grid-template-columns: 1fr 1fr;
+      	gap: 20px;
+      }
+      .customer button:after, .customer button:before{
+      content: none;}
+      .customer.addresses .hear-btn-secondary{
+          border: 1px solid var(--color-primary) !important;
+          color: var(--color-primary) !important;
+          padding:5px 22px !important;
+          line-height: 34px !important;
+          text-decoration: none !important;
+          border-radius: 50px !important;
+          text-transform: capitalize;
+          background: #fff;
+        }
+        .customer.addresses .btn-primary{
+        background: var(--color-primary);
+        color: #fff;
+        padding: 5px 32px;
+        line-height: 34px;
+        text-decoration: none;
+        text-transform: capitalize;
+        display: inline-block;
+        border-radius: 50px;
+        cursor: pointer;
+        border: none;}
+        .order-card,
+        .address-card {
+        	padding: 15px;
+        	background: #F7F6F2;
+        	border: 1.5px solid #E5E2DC;
+        	border-radius: 10px;
+        	margin-bottom: 10px;
+        }
+
+        .address-card {
+        	padding: 15px 40px;
+          position: relative;
+        }
+        .default-badge{
+        position: absolute;
+            right: 20px;
+          font-size: 10px;
+          color: #2FB215;
+          background: #2FB2151A;
+          padding: 3px 12px;
+          border-radius: 20px;
+        }
+        .address-card p{
+        line-height:normal;
+        color: #1A1A1A99;
+        font-size: 14px;
+        }
+        .address-name {
+        	font-weight: 400;
+        	position: relative;
+          color: var(--color-para-text) !important;
+          font-size: 18px !important;
+          margin-bottom:10px;
+        }
+
+        .address-name svg {
+        	position: absolute;
+        	left: -20px;
+        	top: 3px;
+        }
+        .address-no{
+        margin-top:10px;}
+        .sl-info-section {
+        	margin-top: 20px;
+        }
+
+        .sl-section-label {
+        	color: #22c55e;
+        	font-size: 12px;
+        	letter-spacing: 1px;
+        	margin-bottom: 5px;
+        }
+
+        .sl-section-title {
+        	font-size: 28px;
+        	margin-bottom: 25px;
+        }
+
+        /* Rows */
+        .sl-info-row {
+        	display: flex;
+        	justify-content: space-between;
+        	align-items: center;
+        	padding: 15px 0;
+        	border-bottom: 1px solid #eee;
+        }
+
+        .sl-info-left {
+        	display: flex;
+        	align-items: center;
+        	gap: 10px;
+        	color: #555;
+        }
+
+        .sl-icon {
+        	font-size: 18px;
+        }
+
+        .sl-info-right {
+        	color: #111;
+        	font-weight: 500;
+        }
+
+        .sl-order-card {
+        	background: #F7F6F2;
+        	border-top: 1px solid #E5E2DC;
+        	border-radius: 14px;
+        	margin-bottom: 15px;
+        	overflow: hidden;
+        }
+
+        /* Header */
+        .sl-order-header {
+        	display: flex;
+        	justify-content: space-between;
+        	align-items: center;
+        	padding: 18px;
+        	cursor: pointer;
+        }
+
+        .sl-order-left {
+        	display: flex;
+        	gap: 12px;
+        }
+
+        .sl-order-icon {
+        	background: #e6f4ea;
+        	padding: 10px;
+        	border-radius: 10px;
+        	max-height: fit-content;
+        }
+
+        .sl-order-icon svg {
+        	vertical-align: bottom;
+        }
+
+        .order-id {
+        	font-size: 18px;
+        }
+
+        .sl-order-meta {
+        	font-size: 13px;
+        	color: #1A1A1A99;
+        }
+
+        /* Status badges */
+        .sl-badge {
+        	display: inline-block;
+        	padding: 4px 10px;
+        	border-radius: 20px;
+        	font-size: 12px;
+        	margin-left: 10px;
+        }
+
+        .sl-badge.processing {
+        	background: #e0ecff;
+        	color: #2563eb;
+        }
+
+        .sl-badge.delivered {
+        	background: #e6f4ea;
+        	color: #16a34a;
+        }
+
+        .sl-badge.cancelled {
+        	background: #fde2e2;
+        	color: #dc2626;
+        }
+
+        /* Right */
+        .sl-order-right {
+        	display: flex;
+        	align-items: center;
+        	gap: 10px;
+        }
+
+        .sl-arrow {
+        	font-size: 18px;
+        }
+
+        /* Items */
+        .sl-order-items {
+        	display: none;
+        	padding: 15px;
+        	border-top: 1px solid #eee;
+        	margin: 0 20px 20px;
+        	background: #fff;
+        	border-radius: 14px;
+        	border-top: 1px solid #E5E2DC;
+        }
+
+        .sl-items-title {
+        	font-weight: 600;
+        	margin-bottom: 10px;
+        	color: #1A1A1A99;
+        }
+
+        /* Item */
+        .sl-item {
+        	display: flex;
+        	justify-content: space-between;
+        	align-items: end;
+        	background: #F7F6F2;
+        	border-top: 1px solid #E5E2DC;
+        	padding: 10px;
+        	border-radius: 10px;
+        	margin-bottom: 10px;
+        }
+
+        .sl-item-left {
+        	display: flex;
+        	gap: 10px;
+        }
+
+        .sl-item img {
+        	width: 60px;
+        	border-radius: 8px;
+        }
+
+        .sl-item-title {
+        	font-weight: 600;
+        	line-height: normal;
+        }
+
+        .sl-item-price {
+        	font-size: 16px;
+        	font-weight: 600;
+        }
+
+        .sl-qty {
+        	font-size: 14px;
+        	background: #fff;
+        	padding: 4px 10px;
+        	border-radius: 20px;
+        	border-top: 1px solid #E5E2DC;
+        	font-weight: 600;
+        }
+
+        /* Buy again */
+        .sl-buy-again a {
+        	color: #16a34a;
+        	font-weight: 600;
+        	text-decoration: none;
+        }
+
+        .sl-arrow svg {
+        	transition: transform 0.3s ease;
+        }
+
+        /* Rotated state */
+        .sl-order-card.active .sl-arrow svg {
+        	transform: rotate(180deg);
+        }
+        .addresses [aria-expanded=true]~div[id]{
+          width: 40vw;
+          margin: 20px auto 40px;
+        }
+        #custom-wishlist-container .swym-storefront-layout-items-container{
+        display: grid;
+        justify-content: space-between;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 30px;
+      }
+      #custom-wishlist-container .swym-storefront-layout-grid-item{
+      flex-direction: column;}
+      #custom-wishlist-container .swym-storefront-layout-grid-item-image-container{
+      width:100%;}
+      #custom-wishlist-container .swym-storefront-layout-grid-item-option-button{
+      border: none;
+            right: 10px;
+        top: 10px;
+    }
+      #custom-wishlist-container .swym-storefront-layout-grid-item-option-button svg circle{
+        fill: var(--color-white);
+      }
+      #custom-wishlist-container .swym-storefront-layout-grid-item-content{
+        width:100%;
+      }
+      #custom-wishlist-container .swym-storefront-layout-grid-item-add-to-cart-button{
+        background: var(--color-button-primary);
+            border: none;
+      }
+      #custom-wishlist-container .swym-storefront-layout-grid-item-title  {
+      font-size: 18px;
+        font-weight: 600;
+    }
+    #custom-wishlist-container .swym-storefront-layout-grid-item-final-price{
+        font-weight: 600;
+        font-size: 18px;
+        letter-spacing: 0px;
+        color: var(--color-para-text);
+    }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const buttons = document.querySelectorAll('.sl-tabs button');
+
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', function () {
+        buttons.forEach((b) => b.classList.remove('active'));
+        this.classList.add('active');
+
+        document.querySelectorAll('.sl-tab').forEach((tab) => {
+          tab.classList.remove('active');
+        });
+
+        let tabId = this.dataset.tab;
+        document.getElementById(tabId).classList.add('active');
+
+        // ✅ Load wishlist when tab opens
+        if (tabId === 'wishlist') {
+          loadWishlist();
+          moveSwymWishlist();
+        }
+      });
+    });
+
+    /* -------------------------------
+       WAIT FOR SWYM LOAD
+    --------------------------------*/
+    let interval = setInterval(function () {
+      if (window.SwymWishlist) {
+        clearInterval(interval);
+
+        loadWishlist();
+        moveSwymWishlist();
+      }
+    }, 300);
+  });
+
+  /* -------------------------------
+     ORDER TOGGLE (UNCHANGED)
+  --------------------------------*/
+  function toggleOrder(el) {
+    let parent = el.closest('.sl-order-card');
+    let content = parent.querySelector('.sl-order-items');
+
+    let isOpen = parent.classList.contains('active');
+
+    document.querySelectorAll('.sl-order-card').forEach((card) => {
+      card.classList.remove('active');
+      card.querySelector('.sl-order-items').style.display = 'none';
+    });
+
+    if (!isOpen) {
+      parent.classList.add('active');
+      content.style.display = 'block';
+    }
+  }
+
+  /* -------------------------------
+     LOAD WISHLIST (CUSTOM GRID)
+  --------------------------------*/
+  window.loadWishlist = function () {
+    if (!window.SwymWishlist) return;
+
+    let container = document.getElementById('sl-wishlist-grid');
+    if (!container) return;
+
+    window.SwymWishlist.getWishlist(function (products) {
+      container.innerHTML = '';
+
+      if (!products.length) {
+        container.innerHTML = '<p>No wishlist items found</p>';
+        return;
+      }
+
+      products.forEach(function (item) {
+        let html = `
+  <div class="sl-wishlist-card">
+
+    <div class="sl-card-image">
+      <img src="${item.iu}" alt="${item.dt}">
+
+      <div class="sl-wishlist-heart" onclick="removeWishlist('${item.epi}')">
+        ❤️
+      </div>
+    </div>
+
+    <div class="sl-card-content">
+      <p class="sl-title">${item.dt}</p>
+
+      <p class="sl-desc">
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+      </p>
+
+      <div class="sl-rating">
+        ⭐⭐⭐⭐☆ 
+        <span>| 12 reviews</span>
+      </div>
+
+      <p class="sl-price">${formatMoney(item.pr)}</p>
+    </div>
+
+  </div>
+`;
+
+        container.insertAdjacentHTML('beforeend', html);
+      });
+    });
+  };
+
+  /* -------------------------------
+     MOVE SWYM UI INTO YOUR SECTION
+  --------------------------------*/
+  window.moveSwymWishlist = function () {
+    let swymContainer = document.querySelector('#swym-storefront-layout-items-container');
+    let customContainer = document.getElementById('custom-wishlist-container');
+
+    if (!swymContainer || !customContainer) return;
+
+    customContainer.innerHTML = '';
+    customContainer.appendChild(swymContainer);
+  };
+
+  /* -------------------------------
+     REMOVE ITEM
+  --------------------------------*/
+  window.removeWishlist = function (epi) {
+    if (!window.SwymWishlist) return;
+
+    window.SwymWishlist.removeFromWishlist({ epi: epi }, function () {
+      loadWishlist();
+      moveSwymWishlist();
+    });
+  };
+
+  /* -------------------------------
+     FORMAT MONEY
+  --------------------------------*/
+  function formatMoney(price) {
+    return 'Rp ' + (price / 100).toLocaleString('id-ID');
+  }
+
+  /* -------------------------------
+     SHOPIFY ADDRESS SCRIPT (UNCHANGED)
+  --------------------------------*/
+  window.addEventListener('load', () => {
+    typeof CustomerAddresses !== 'undefined' && new CustomerAddresses();
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Account Page",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Welcome,"
+    },
+    {
+      "type": "text",
+      "id": "orders_label",
+      "label": "Orders Label",
+      "default": "Orders"
+    },
+    {
+      "type": "text",
+      "id": "address_label",
+      "label": "Address Label",
+      "default": "Addresses"
+    },
+    {
+      "type": "text",
+      "id": "wishlist_label",
+      "label": "Wishlist Label",
+      "default": "Wishlist"
+    },
+    {
+      "type": "number",
+      "id": "wishlist_count",
+      "label": "Wishlist Count",
+      "default": 0
+    },
+    {
+      "type": "text",
+      "id": "tab1",
+      "label": "Tab 1",
+      "default": "Overview"
+    },
+    {
+      "type": "text",
+      "id": "tab2",
+      "label": "Tab 2",
+      "default": "Orders"
+    },
+    {
+      "type": "text",
+      "id": "tab3",
+      "label": "Tab 3",
+      "default": "Addresses"
+    },
+    {
+      "type": "text",
+      "id": "tab4",
+      "label": "Tab 4",
+      "default": "Wishlist"
+    },
+    {
+      "type": "text",
+      "id": "overview_title",
+      "label": "Overview Title",
+      "default": "Overview"
+    },
+    {
+      "type": "textarea",
+      "id": "overview_text",
+      "label": "Overview Text",
+      "default": "Welcome to your account dashboard."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Account Page"
+    }
+  ]
+}
+{% endschema %}

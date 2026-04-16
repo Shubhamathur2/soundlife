@@ -1,0 +1,61 @@
+<section class="customer-stories">
+  <div class="page-width cs-wrapper">
+    
+    <div class="cs-images">
+      <div class="img-back">
+        <img 
+          src="{{ section.settings.image1 | image_url: width: 600 }}" 
+          alt="">
+      </div>
+
+      <div class="img-front">
+        <img 
+          src="{{ section.settings.image2 | image_url: width: 600 }}" 
+          alt="">
+      </div>
+    </div>
+
+    <div class="cs-content">
+      <h2 class="heading">{{ section.settings.heading }}</h2>
+      <div class="cs-text">
+        {{ section.settings.text }}
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+{% schema %}
+{
+  "name": "Customer Stories",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image1",
+      "label": "Back Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image2",
+      "label": "Front Image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "default": "Customer Stories",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Content"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Customer Stories"
+    }
+  ]
+}
+{% endschema %}

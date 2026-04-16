@@ -1,0 +1,30 @@
+<section class="video-tabs-section">
+  <div class="page-width">
+
+    <h2 class="video-tabs-title">True Story. A Real Audio Experience.</h2>
+    <p class="video-tabs-subtitle">
+      Watch how Soundlife changes lives through better hearing—one story at a time.
+    </p>
+
+    <!-- Tabs -->
+    <div class="video-tabs">
+      <button class="tab-btn active" data-tab="instagram">Instagram</button>
+      <button class="tab-btn" data-tab="tiktok">Tiktok</button>
+      <button class="tab-btn" data-tab="youtube">Youtube</button>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="tab-content active" id="instagram">
+      {% render 'video-slider-instagram' %}
+    </div>
+
+    <div class="tab-content" id="tiktok">
+      {% render 'video-slider-tiktok' %}
+    </div>
+
+    <div class="tab-content" id="youtube">
+      {% render 'video-slider-youtube' %}
+    </div>
+
+  </div>
+</section>

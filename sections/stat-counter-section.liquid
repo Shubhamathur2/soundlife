@@ -1,0 +1,51 @@
+{% comment %}
+  Stats Counter Section
+{% endcomment %}
+
+<section class="stats-section">
+  <div class="page-width">
+    <div class="stats-wrapper">
+      {% for block in section.blocks %}
+        <div class="stat-item" {{ block.shopify_attributes }}>
+          <h2 class="stat-number" data-count="{{ block.settings.number }}">
+            {{ block.settings.number }}
+          </h2>
+          <p class="stat-label">{{ block.settings.label }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Stats Section",
+  "max_blocks": 4,
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Number",
+          "default": "5000+"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "LIVES TRANSFORMED"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Stats Section",
+      "blocks": [{ "type": "stat" }, { "type": "stat" }, { "type": "stat" }, { "type": "stat" }]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,208 @@
+{% comment %}
+  Renders a megamenu for the header.
+
+  Usage:
+  {% render 'header-mega-menu' %}
+{% endcomment %}
+
+<nav class="header__inline-menu">
+  <ul class="list-menu list-menu--inline" role="list">
+    {%- for link in section.settings.menu.links -%}
+      <li>
+        {%- if link.links != blank -%}
+          <header-menu>
+            <details id="Details-HeaderMenu-{{ forloop.index }}" class="mega-menu">
+              <summary
+                id="HeaderMenu-{{ link.handle }}"
+                class="header__menu-item list-menu__item link focus-inset"
+              >
+                <span
+                  {%- if link.child_active %}
+                    class="header__active-menu-item"
+                  {% endif %}
+                >
+                  {{- link.title | escape -}}
+                </span>
+                {{- 'icon-caret.svg' | inline_asset_content -}}
+              </summary>
+              <div
+                id="MegaMenu-Content-{{ forloop.index }}"
+                class="mega-menu__content color-{{ section.settings.menu_color_scheme }} gradient motion-reduce global-settings-popup"
+                tabindex="-1"
+              >
+               {% unless link.handle == 'shop-by-products' or link.handle == 'shop-by-intent' %}
+
+
+                <ul
+                  class="mega-menu__list page-width{% if link.levels == 1 %} mega-menu__list--condensed{% endif %}"
+                  role="list"
+                >
+                  {%- for childlink in link.links -%}
+                    <li>
+                      <a
+                        id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
+                        href="{{ childlink.url }}"
+                        class="mega-menu__link mega-menu__link--level-2 link{% if childlink.current %} mega-menu__link--active{% endif %}"
+                        {% if childlink.current %}
+                          aria-current="page"
+                        {% endif %}
+                      >
+                        {{ childlink.title | escape }}
+                      </a>
+                      {%- if childlink.links != blank -%}
+                        <ul class="list-unstyled" role="list">
+                          {%- for grandchildlink in childlink.links -%}
+                            <li>
+                              <a
+                                id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}"
+                                href="{{ grandchildlink.url }}"
+                                class="mega-menu__link link{% if grandchildlink.current %} mega-menu__link--active{% endif %}"
+                                {% if grandchildlink.current %}
+                                  aria-current="page"
+                                {% endif %}
+                              >
+                                {{ grandchildlink.title | escape }}
+                              </a>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      {%- endif -%}
+                    </li>
+                  {%- endfor -%}
+                </ul>
+                {% endunless %}
+               {% if link.handle == 'shop-by-products' %}
+  <div class="mega-menu-wrapper page-width shop-by-products-mega">
+
+    <!-- LEFT -->
+    <div class="mega-menu-links">
+      {% for child in link.links %}
+        {% if child.type == 'collection_link' %}
+          {% assign col = child.object %}
+          {% if col and col.products_count > 0 %}
+            <div class="mega-column">
+              <h4>{{ col.title }}</h4>
+              <ul>
+                {% for product in col.products limit: 6 %}
+                  <li>
+                    <a href="{{ product.url }}">{{ product.title }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <!-- RIGHT -->
+    <div class="mega-menu-images">
+      {% for child in link.links %}
+        {% if child.type == 'collection_link' %}
+          {% assign col = child.object %}
+          {% if col and col.featured_image %}
+            <a href="{{ col.url }}" class="mega-image-card">
+              <img
+                src="{{ col.featured_image | image_url: width: 420 }}"
+                alt="{{ col.title }}"
+                width="200"
+                height="160"
+              >
+              <strong>{{ col.title }}</strong>
+            </a>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    </div>
+
+
+   
+  </div>
+{% endif %}
+
+{% if link.handle == 'shop-by-intent' %}
+<div class="mega-menu-wrapper page-width shop-by-intent-mega">
+
+  <!-- LEFT: Tabs -->
+  <div class="intent-tabs">
+    <h4 class="intent-title">Products</h4>
+    <ul class="intent-tab-list">
+      {% for child in link.links %}
+        {% if child.type == 'collection_link' %}
+          <li>
+            <button
+  type="button"
+  class="intent-tab {% if forloop.first %}active{% endif %}"
+  data-tab="intent-{{ child.handle }}"
+>
+
+              {{ child.title }}
+            </button>
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- RIGHT: Panels -->
+  <div class="intent-tab-content">
+    {% for child in link.links %}
+      {% if child.type == 'collection_link' %}
+        {% assign col = child.object %}
+        <div
+          class="intent-panel {% if forloop.first %}active{% endif %}"
+          id="intent-{{ child.handle }}"
+        >
+          <div class="intent-cards">
+            {% for product in col.products limit: 4 %}
+              <a href="{{ product.url }}" class="intent-card">
+                <img
+                  src="{{ product.featured_image | image_url: width: 500 }}"
+                  alt="{{ product.title }}"
+                  width="500"
+                  height="360"
+                >
+                <div class="intent-card-content">
+                  <strong>{{ product.title }}</strong>
+                  {% if product.metafields.custom.short_description %}
+                    <p class="intent-short-desc">{{ product.metafields.custom.short_description.value | truncate: 56, "..."}}</p>
+                  {% endif %}
+                </div>
+              </a>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+</div>
+{% endif %}
+
+
+
+              </div>
+            </details>
+          </header-menu>
+        {%- else -%}
+          <a
+            id="HeaderMenu-{{ link.handle }}"
+            href="{{ link.url }}"
+            class="header__menu-item list-menu__item link link--text focus-inset"
+            {% if link.current %}
+              aria-current="page"
+            {% endif %}
+          >
+            <span
+              {%- if link.current %}
+                class="header__active-menu-item"
+              {% endif %}
+            >
+              {{- link.title | escape -}}
+            </span>
+          </a>
+        {%- endif -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+</nav>

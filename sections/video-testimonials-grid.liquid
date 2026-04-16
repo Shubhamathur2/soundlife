@@ -1,0 +1,111 @@
+
+
+<section class="video-testimonial-wrapper section-space-two">
+  <div class="page-width">
+    <h2 class="heading">{{ section.settings.heading }}</h2>
+
+    <div class="video-grid">
+      {% for block in section.blocks %}
+        {% assign video_url = block.settings.video_url %}
+
+        {% if video_url contains 'watch?v=' %}
+          {% assign video_id = video_url | split: 'watch?v=' | last | split: '&' | first %}
+        {% elsif video_url contains 'youtu.be/' %}
+          {% assign video_id = video_url | split: 'youtu.be/' | last | split: '?' | first %}
+        {% endif %}
+
+        <a class="video-card" href="https://www.youtube.com/watch?v={{ video_id }}" target="_blank">
+          <div class="thumb">
+            <img
+              src="https://img.youtube.com/vi/{{ video_id }}/maxresdefault.jpg"
+              onerror="this.onerror=null;this.src='https://img.youtube.com/vi/{{ video_id }}/hqdefault.jpg';"
+            >
+
+            <div class="play-btn">▶</div>
+
+            {% if block.settings.duration != blank %}
+              <div class="duration">
+                {{ block.settings.duration }}
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="card-content">
+            <p>{{ block.settings.title }}</p>
+
+            {% if block.settings.rating > 0 %}
+              <div class="review">
+                {%- comment -%} Filled stars {%- endcomment -%}
+                {% for i in (1..block.settings.rating) %}
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M6.61663 0.867099C7.11797 -0.289032 8.75753 -0.289034 9.25887 0.867099L10.7754 4.3644L14.5702 4.726C15.8247 4.84554 16.3313 6.40485 15.3867 7.23892L12.5292 9.76197L13.3579 13.4828C13.6319 14.7128 12.3055 15.6765 11.2203 15.0358L7.93775 13.0978L4.65517 15.0358C3.57002 15.6765 2.24359 14.7128 2.51756 13.4828L3.3463 9.76197L0.488811 7.23892C-0.455813 6.40485 0.0508373 4.84554 1.30531 4.726L5.10008 4.3644L6.61663 0.867099Z" fill="#FBB040"/>
+                  </svg>
+                {% endfor %}
+
+                {%- comment -%} Empty stars {%- endcomment -%}
+                {% assign empty_stars = 5 | minus: block.settings.rating %}
+                {% for i in (1..empty_stars) %}
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M6.61663 0.867099C7.11797 -0.289032 8.75753 -0.289034 9.25887 0.867099L10.7754 4.3644L14.5702 4.726C15.8247 4.84554 16.3313 6.40485 15.3867 7.23892L12.5292 9.76197L13.3579 13.4828C13.6319 14.7128 12.3055 15.6765 11.2203 15.0358L7.93775 13.0978L4.65517 15.0358C3.57002 15.6765 2.24359 14.7128 2.51756 13.4828L3.3463 9.76197L0.488811 7.23892C-0.455813 6.40485 0.0508373 4.84554 1.30531 4.726L5.10008 4.3644L6.61663 0.867099ZM9.4543 4.93728L7.93775 1.43998L6.4212 4.93728C6.21254 5.41846 5.75878 5.74814 5.23668 5.79789L1.4419 6.15949L4.2994 8.68254C4.69254 9.02967 4.86586 9.56311 4.75184 10.075L3.92309 13.7958L7.20567 11.8578C7.65731 11.5912 8.21819 11.5912 8.66982 11.8578L11.9524 13.7958L11.1237 10.075C11.0096 9.56311 11.183 9.02967 11.5761 8.68254L14.4336 6.15949L10.6388 5.79789C10.1167 5.74814 9.66295 5.41846 9.4543 4.93728Z" fill="#FBB040"/>
+                  </svg>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Video Testimonial Grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Hear Their Stories"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "video",
+      "name": "Video Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "url",
+          "id": "video_url",
+          "label": "YouTube Video Link"
+        },
+        {
+          "type": "text",
+          "id": "duration",
+          "label": "Duration (Example 2:06)"
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "label": "Star Rating",
+          "min": 0,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Video Testimonial Grid"
+    }
+  ]
+}
+{% endschema %}

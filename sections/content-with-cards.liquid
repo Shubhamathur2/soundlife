@@ -1,0 +1,105 @@
+<section class="content-cards-section section-space-two">
+  <div class="page-width content-cards-wrapper">
+    <!-- LEFT CONTENT -->
+    <div class="content-left">
+      <h2 class="heading heading-left">
+        {{ section.settings.heading }}
+      </h2>
+
+      <div class="description">
+        {{ section.settings.description }}
+      </div>
+
+      {% if section.settings.image != blank %}
+        <div class="section-image">
+          <img
+            src="{{ section.settings.image | image_url: width: 900 }}"
+            alt="{{ section.settings.heading }}"
+            loading="lazy"
+          >
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- RIGHT CARDS -->
+    <div class="content-right">
+      {% for block in section.blocks %}
+        <div class="info-card" {{ block.shopify_attributes }}>
+          {% if block.settings.icon != blank %}
+            <div class="card-icon">
+              <img
+                src="{{ block.settings.icon | image_url: width: 60 }}"
+                alt=""
+              >
+            </div>
+          {% endif %}
+
+          <h3 class="card-title">
+            {{ block.settings.title }}
+          </h3>
+
+          <p class="card-text">
+            {{ block.settings.text }}
+          </p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Content with Cards",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Section Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Add your content here.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Bottom Image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Card title"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "Card description"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Content with Cards",
+      "blocks": [{ "type": "card" }, { "type": "card" }, { "type": "card" }, { "type": "card" }]
+    }
+  ]
+}
+{% endschema %}

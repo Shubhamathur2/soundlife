@@ -1,0 +1,474 @@
+{%- comment -%} Assign: Preview section js fix {%- endcomment -%}
+{%- assign section_id = section.id | replace: '+', '' -%}
+
+{%- comment -%} Images: all placeholders {%- endcomment -%}
+{%- assign placeholder_image_id = 'RbbdzZBKRDY' -%}
+{%- assign placeholder_image_id_2 = 'DBtgQI-9XdM' -%}
+
+{% comment %} Images: responsive image widths {% endcomment %}
+{%- assign widths = '180, 360, 540, 720, 900, 1080, 1296, 1512, 1728, 1950, 2100, 2260, 2450, 2700, 3000, 3350, 3750, 4100' -%}
+
+{%- comment -%} Layout: has user entered measurement value into max-width field? {%- endcomment -%}
+{%- if section.settings.max_width contains 'px' or section.settings.max_width contains '%' -%}
+  {%- assign max_width = section.settings.max_width -%}
+{%- else -%}
+  {%- assign max_width = section.settings.max_width | append: 'px' -%}
+{%- endif -%}
+
+{%- capture minify -%}
+{%- comment -%} CSS {%- endcomment -%}
+<style>
+
+</style>
+
+<section id="DP--{{ section.id }}" class="wsp-section__main wsp-section__section section-space-two">
+
+ 
+  <div class="wsp-main-content page-width">
+    <div class="wsp-heading-sec">
+      <h2 class="heading">{{section.settings.section_heading }}</h2>
+      <!-- Tabs -->
+      <div class="wsp-tabs__nav">
+        {% for block in section.blocks %}
+          <button
+            class="wsp-tabs__btn {% if forloop.first %}is-active{% endif %}"
+            data-tab="tab-{{ block.id }}">
+            {{ block.settings.tab_title }}
+          </button>
+        {% endfor %}
+      </div>
+    </div>
+    <!-- Tabs content -->
+    <div class="wsp-tabs__content">
+      {% for block in section.blocks %}
+        <div
+          id="tab-{{ block.id }}"
+          class="wsp-tabs__panel {% if forloop.first %}is-active{% endif %}"
+          {{ block.shopify_attributes }}>
+
+          <div class="wsp-product-main-container">
+
+            <!-- LEFT: Product -->
+            <div class="wsp-section__product-column">
+              {% assign product = block.settings.product %}
+              {% if product %}
+              <div class="wsp-product-card">
+                {% if product.available %}
+                <span class="badge-label">
+                  {{ section.settings.in_stock}}
+                </span>
+                {% else %}
+                  <span class="badge-label">
+                    {{ section.settings.out_stock }}
+                  </span>
+                {% endif %}
+                <div class="wsp-product-gallery">
+                  <div class="wsp-gallery-main">
+                    <button class="wsp-gallery-arrow wsp-gallery-arrow--prev">‹</button>
+                    <div class="wsp-product-gallery-track">
+                      {% for media in product.media %}
+                        {% if media.media_type == 'image' %}
+                        <div class="wsp-product-gallery__item">
+                          {{ media | image_url: width: 800 | image_tag }}
+                        </div>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                    <button class="wsp-gallery-arrow wsp-gallery-arrow--next">›</button>
+                  </div>
+                  <div>
+                    <h3 class="wsp-product-title">{{ product.title }}</h3>
+                    <p class="wsp-subheading">{{ block.settings.product_subheading }}</p>
+                  </div>
+                </div>
+
+                <div class="wsp-product-details">
+                
+
+                  {% comment %} <div class="wsp-product-price">
+                    {% if product.compare_at_price > product.price %}
+                      <span class="compare">{{ product.compare_at_price | money }}</span>
+                    {% endif %}
+                    <span class="price">{{ product.price | money }}</span>
+                  </div> {% endcomment %}
+
+                  <div class="wsp-product-desc">
+                    <span>{{block.settings.product_style_name}}<strong> {{ block.settings.product_style }}</strong></span>
+                    <span>{{ block.settings.product_technology_name }}<strong> {{ block.settings.product_technology }}</strong></span>
+                    <span>{{ block.settings.product_battery_name }}<strong> {{ block.settings.product_battery }}</strong></span>
+                    <span>{{ block.settings.product_battery_name }}<strong> {{ block.settings.product_fit }}</strong></span>
+                  </div>
+
+                  <a href="{{ product.url }}" class="btn-primary full-width">View Product</a>
+                </div>
+              </div>
+              {% endif %}
+            </div>
+
+            <!-- RIGHT: Comparison -->
+            <div class="wsp-section__background">
+              <div class="wsp-section__compare">
+                {% comment %} <div class="name-overlay">{{ block.settings.tab_title }}</div> {% endcomment %}
+                <!-- Right image -->
+                <div class="wsp-section__comparison__image wsp-section__comparison__image--right">
+                  {{ block.settings.right_image | image_url: width: 5000 | image_tag }}
+                  {% if block.settings.right_caption != blank %}
+                    <span class="wsp-section__caption wsp-section__caption--right badge-label">
+                      {{ block.settings.right_caption }}
+                    </span>
+                  {% endif %}
+                </div>
+
+                <!-- Slider -->
+                <div class="wsp-section__comparison__slider">
+                  {% if block.settings.handle_image %}
+                    {{ block.settings.handle_image | image_url: width: 100 | image_tag }}
+                  {% else %}
+                    <div class="wsp-section__comparison__slider-handle">
+                    <svg width="24" height="16" viewBox="0 0 24 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <g clip-path="url(#clip0_1000_746)">
+                                <path d="M10 12L6 8L10 4" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                              </g>
+                              <g clip-path="url(#clip1_1000_746)">
+                                <path d="M14 12L18 8L14 4" stroke="white" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                              </g>
+                              <defs>
+                                <clipPath id="clip0_1000_746">
+                                    <rect width="16" height="16" fill="white"/>
+                                </clipPath>
+                                <clipPath id="clip1_1000_746">
+                                    <rect width="16" height="16" fill="white" transform="translate(8)"/>
+                                </clipPath>
+                              </defs>
+                          </svg>
+                    </div>
+                  {% endif %}
+                </div>
+
+                <!-- Left image -->
+                <div class="wsp-section__comparison__image wsp-section__comparison__overlay">
+                  {{ block.settings.left_image | image_url: width: 5000 | image_tag }}
+                  {% if block.settings.left_caption != blank %}
+                    <span class="wsp-section__caption wsp-section__caption--left badge-label">
+                      {{ block.settings.left_caption }}
+                    </span>
+                  {% endif %}
+                </div>
+
+              </div>
+              <p class="drag-info"><svg class="arrow-svg arrow-svg-reverse" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M3.75 9H14.25" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M9 3.75L14.25 9L9 14.25" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  {{ section.settings.drag_info }} 
+                  <svg class="arrow-svg " width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3.75 9H14.25" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M9 3.75L14.25 9L9 14.25" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </p>
+            </div>
+
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    
+    
+  </div>
+</section>
+
+{%- endcapture -%}
+{{ minify | strip_newlines }}
+
+{% schema %}
+{
+  "name": "Comparison Slider Tabs",
+  "class": "DP__comparison-slider-text",
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_heading",
+      "label": "Section Heading",
+      "default": "Life sounds better"
+    },
+    {
+      "type": "text",
+      "id": "drag_info",
+      "label": "Drag Info Text",
+      "default": "Drag to experience the clarity transformation",
+    },
+    {
+      "type": "text",
+      "id": "in_stock",
+      "label": "In Stock",
+      "default": "In Stock",
+    },
+    {
+      "type": "text",
+      "id": "out_stock",
+      "label": "Out Stock",
+      "default": "Out Stock",
+    },
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tab_title",
+          "label": "Tab title",
+          "default": "Tab"
+        },
+        {
+          "type": "text",
+          "id": "product_subheading",
+          "label": "Product Sub Heading",
+          "default": "Tab"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "product_style_name",
+          "label": "Product Style Name",
+          "default": "STYLE"
+        },
+        {
+          "type": "text",
+          "id": "product_style",
+          "label": "Product Style",
+          "default": "Discreet"
+        },
+        {
+          "type": "text",
+          "id": "product_technology_name",
+          "label": "Product Technology Name",
+          "default": "TECHNOLOGY"
+        },
+        {
+          "type": "text",
+          "id": "product_technology",
+          "label": "Product Technology",
+          "default": "Digital Premium"
+        },
+        {
+          "type": "text",
+          "id": "product_battery_name",
+          "label": "Product Battery Name",
+          "default": "BATTERY"
+        },
+        {
+          "type": "text",
+          "id": "product_battery",
+          "label": "Product Battery",
+          "default": "Rechargeable"
+        },
+        {
+          "type": "text",
+          "id": "product_fit_name",
+          "label": "Product Fit Name",
+          "default": "FIT"
+        },
+        {
+          "type": "text",
+          "id": "product_fit",
+          "label": "Product Fit",
+          "default": "Custom Mold"
+        },
+        {
+          "type": "image_picker",
+          "id": "left_image",
+          "label": "Left image"
+        },
+        {
+          "type": "text",
+          "id": "left_caption",
+          "label": "Left caption"
+        },
+        {
+          "type": "image_picker",
+          "id": "right_image",
+          "label": "Right image"
+        },
+        {
+          "type": "text",
+          "id": "right_caption",
+          "label": "Right caption"
+        },
+        {
+          "type": "image_picker",
+          "id": "handle_image",
+          "label": "Handle image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Comparison Slider Tabs",
+      "blocks": [{ "type": "tab" }, { "type": "tab" }, { "type": "tab" }]
+    }
+  ]
+}
+{% endschema %}
+
+{%- comment -%} JSON Settings {%- endcomment -%}
+<script type="application/json" data-wsp-section="{{ section_id }}">
+  {
+    "id": {{ section_id | json }},
+    "animation": {{ section.settings.animation | json }}
+  }
+</script>
+
+{%- comment -%} JavaScript {%- endcomment -%}
+<script
+  data-wsp-section-js="{{ section_id }}"
+  type="module"
+  defer
+>
+  (function(){
+
+    const webPack = {
+      settings: {},
+
+      // ==========================
+      // ✅ ADDED: Product gallery slider
+      // ==========================
+      initProductGallery: function(section) {
+        const gallery = section.querySelector('.wsp-product-gallery');
+        if (!gallery) return;
+
+        const track = gallery.querySelector('.wsp-product-gallery-track');
+        const slides = gallery.querySelectorAll('.wsp-product-gallery__item');
+        const prev = gallery.querySelector('.wsp-gallery-arrow--prev');
+        const next = gallery.querySelector('.wsp-gallery-arrow--next');
+
+        if (!track || slides.length <= 1) return;
+
+        let index = 0;
+
+        function update() {
+          track.style.transform = `translateX(-${index * 100}%)`;
+        }
+
+        prev?.addEventListener('click', () => {
+          index = index > 0 ? index - 1 : slides.length - 1;
+          update();
+        });
+
+        next?.addEventListener('click', () => {
+          index = index < slides.length - 1 ? index + 1 : 0;
+          update();
+        });
+      },
+
+      load: function(section){
+
+          const compares = section.querySelectorAll('.wsp-section__compare');
+          if (!compares.length) return;
+
+          compares.forEach(compare => {
+
+            const overlay = compare.querySelector('.wsp-section__comparison__overlay');
+            const slider  = compare.querySelector('.wsp-section__comparison__slider');
+
+            if (!overlay || !slider) return;
+
+            let dragging = false;
+
+            function set(percent) {
+              overlay.style.width = percent + '%';
+              slider.style.left = `calc(${percent}% - 25px)`;
+
+              // ✅ ADD THIS
+  if (percent <= 0 || percent >= 100 ) {
+    overlay.style.borderRadius = '16px';
+  } else {
+    overlay.style.borderRadius = '0';
+  }
+            }
+
+            // init
+            set(50);
+
+            function percentFromEvent(e) {
+              const rect = compare.getBoundingClientRect();
+              const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+              return Math.max(0, Math.min(100, (x / rect.width) * 100));
+            }
+
+            slider.addEventListener('mousedown', e => {
+              e.preventDefault();
+              dragging = true;
+            });
+
+            slider.addEventListener('touchstart', () => {
+              dragging = true;
+            }, { passive: true });
+
+            document.addEventListener('mouseup', () => dragging = false);
+            document.addEventListener('touchend', () => dragging = false);
+
+            document.addEventListener('mousemove', e => {
+              if (!dragging) return;
+              set(percentFromEvent(e));
+            });
+
+            document.addEventListener('touchmove', e => {
+              if (!dragging) return;
+              set(percentFromEvent(e));
+            }, { passive: true });
+
+      });
+
+  webPack.initProductGallery(section);
+},
+
+
+      unload: function(section){
+        section.classList.remove('wsp-section__animation-applied');
+      }
+    };
+
+    window.addEventListener('shopify:section:unload', function (e) {
+      const section = document.querySelector(`#DP--${e.detail.sectionId}`);
+      if (section) webPack.unload(section);
+    });
+
+    webPack.settings = JSON.parse(
+      document.querySelector('[data-wsp-section="{{ section_id }}"]').innerHTML
+    );
+
+    const sectionId = {{ section.id | json }};
+    const section = document.querySelector(`#DP--${sectionId}`);
+
+    if (sectionId === webPack.settings.id){
+      webPack.load(section);
+    }
+
+  })()
+
+  document.addEventListener('DOMContentLoaded', () => {
+  const tabs = document.querySelectorAll('.wsp-tabs__btn');
+  const panels = document.querySelectorAll('.wsp-tabs__panel');
+
+  tabs.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.tab;
+
+      tabs.forEach(b => b.classList.remove('is-active'));
+      panels.forEach(p => p.classList.remove('is-active'));
+
+      btn.classList.add('is-active');
+      document.getElementById(id).classList.add('is-active');
+    });
+  });
+});
+</script>
+

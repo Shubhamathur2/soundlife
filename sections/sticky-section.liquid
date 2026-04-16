@@ -1,0 +1,253 @@
+  {% if section.settings.enable %}
+    <div class="sticky-hearing-bar is-top page-width">
+      <div class="sticky-hearing-inner">
+        <h4>{{ section.settings.text }}</h4>
+        <button class="hear-difference-btn">
+          {{ section.settings.link_text }} <svg class="arrow-svg white-svg" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3.75 9H14.25" stroke="#005CDE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M9 3.75L14.25 9L9 14.25" stroke="#005CDE" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+
+        </button>
+      </div>
+    </div>
+<svg width="0" height="0">
+  <filter id="liquid-glass">
+    <feTurbulence type="fractalNoise" baseFrequency="0.008" numOctaves="2" result="noise"/>
+    <feDisplacementMap in="SourceGraphic" in2="noise" scale="12"/>
+  </filter>
+</svg>
+
+    <!-- POPUP -->
+  <div class="hear-popup-overlay" id="hearPopup">
+  <div class="hear-popup">
+
+    <!-- Close -->
+    <button class="hear-popup-close">✕</button>
+
+    <!-- LEFT: Media -->
+    <div class="hear-popup-left">
+      {% if section.settings.popup_video != blank %}
+        {{ section.settings.popup_video | video_tag:
+          autoplay: false,
+          loop: false,
+          muted: false,
+          controls: true,
+          playsinline: true,
+          class: 'popup-video'
+        }}
+      {% elsif section.settings.popup_image != blank %}
+        <img src="{{ section.settings.popup_image | image_url: width: 900 }}" alt="Customer story">
+      {% endif %}
+    </div>
+
+    <!-- RIGHT: Content -->
+    <div class="hear-popup-right">
+
+      <div class="popup-badge">
+       <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6.41602 2.74281C6.4159 2.66156 6.39172 2.58216 6.34652 2.51464C6.30132 2.44712 6.23714 2.3945 6.16206 2.36342C6.08699 2.33235 6.00439 2.3242 5.9247 2.34002C5.845 2.35584 5.77178 2.39491 5.71427 2.45231L3.74027 4.42573C3.66408 4.50236 3.57345 4.56312 3.47362 4.60447C3.37379 4.64583 3.26674 4.66696 3.15868 4.66664H1.74935C1.59464 4.66664 1.44627 4.7281 1.33687 4.8375C1.22747 4.94689 1.16602 5.09527 1.16602 5.24998V8.74998C1.16602 8.90468 1.22747 9.05306 1.33687 9.16245C1.44627 9.27185 1.59464 9.33331 1.74935 9.33331H3.15868C3.26674 9.33299 3.37379 9.35412 3.47362 9.39548C3.57345 9.43683 3.66408 9.49759 3.74027 9.57423L5.71368 11.5482C5.7712 11.6059 5.84453 11.6451 5.92438 11.661C6.00423 11.6769 6.08701 11.6688 6.16222 11.6376C6.23744 11.6065 6.30171 11.5537 6.34689 11.4859C6.39207 11.4182 6.41613 11.3386 6.41602 11.2571V2.74281Z" stroke="#1A1A1A" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M9.33398 5.25C9.71263 5.75486 9.91732 6.36892 9.91732 7C9.91732 7.63108 9.71263 8.24514 9.33398 8.75" stroke="#1A1A1A" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M11.2949 10.7123C11.7824 10.2248 12.1692 9.64606 12.433 9.00909C12.6968 8.37213 12.8326 7.68944 12.8326 6.99999C12.8326 6.31055 12.6968 5.62785 12.433 4.99089C12.1692 4.35393 11.7824 3.77517 11.2949 3.28766" stroke="#1A1A1A" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      {{ section.settings.badge_text }}
+      </div>
+
+      <h2 class="popup-heading">
+        {{ section.settings.popup_heading }}
+      </h2>
+
+      <p class="popup-subheading">
+        {{ section.settings.popup_subheading }}
+      </p>
+
+      <!-- Feature Pills -->
+      <div class="popup-features">
+
+        <div class="feature-pill">
+         🎧 {{ section.settings.benefit_1_title }}
+        </div>
+
+        <div class="feature-pill">
+          ⭐ {{ section.settings.benefit_2_title }}
+        </div>
+
+        <div class="feature-pill">
+          🛡️ {{ section.settings.benefit_3_title }}
+        </div>
+
+        <div class="feature-pill">
+          🤖 {{ section.settings.benefit_4_title }}
+        </div>
+        <div class="feature-pill">
+          🔇 {{ section.settings.benefit_5_title }}
+        </div>
+        <div class="feature-pill">
+          📱 {{ section.settings.benefit_6_title }}
+        </div>
+
+      </div>
+
+      <!-- Buttons -->
+      <div class="hear-actions">
+        <a href="/pages/book-appointment" class="soundlife-btn-primary btn-primary">
+          {{ section.settings.book_button_text }}<svg class="arrow-svg white-svg" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3.75 9H14.25" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M9 3.75L14.25 9L9 14.25" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+
+        <a href="/pages/hearing-test" class="soundlife-btn-secondary">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M0.666016 7.99999H2.66602C3.01964 7.99999 3.35878 8.14047 3.60882 8.39051C3.85887 8.64056 3.99935 8.9797 3.99935 9.33332V11.3333C3.99935 11.6869 3.85887 12.0261 3.60882 12.2761C3.35878 12.5262 3.01964 12.6667 2.66602 12.6667H1.99935C1.64573 12.6667 1.30659 12.5262 1.05654 12.2761C0.806491 12.0261 0.666016 11.6869 0.666016 11.3333V6.66666C0.666016 5.07536 1.29816 3.54923 2.42337 2.42402C3.54859 1.2988 5.07472 0.666656 6.66602 0.666656C8.25731 0.666656 9.78344 1.2988 10.9087 2.42402C12.0339 3.54923 12.666 5.07536 12.666 6.66666V11.3333C12.666 11.6869 12.5255 12.0261 12.2755 12.2761C12.0254 12.5262 11.6863 12.6667 11.3327 12.6667H10.666C10.3124 12.6667 9.97326 12.5262 9.72321 12.2761C9.47316 12.0261 9.33268 11.6869 9.33268 11.3333V9.33332C9.33268 8.9797 9.47316 8.64056 9.72321 8.39051C9.97326 8.14047 10.3124 7.99999 10.666 7.99999H12.666" stroke="white" stroke-opacity="0.9" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+{{ section.settings.test_button_text }}
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+  {% endif %}
+
+  <div class="qr-section">
+    <img src="{{ 'qr-fix.svg' | file_url }}">
+  </div>
+  <div class="qr-popup">
+    <div class="qr-top">
+      <h6>Quick Connect</h6>
+      <button class="qr-popup-close">✕</button>
+    </div>
+    <div class="qr-bottom">
+      <img src="{{ 'qr-code.svg' | file_url }}">
+      <h5>Scan to connect with us on WhatsApp</h5>
+      <p>Get instant support</p>
+    </div>
+  </div>
+
+  {% schema %}
+  {
+    "name": "Sticky Bottom Banner",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable",
+        "label": "Enable banner",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "text",
+        "label": "Banner text",
+        "default": "Hear Well, Live Well: The Importance of Hearing Health"
+      },
+      {
+        "type": "text",
+        "id": "link_text",
+        "label": "Button text",
+        "default": "Hear The Difference"
+      },
+
+      {
+        "type": "header",
+        "content": "Popup Content"
+      },
+      {
+        "type": "text",
+        "id": "badge_text",
+        "label": "Badge Text",
+        "default": "Special Offer",
+      },
+      {
+        "type": "text",
+        "id": "popup_heading",
+        "label": "Popup heading",
+        "default": "Special Offer for You!"
+      },
+      {
+        "type": "text",
+        "id": "popup_subheading",
+        "label": "Popup subheading",
+        "default": "TEST INDONESIA HERE"
+      },
+
+      {
+        "type": "text",
+        "id": "benefit_1_title",
+        "label": "Benefit 1 Title",
+        "default": "10-Day Free Trial"
+      },
+      {
+        "type": "text",
+        "id": "benefit_2_title",
+        "label": "Benefit 2 Title",
+        "default": "Real Reviews"
+      },
+      {
+        "type": "text",
+        "id": "benefit_3_title",
+        "label": "Benefit 3 Title",
+        "default": "Extended Warranty"
+      },
+      {
+        "type": "text",
+        "id": "benefit_4_title",
+        "label": "Benefit 4 Title",
+        "default": "AI-Powered"
+      },
+      {
+        "type": "text",
+        "id": "benefit_5_title",
+        "label": "Benefit 5 Title",
+        "default": "Noise Cancellation"
+      },
+      {
+        "type": "text",
+        "id": "benefit_6_title",
+        "label": "Benefit 6 Title",
+        "default": "Bluetooth Ready"
+      },
+      {
+        "type": "text",
+        "id": "customer_stories_title",
+        "label": "Customer Stories Title",
+        "default": "Customer Stories"
+      },
+
+      {
+        "type": "text",
+        "id": "video_placeholder",
+        "label": "Video Placeholder Text",
+        "default": "Select a video in the section settings"
+      },
+
+      {
+        "type": "text",
+        "id": "book_button_text",
+        "label": "Book Appointment Button Text",
+        "default": "Book Appointment"
+      },
+      {
+        "type": "text",
+        "id": "test_button_text",
+        "label": "Hearing Test Button Text",
+        "default": "Free Hear Test"
+      },
+
+      {
+        "type": "video",
+        "id": "popup_video",
+        "label": "Popup video"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Sticky Bottom Banner",
+        "category": "Promotional"
+      }
+    ]
+  }
+  {% endschema %}
+

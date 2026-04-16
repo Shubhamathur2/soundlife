@@ -1,0 +1,136 @@
+<span class="field-currency">{{ cart.currency.symbol }}</span>
+<div class="wrape-range-slider">
+<div class="price-slider-wrapper">
+  <div class="slider-track"></div>
+  <input type="range" class="range-min" min="0" max="{{ filter.range_max | money_without_currency }}" value="{{ filter.min_value.value | default: 0 }}">
+  <input type="range" class="range-max" min="0" max="{{ filter.range_max | money_without_currency }}" value="{{ filter.max_value.value | default: filter.range_max }}">
+</div>
+<div class="input-field-wrap">
+<div class="field">
+  <input
+    class="field__input"
+    name="{{ filter.min_value.param_name }}"
+    id="{{ id_prefix }}{{ filter.label | escape }}-GTE"
+    {%- if filter.min_value.value -%}
+      value="{{ filter.min_value.value | money_without_currency }}"
+    {%- endif -%}
+    type="text"
+    inputmode="decimal"
+    placeholder="0"
+    data-pattern="\d| |,|\."
+    data-min="0"
+    data-max="{{ filter.range_max | money_without_currency }}"
+  >
+  <label class="field__label" for="{{ id_prefix }}{{ filter.label | escape }}-GTE">
+    {{- 'products.facets.from' | t -}}
+  </label>
+</div>
+
+{%- if filter_type != 'vertical' -%}
+  <span class="field-currency">{{ cart.currency.symbol }}</span>
+{%- endif -%}
+
+<div class="field">
+  <input
+    class="field__input"
+    name="{{ filter.max_value.param_name }}"
+    id="{{ id_prefix }}{{ filter.label | escape }}-LTE"
+    {%- if filter.max_value.value -%}
+      value="{{ filter.max_value.value | money_without_currency }}"
+    {%- endif -%}
+    type="text"
+    inputmode="decimal"
+    placeholder="{{ filter.range_max | money_without_currency }}"
+    data-pattern="\d| |,|\."
+    data-min="0"
+    data-max="{{ filter.range_max | money_without_currency }}"
+  >
+  <label class="field__label" for="{{ id_prefix }}{{ filter.label | escape }}-LTE">
+    {{- 'products.facets.to' | t -}}
+  </label>
+</div>
+</div>
+</div>
+<style>
+  .price-slider-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.price-slider-wrapper input[type="range"] {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  pointer-events: none;
+  background: none;
+}
+
+.price-slider-wrapper input[type="range"]::-webkit-slider-thumb {
+  pointer-events: auto;
+  position: relative;
+  z-index: 2;
+}
+</style>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const minInput = document.querySelector(".range-min");
+    const maxInput = document.querySelector(".range-max");
+
+    const minField = document.querySelector("[name='{{ filter.min_value.param_name }}']");
+    const maxField = document.querySelector("[name='{{ filter.max_value.param_name }}']");
+
+    const track = document.querySelector(".slider-track");
+
+    const minGap = 0;
+    const maxVal = parseInt(minInput.max);
+
+    function updateSlider() {
+    let minVal = Number(minInput.value) || 0;
+    let maxValCurrent = Number(maxInput.value) || maxVal;
+
+    if (maxValCurrent - minVal < minGap) {
+        maxValCurrent = minVal + minGap;
+        maxInput.value = maxValCurrent;
+    }
+
+    let percent1 = (minVal / maxVal) * 100;
+    let percent2 = (maxValCurrent / maxVal) * 100;
+
+    track.style.background = `linear-gradient(
+      to right,
+      #ccc ${percent1}%,
+      green ${percent1}%,
+      green ${percent2}%,
+      #ccc ${percent2}%
+    )`;
+
+    minField.value = minVal;
+    maxField.value = maxValCurrent;
+}
+
+    function updateFromInputs() {
+        let minVal = parseInt(minField.value) || 0;
+        let maxValCurrent = parseInt(maxField.value) || maxVal;
+
+        if (minVal < 0) minVal = 0;
+        if (maxValCurrent > maxVal) maxValCurrent = maxVal;
+
+        if (minVal > maxValCurrent) {
+            minVal = maxValCurrent;
+        }
+
+        minInput.value = minVal;
+        maxInput.value = maxValCurrent;
+
+        updateSlider();
+    }
+
+    minInput.addEventListener("input", updateSlider);
+    maxInput.addEventListener("input", updateSlider);
+
+    minField.addEventListener("input", updateFromInputs);
+    maxField.addEventListener("input", updateFromInputs);
+
+    updateSlider();
+});
+</script>

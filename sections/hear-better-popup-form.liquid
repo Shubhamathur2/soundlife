@@ -1,0 +1,446 @@
+{% comment %}
+Hear Better Popup Form (Global Trigger Compatible)
+Button can be placed in any section using class: open-hear-popup
+{% endcomment %}
+
+<!-- Popup Overlay -->
+<div class="hear-popup-overlay" id="hearPopup">
+  <div class="hear-popup-container">
+
+    <!-- Close Button -->
+    <button type="button" class="hear-close" id="closeHearForm">×</button>
+
+    <!-- Heading -->
+    <h2 class="hear-title">{{ section.settings.heading }}</h2>
+    <p class="hear-subtitle">{{ section.settings.subheading }}</p>
+
+    {% form 'contact', id: 'HearBetterForm', class: 'hear-form' %}
+      <div class="form-grid">
+
+        <div class="form-field">
+          <label>{{ section.settings.recipient_type_label }}</label>
+          <select name="contact[Recipient Type]" required>
+            <option value="">{{ section.settings.recipient_type_placeholder }}</option>
+            <option>{{ section.settings.option_seniors }}</option>
+            <option>{{ section.settings.option_children }}</option>
+            <option>{{ section.settings.option_adults }}</option>
+            <option>{{ section.settings.option_others }}</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label>{{ section.settings.name_label }}</label>
+          <input type="text" name="contact[Name]" placeholder="{{ section.settings.name_placeholder }}" required>
+        </div>
+
+        <div class="form-field">
+          <label>{{ section.settings.email_label }}</label>
+          <input type="email" name="contact[email]" placeholder="{{ section.settings.email_placeholder }}" required>
+        </div>
+
+        <div class="form-field">
+          <label>{{ section.settings.dob_label }}</label>
+          <input type="date" name="contact[Date of Birth]" required>
+        </div>
+
+        <div class="form-field">
+          <label>{{ section.settings.residence_label }}</label>
+          <input type="text" name="contact[Residence]" placeholder="{{ section.settings.residence_placeholder }}" required>
+        </div>
+
+        <div class="form-field">
+          <label>{{ section.settings.whatsapp_label }}</label>
+          <input 
+            type="tel"
+            id="whatsapp"
+            name="contact[WhatsApp]"
+            placeholder="{{ section.settings.whatsapp_placeholder }}"
+            inputmode="numeric"
+            autocomplete="off"
+            required>
+        </div>
+
+        <div class="form-field full-width">
+          <label>{{ section.settings.story_label }}</label>
+          <input type="url" name="contact[Story Video]" placeholder="{{ section.settings.story_placeholder }}">
+        </div>
+
+      </div>
+
+      <div class="hear-terms">
+        <input type="checkbox" id="termsCheck" required>
+        <label for="termsCheck">
+          {{ section.settings.terms_text }}
+          <a href="{{ section.settings.terms_link }}" target="_blank">
+            {{ section.settings.terms_link_text }}
+          </a>
+          {{ section.settings.terms_text_after }}
+        </label>
+      </div>
+
+      <button type="submit" class="hear-submit">
+        {{ section.settings.submit_button_text }} <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4.3208 10.3711H16.4196" stroke="white" stroke-width="1.72839" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M10.3706 4.32031L16.42 10.3697L10.3706 16.4191" stroke="white" stroke-width="1.72839" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+      </button>
+
+      {% if form.posted_successfully? %}
+        <p class="form-success">{{ section.settings.success_message }}</p>
+      {% endif %}
+    {% endform %}
+  </div>
+</div>
+
+<style>
+    .hear-popup-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.65);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+    }
+    /* Modern Smooth Scrollbar for Popup */
+    .hear-popup-container {
+    width: 90%;
+    max-width: 1000px;
+    padding: 60px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #0b5bd3, #08a33c);
+    position: relative;
+    height: 90vh;
+    overflow-y: auto; /* better than scroll */
+    scroll-behavior: smooth;
+    }
+
+    /* Chrome, Edge, Safari */
+    .hear-popup-container::-webkit-scrollbar {
+    width: 8px;
+    }
+
+    .hear-popup-container::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 20px;
+    }
+
+    .hear-popup-container::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.2));
+    border-radius: 20px;
+    backdrop-filter: blur(6px);
+    transition: all 0.3s ease;
+    }
+
+    /* Hover Effect (cool interaction) */
+    .hear-popup-container::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #ffffff, rgba(255,255,255,0.4));
+    }
+
+    /* Firefox Support */
+    .hear-popup-container {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.5) transparent;
+    }
+    .hear-close{
+    position:absolute;
+    top:20px;
+    right:20px;
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    border:none;
+    background:rgba(255,255,255,0.15);
+    color:#fff;
+    font-size:22px;
+    cursor:pointer;
+    }
+
+    .hear-title{
+    text-align:center;
+    font-size:36px;
+    margin-bottom:10px;
+    font-weight:600;
+    color:#fff;
+    }
+
+    .hear-subtitle{
+    text-align:center;
+    opacity:0.9;
+    margin-bottom:40px;
+    color:#fff;
+    }
+
+    .form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:30px 50px;
+    }
+
+    .full-width{
+    grid-column:1 / -1;
+    }
+    .hear-popup-container .form-field label
+    {
+    color:#fff;
+    }
+    .hear-popup-container .hear-terms 
+    {
+    text-align:center;
+    margin-top:20px;
+    }
+    .hear-popup-container .hear-terms label
+    {
+    color:#fff;
+    }
+    .hear-popup-container .hear-terms label a
+    {
+    color:#fff;
+    text-decoration: underline;
+    }
+    .hear-popup-overlay .form-field input,
+    .hear-popup-overlay .form-field select{
+    width:100%;
+    background:transparent;
+    border:none;
+    border-bottom:1px solid rgba(255,255,255,0.7);
+    padding:12px 0;
+    color:#fff;
+    font-size:16px;
+    outline:none;
+    }
+
+    .hear-popup-overlay .form-field input::placeholder{
+    color:rgba(255,255,255,0.7);
+    }
+    
+    .hear-popup-overlay input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1) brightness(100%) contrast(100%);
+    opacity: 1;
+    cursor: pointer;
+    }
+
+    .hear-popup-overlay .hear-submit{
+    margin:30px auto 0;
+    display:block;
+    background:var(--color-button-primary);
+    border:none;
+    padding:18px 40px;
+    border-radius:50px;
+    font-size:18px;
+    font-weight:600;
+    color:#fff;
+    cursor:pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    }
+
+    @media(max-width:768px){
+        .form-grid{
+            grid-template-columns:1fr;
+        }
+        .full-width{
+            grid-column:auto;
+        }
+    }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+  const popup = document.getElementById("hearPopup");
+  const closeBtn = document.getElementById("closeHearForm");
+  const triggerButtons = document.querySelectorAll(".open-hear-popup");
+
+  // Open popup (works with <a> and <button>)
+  triggerButtons.forEach(btn => {
+    btn.addEventListener("click", function(e){
+      e.preventDefault(); // VERY IMPORTANT (stops link redirect)
+
+      if(!popup) return;
+
+      popup.style.display = "flex";
+      document.body.style.overflow = "hidden";
+    });
+  });
+
+  // Close popup
+  if(closeBtn){
+    closeBtn.addEventListener("click", function(){
+      popup.style.display = "none";
+      document.body.style.overflow = "auto";
+    });
+  }
+
+  // Close on overlay click
+  if(popup){
+    popup.addEventListener("click", function(e){
+      if(e.target === popup){
+        popup.style.display = "none";
+        document.body.style.overflow = "auto";
+      }
+    });
+  }
+
+});
+</script>
+
+{% schema %}
+{
+  "name": "Hear Better Popup Form",
+  "settings": [
+    { 
+        "type": "text", 
+        "id": "heading", 
+        "label": "Heading", 
+        "default": "Take the First Step to Hear Better" 
+    },
+    { 
+        "type": "text", 
+        "id": "subheading", 
+        "label": "Subheading", 
+        "default": "Submit your form and story video. Our team will review every application." 
+    },
+    { 
+        "type": "text", 
+        "id": "recipient_type_label", 
+        "label": "Recipient Type Label", 
+        "default": "Recipient Type" 
+    },
+    { 
+        "type": "text", 
+        "id": "recipient_type_placeholder", 
+        "label": "Recipient Type Placeholder", 
+        "default": "Select Recipient Type" 
+    },
+    { 
+        "type": "text", 
+        "id": "name_label", 
+        "label": "Name Label", 
+        "default": "Recipient's Name"
+     },
+    { 
+        "type": "text", 
+        "id": "name_placeholder", 
+        "label": "Name Placeholder", 
+        "default": "John Doe" 
+    },
+    { 
+        "type": "text", 
+        "id": "email_label", 
+        "label": "Email Label", 
+        "default": "Recipient Email" 
+    },
+    { 
+        "type": "text", 
+        "id": "email_placeholder", 
+        "label": "Email Placeholder", 
+        "default": "john@gmail.com"
+    },
+    {   
+        "type": "text", 
+        "id": "dob_label", 
+        "label": "DOB Label", 
+        "default": "Recipient's Date Of Birth" 
+    },
+    {   
+        "type": "text", 
+        "id": "residence_label", 
+        "label": "Residence Label", 
+        "default": "Recipient's Place Of Residence (City + Province)" 
+    },
+    { 
+        "type": "text", 
+        "id": "residence_placeholder", 
+        "label": "Residence Placeholder", 
+        "default": "City, Province" 
+    },
+    { 
+        "type": "text", 
+        "id": "whatsapp_label", 
+        "label": "WhatsApp Label", 
+        "default": "WhatsApp (Must Be Contactable)" 
+    },
+    { 
+        "type": "text", 
+        "id": "whatsapp_placeholder", 
+        "label": "WhatsApp Placeholder", 
+        "default": "+62 xxx xxxx xxxx" 
+    },
+    { 
+        "type": "text", 
+        "id": "story_label", 
+        "label": "Story Label", 
+        "default": "Story Video Link On YouTube/IG/TikTok" 
+    },
+    { 
+        "type": "text", 
+        "id": "story_placeholder", 
+        "label": "Story Placeholder", 
+        "default": "https://example.com" 
+    },
+    { 
+        "type": "text", 
+        "id": "option_seniors", 
+        "label": "Option Seniors", 
+        "default": "Seniors above 60 years old" 
+    },
+    { 
+        "type": "text", 
+        "id": "option_children", 
+        "label": "Option Children", 
+        "default": "Children" 
+    },
+    { 
+        "type": "text", 
+        "id": "option_adults", 
+        "label": "Option Adults", 
+        "default": "Adults" 
+    },
+    { 
+        "type": "text", 
+        "id": "option_others", 
+        "label": "Option Others", 
+        "default": "Others" 
+    },
+    { 
+        "type": "text", 
+        "id": "terms_text", 
+        "label": "Terms Text", 
+        "default": "By submitting this form, I acknowledge and agree to the" 
+    },
+    { 
+        "type": "text", 
+        "id": "terms_link_text", 
+        "label": "Terms Link Text", 
+        "default": "terms and conditions" 
+    },
+    { 
+        "type": "url", 
+        "id": "terms_link", 
+        "label": "Terms Link" 
+    },
+    {  "type": "text",
+        "id": "terms_text_after",
+        "label": "Terms Text (After Link)",
+        "default": "of this campaign."
+    },
+    { 
+        "type": "text", 
+        "id": "submit_button_text", 
+        "label": "Submit Button Text", 
+        "default": "SUBMIT MY APPLICATION" 
+    },
+    { 
+        "type": "text", 
+        "id": "success_message", 
+        "label": "Success Message", 
+        "default": "Application submitted successfully!" 
+    }
+  ],
+  "presets": [
+    { "name": "Hear Better Popup Form" }
+  ]
+}
+{% endschema %}

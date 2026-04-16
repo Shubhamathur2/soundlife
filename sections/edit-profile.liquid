@@ -1,0 +1,146 @@
+{% if customer %}
+<div class="edit-profile-wrapper">
+
+  <!-- Edit Profile Button -->
+  <button id="editProfileBtn" class="edit-profile-btn">
+    Edit Profile
+  </button>
+
+  <!-- Popup -->
+  <div id="editProfilePopup" class="edit-profile-popup">
+    <div class="popup-overlay"></div>
+
+    <div class="popup-content">
+      <span class="close-popup">&times;</span>
+
+      <h2>Edit Profile</h2>
+
+      {% form 'customer', customer %}
+        
+        <div class="field">
+          <label>First Name</label>
+          <input type="text" name="customer[first_name]" value="{{ customer.first_name }}">
+        </div>
+
+        <div class="field">
+          <label>Last Name</label>
+          <input type="text" name="customer[last_name]" value="{{ customer.last_name }}">
+        </div>
+
+        <div class="field">
+          <label>Email</label>
+          <input type="email" name="customer[email]" value="{{ customer.email }}">
+        </div>
+
+        <button type="submit" class="save-btn">Save Changes</button>
+
+      {% endform %}
+
+    </div>
+  </div>
+
+</div>
+{% else %}
+  <p>Please log in to edit your profile.</p>
+{% endif %}
+
+<style>
+.edit-profile-btn {
+  padding: 10px 20px;
+  background: #000;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.edit-profile-popup {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+}
+
+.popup-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+}
+
+.popup-content {
+  position: relative;
+  background: #fff;
+  max-width: 500px;
+  margin: 80px auto;
+  padding: 30px;
+  border-radius: 8px;
+  z-index: 2;
+}
+
+.close-popup {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.field {
+  margin-bottom: 15px;
+}
+
+.field input {
+  width: 100%;
+  padding: 8px;
+}
+
+.save-btn {
+  background: #000;
+  color: #fff;
+  padding: 10px;
+  width: 100%;
+  border: none;
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const btn = document.getElementById("editProfileBtn");
+  const popup = document.getElementById("editProfilePopup");
+  const close = document.querySelector(".close-popup");
+  const overlay = document.querySelector(".popup-overlay");
+
+  if (btn) {
+    btn.addEventListener("click", () => {
+      popup.style.display = "block";
+    });
+  }
+
+  if (close) {
+    close.addEventListener("click", () => {
+      popup.style.display = "none";
+    });
+  }
+
+  if (overlay) {
+    overlay.addEventListener("click", () => {
+      popup.style.display = "none";
+    });
+  }
+});
+</script>
+
+{% schema %}
+{
+  "name": "Edit Profile",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Edit Profile"
+    }
+  ]
+}
+{% endschema %}

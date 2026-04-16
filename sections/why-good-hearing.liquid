@@ -1,0 +1,134 @@
+<section class="why-hearing-section section-space-two">
+  <div class="page-width">
+    <div class="why-hearing-wrapper">
+    <!-- Left Image -->
+    <div class="why-hearing-left">
+      {% if section.settings.left_image != blank %}
+        <img 
+          src="{{ section.settings.left_image | image_url: width: 800 }}" 
+          alt="{{ section.settings.heading | escape }}"
+          loading="lazy"
+        >
+      {% endif %}
+    </div>
+
+    <!-- Right Content -->
+    <div class="why-hearing-right">
+      
+      {% if section.settings.heading != blank %}
+        <h2 class="heading heading-left">{{ section.settings.heading }}</h2>
+      {% endif %}
+
+      {% if section.settings.description != blank %}
+        <p class="description">{{ section.settings.description }}</p>
+      {% endif %}
+
+      {% if section.settings.right_image != blank %}
+        <div class="why-hearing-banner">
+          <img 
+            src="{{ section.settings.right_image | image_url: width: 1200 }}" 
+            alt="Banner"
+            loading="lazy"
+          >
+        </div>
+      {% endif %}
+
+     
+
+    </div>
+     <!-- Feature Cards -->
+      <div class="why-hearing-cards">
+        {% for block in section.blocks %}
+          <div class="hearing-card">
+            
+            {% if block.settings.icon != blank %}
+              <div class="card-icon">
+                <img 
+                  src="{{ block.settings.icon | image_url: width: 100 }}" 
+                  alt="{{ block.settings.title }}"
+                  loading="lazy"
+                >
+              </div>
+            {% endif %}
+
+            {% if block.settings.title != blank %}
+              <h3>{{ block.settings.title }}</h3>
+            {% endif %}
+
+            {% if block.settings.text != blank %}
+              <p>{{ block.settings.text }}</p>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+      </div>
+  </div>
+</section>
+
+
+
+{% schema %}
+{
+  "name": "Why Good Hearing",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "left_image",
+      "label": "Left Large Image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Why Good Hearing Matters?"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Our collective giving means children can chase dreams, and seniors can remain part of their families’ lives."
+    },
+    {
+      "type": "image_picker",
+      "id": "right_image",
+      "label": "Right Banner Image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Feature Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon (SVG/PNG)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Effective Communications"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "Hearing is the foundation of spoken communication."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 3,
+  "presets": [
+    {
+      "name": "Why Good Hearing",
+      "blocks": [
+        { "type": "card" },
+        { "type": "card" },
+        { "type": "card" }
+      ]
+    }
+  ]
+}
+{% endschema %}

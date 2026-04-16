@@ -1,0 +1,336 @@
+<section class="hear-world page-width">
+  <div class="hear-world-inner">
+    <!-- LEFT CONTENT -->
+    <div class="hear-world-left">
+      <div class="eyebrow">
+        {{ section.settings.eyebrow }}
+      </div>
+
+      <h2 class="heading heading-left">
+        {{ section.settings.heading }}
+      </h2>
+
+      <p class="description">
+        {{ section.settings.description }}
+      </p>
+
+      <div class="hear-world-buttons">
+        {% if section.settings.primary_button_label != blank %}
+          <a href="{{ section.settings.primary_button_link }}" class="btn-primary">
+            {{ section.settings.primary_button_label }} <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M3.75 9H14.25" stroke="#FCFBF8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M9 3.75L14.25 9L9 14.25" stroke="#FCFBF8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
+          </a>
+        {% endif %}
+
+        {% if section.settings.secondary_button_label != blank %}
+          <a href="{{ section.settings.secondary_button_link }}" class="hear-btn-secondary">
+            {{ section.settings.secondary_button_label }}
+          </a>
+        {% endif %}
+      </div>
+      <div class="facts">
+        <div class="experience">
+          <h4>{{ section.settings.experience_number }}</h4>
+          <p>{{ section.settings.experience_text }}</p>
+        </div>
+        <div class="live-tranformed">
+          <h4>{{ section.settings.live_tranformed_number }}</h4>
+          <p>{{ section.settings.live_tranformed_text }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT SLIDER -->
+    <div class="carousel">
+      <div class="list">
+        {% for block in section.blocks %}
+          <div class="item" {{ block.shopify_attributes }}>
+            <div class="slide-image">
+              {% if block.settings.slide_image %}
+                {{
+                  block.settings.slide_image
+                  | image_url: width: 1500
+                  | image_tag: loading: 'lazy', class: 'slide-img'
+                }}
+              {% else %}
+                {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+              {% endif %}
+            </div>
+            <div class="content">
+              <img src="{{ 'green-star.svg' | file_url}}">
+              <div class="des">{{ block.settings.description }}</div>
+              <div class="author">{{ block.settings.author }}</div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="navigation-controls">
+        <div class="arrows">
+          <button id="prev" aria-label="Previous slide"></button>
+          <button id="next" aria-label="Next slide"></button>
+        </div>
+      </div>
+
+      <div class="time"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+ document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.hear-world').forEach(section => {
+      const carousel = section.querySelector('.carousel');
+      if (!carousel) return;
+
+      const slides = carousel.querySelectorAll('.list .item');
+      const arrowsWrapper = carousel.querySelector('.arrows');
+
+      let currentSlide = 0;
+      const slideCount = slides.length;
+      const autoplaySpeed = {{ section.settings.autoplay_speed | times: 1000 }};
+      let autoplayTimer;
+
+      // ===== CONVERT ARROWS TO DOTS (keep same class) =====
+      arrowsWrapper.innerHTML = '';
+      slides.forEach((_, index) => {
+          const dot = document.createElement('button');
+          dot.className = 'dot';
+          if (index === 0) dot.classList.add('active');
+
+          dot.addEventListener('click', () => {
+              currentSlide = index;
+              showSlide(currentSlide);
+          });
+
+          arrowsWrapper.appendChild(dot);
+      });
+
+      const dots = arrowsWrapper.querySelectorAll('.dot');
+
+      function showSlide(index) {
+          slides.forEach((slide, i) => {
+              slide.style.opacity = i === index ? '1' : '0';
+              slide.style.visibility = i === index ? 'visible' : 'hidden';
+          });
+
+          dots.forEach((dot, i) => {
+              dot.classList.toggle('active', i === index);
+          });
+
+          resetAutoplay();
+      }
+
+      function nextSlide() {
+          currentSlide = (currentSlide + 1) % slideCount;
+          showSlide(currentSlide);
+      }
+
+      function prevSlide() {
+          currentSlide = (currentSlide - 1 + slideCount) % slideCount;
+          showSlide(currentSlide);
+      }
+
+      function startAutoplay() {
+          if (slideCount <= 1) return;
+          autoplayTimer = setTimeout(nextSlide, autoplaySpeed);
+      }
+
+      function resetAutoplay() {
+          clearTimeout(autoplayTimer);
+          startAutoplay();
+      }
+
+      // ===== DRAG / SWIPE FUNCTIONALITY =====
+      let startX = 0;
+      let endX = 0;
+      let isDragging = false;
+
+      const dragArea = carousel.querySelector('.list');
+
+      // Mouse events (desktop)
+      dragArea.addEventListener('mousedown', (e) => {
+          isDragging = true;
+          startX = e.clientX;
+      });
+
+      dragArea.addEventListener('mousemove', (e) => {
+          if (!isDragging) return;
+          endX = e.clientX;
+      });
+
+      dragArea.addEventListener('mouseup', () => {
+          if (!isDragging) return;
+          handleSwipe();
+          isDragging = false;
+      });
+
+      dragArea.addEventListener('mouseleave', () => {
+          if (isDragging) {
+              handleSwipe();
+              isDragging = false;
+          }
+      });
+
+      // Touch events (mobile)
+      dragArea.addEventListener('touchstart', (e) => {
+          startX = e.touches[0].clientX;
+      });
+
+      dragArea.addEventListener('touchmove', (e) => {
+          endX = e.touches[0].clientX;
+      });
+
+      dragArea.addEventListener('touchend', () => {
+          handleSwipe();
+      });
+
+      function handleSwipe() {
+          const threshold = 50; // swipe sensitivity
+          const diff = startX - endX;
+
+          if (Math.abs(diff) < threshold) return;
+
+          if (diff > 0) {
+              nextSlide(); // swipe left → next
+          } else {
+              prevSlide(); // swipe right → prev
+          }
+      }
+
+      // INIT
+      showSlide(0);
+      startAutoplay();
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "Hear the World",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "The Sound of Life"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Main heading",
+      "default": "Hear the world again"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Rediscover the symphony of everyday life. From whispered conversations to the gentle rustle of leaves — experience sound in its purest form."
+    },
+    {
+      "type": "text",
+      "id": "primary_button_label",
+      "label": "Primary button label",
+      "default": "Begin your Journey"
+    },
+    {
+      "type": "url",
+      "id": "primary_button_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_button_label",
+      "label": "Secondary button label",
+      "default": "Free Hearing Test"
+    },
+    {
+      "type": "url",
+      "id": "secondary_button_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "unit": "sec",
+      "label": "Autoplay Speed",
+      "default": 7
+    },
+    {
+      "type": "range",
+      "id": "transition_speed",
+      "min": 1,
+      "max": 5,
+      "step": 0.5,
+      "unit": "sec",
+      "label": "Transition Speed",
+      "default": 3
+    },
+    {
+      "type": "text",
+      "id": "experience_number",
+      "label": "Experience Number",
+      "default": "15+"
+    },
+    {
+      "type": "text",
+      "id": "experience_text",
+      "label": "Experience Text",
+      "default": "Years of Expertise"
+    },
+    {
+      "type": "text",
+      "id": "live_tranformed_number",
+      "label": "Live Transformed Number",
+      "default": "50K+"
+    },
+    {
+      "type": "text",
+      "id": "live_tranformed_text",
+      "label": "Live Tranformed Text",
+      "default": "Lives Transformed"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "limit": 5,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "slide_image",
+          "label": "Slide Image"
+        },
+        {
+        "type": "text",
+        "id": "author",
+        "label": "Author Name",
+        "default": "— Linda W."
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "The first time my child heard clearly..."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 5,
+  "presets": [
+    {
+      "name": "Hear the World",
+      "category": "Custom",
+      
+    }
+    
+  ]
+}
+{% endschema %}

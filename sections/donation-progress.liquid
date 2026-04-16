@@ -1,0 +1,156 @@
+{% comment %}
+  Donation Progress Section
+{% endcomment %}
+
+<section class="donation-progress-section">
+  <div class="page-width">
+    <div class="donation-header">
+      {% if section.settings.heading != blank %}
+        <h2 class="donation-title">{{ section.settings.heading }}</h2>
+      {% endif %}
+      {% if section.settings.subheading != blank %}
+        <p class="donation-subtitle">{{ section.settings.subheading }}</p>
+      {% endif %}
+    </div>
+
+    <div class="donation-grid">
+      <!-- Left Content -->
+      <div class="donation-left">
+        <div class="donation-stats">
+          <div class="stat-card">
+            <h3 class="stat-value">{{ section.settings.raised_percent }}%</h3>
+            <p class="stat-label">{{ section.settings.raised_label }}</p>
+          </div>
+
+          <div class="stat-card">
+            <h3 class="stat-value">{{ section.settings.sponsors_count }}</h3>
+            <p class="stat-label">{{ section.settings.sponsors_label }}</p>
+          </div>
+        </div>
+
+        <!-- Progress Box -->
+        <div class="progress-box">
+          <div class="progress-bar">
+            <div
+              class="progress-fill"
+              style="width: {{ section.settings.progress_value }}%;">
+            </div>
+          </div>
+
+          <div class="progress-meta">
+            <span>{{ section.settings.progress_text_left }}</span>
+            <span>{{ section.settings.progress_text_right }}</span>
+          </div>
+        </div>
+
+        {% if section.settings.button_text != blank %}
+          <a href="{{ section.settings.button_link }}" class="btn-primary">
+            {{ section.settings.button_text }} <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M4.3208 10.3711H16.4196" stroke="white" stroke-width="1.72839" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M10.3706 4.32031L16.42 10.3697L10.3706 16.4191" stroke="white" stroke-width="1.72839" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
+          </a>
+        {% endif %}
+      </div>
+
+      <!-- Right Image -->
+      <div class="donation-right">
+        {% if section.settings.image != blank %}
+          <img
+            src="{{ section.settings.image | image_url: width: 900 }}"
+            alt="Donation"
+            loading="lazy"
+          >
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+
+{% schema %}
+{
+  "name": "Donation Progress Section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "No Specific Person in Mind?"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+    },
+    {
+      "type": "text",
+      "id": "raised_percent",
+      "label": "Raised Percentage",
+      "default": "78"
+    },
+    {
+      "type": "text",
+      "id": "raised_label",
+      "label": "Raised Label",
+      "default": "Raised"
+    },
+    {
+      "type": "text",
+      "id": "sponsors_count",
+      "label": "Sponsors Count",
+      "default": "112"
+    },
+    {
+      "type": "text",
+      "id": "sponsors_label",
+      "label": "Sponsors Label",
+      "default": "Sponsors"
+    },
+    {
+      "type": "range",
+      "id": "progress_value",
+      "label": "Progress Value (%)",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 65
+    },
+    {
+      "type": "text",
+      "id": "progress_text_left",
+      "label": "Progress Left Text",
+      "default": "65% of 80 devices"
+    },
+    {
+      "type": "text",
+      "id": "progress_text_right",
+      "label": "Progress Right Text",
+      "default": "99 days left"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Donate Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Right Side Image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Donation Progress"
+    }
+  ]
+}
+{% endschema %}

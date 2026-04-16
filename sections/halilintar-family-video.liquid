@@ -1,0 +1,80 @@
+<section class="hero-family section-space-two">
+  <div class="hero-family__inner page-width">
+    
+    {% if section.settings.heading != blank %}
+      <h2 class="heading">
+        {{ section.settings.heading }}
+      </h2>
+    {% endif %}
+
+    {% if section.settings.subtext != blank %}
+      <p class="description">
+        {{ section.settings.subtext }}
+      </p>
+    {% endif %}
+
+    {% if section.settings.image != blank %}
+      <div class="hero-family__media">
+        
+        {% if section.settings.video_url != blank %}
+          <a href="{{ section.settings.video_url }}" target="_blank" class="hero-family__play" aria-label="Play Video">
+            {% if section.settings.play_svg != blank %}
+              <img src="{{ section.settings.play_svg | image_url }}" alt="Play">
+            {% else %}
+              <svg viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"></path>
+              </svg>
+            {% endif %}
+          </a>
+        {% endif %}
+
+        <img 
+          src="{{ section.settings.image | image_url: width: 2000 }}" 
+          alt="{{ section.settings.image.alt | escape }}"
+          loading="lazy"
+        >
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero Video Family",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "A Word for Halilintar Family"
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "Early hearing support gives your baby every opportunity to grow, connect, and thrive. If you suspect hearing loss, act now — your baby’s brain is ready to listen."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Main Image / Video Thumbnail"
+    },
+    {
+      "type": "url",
+      "id": "video_url",
+      "label": "Video Link (YouTube/Vimeo)"
+    },
+    {
+      "type": "image_picker",
+      "id": "play_svg",
+      "label": "Custom Play Button SVG/Icon (Optional)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero - Family Video Section"
+    }
+  ]
+}
+{% endschema %}

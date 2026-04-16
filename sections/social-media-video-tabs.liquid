@@ -1,0 +1,171 @@
+<section class="social-tabs section-space-two">
+  <div class="page-width">
+    <div class="heading-section">
+      {% if section.settings.heading != blank %}
+        <h2 class="heading">{{ section.settings.heading }}</h2>
+      {% endif %}
+      {% if section.settings.subheading != blank %}
+        <p>{{ section.settings.subheading }}</p>
+      {% endif %}
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="instagram">Instagram</button>
+      <button class="tab-btn" data-tab="tiktok">TikTok</button>
+      <button class="tab-btn" data-tab="youtube">YouTube</button>
+    </div>
+
+    {% assign platforms = 'instagram,tiktok,youtube' | split: ',' %}
+
+    {% for platform in platforms %}
+      <div class="panel {% if platform == 'instagram' %}active{% endif %}" data-panel="{{ platform }}">
+        <div class="carousel">
+          <button class="arrow prev">&#10094;</button>
+          <div class="track">
+            {% for block in section.blocks %}
+              {% if block.settings.platform == platform %}
+                <a href="{{ block.settings.url }}" target="_blank" rel="noopener" class="card">
+                  <div class="card-inner">
+                    {% if block.settings.thumbnail %}
+                      <img
+                        src="{{ block.settings.thumbnail | image_url: width: 600 }}"
+                        class="thumbnail"
+                        loading="lazy"
+                      >
+                    {% endif %}
+                    {% if block.settings.badge != blank %}
+                      <div class="badge-label-secondary">{{ block.settings.badge }}</div>
+                    {% endif %}
+                    {% if block.settings.title != blank %}
+                      <div class="title">{{ block.settings.title }}</div>
+                    {% endif %}
+                    <svg class="play-btn" width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <foreignObject x="-4" y="-4" width="72" height="72"><div xmlns="http://www.w3.org/1999/xhtml" style="backdrop-filter:blur(2px);clip-path:url(#bgblur_0_1610_8213_clip_path);height:100%;width:100%"></div></foreignObject><g data-figma-bg-blur-radius="4">
+                      <rect width="64" height="64" rx="32" fill="#FBFAF8" fill-opacity="0.2"/>
+                      <path d="M28 23L42 32L28 41V23Z" fill="white" stroke="#FBFAF8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </g>
+                      <defs>
+                      <clipPath id="bgblur_0_1610_8213_clip_path" transform="translate(4 4)"><rect width="64" height="64" rx="32"/>
+                      </clipPath></defs>
+                    </svg>
+                  </div>
+                </a>
+              {% endif %}
+            {% endfor %}
+          </div>
+          <button class="arrow next">&#10095;</button>
+        </div>
+        <div class="dots"></div>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.social-tabs').forEach((section) => {
+      const tabs = section.querySelectorAll('.tab-btn');
+      const panels = section.querySelectorAll('.panel');
+
+      tabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+          tabs.forEach((t) => t.classList.remove('active'));
+          panels.forEach((p) => p.classList.remove('active'));
+          tab.classList.add('active');
+          section.querySelector('[data-panel="' + tab.dataset.tab + '"]').classList.add('active');
+        });
+      });
+
+      panels.forEach((panel) => {
+        const track = panel.querySelector('.track');
+        const cards = panel.querySelectorAll('.card');
+        const prev = panel.querySelector('.prev');
+        const next = panel.querySelector('.next');
+        const dotsContainer = panel.querySelector('.dots');
+
+        if (cards.length === 0) return;
+
+        let index = 0;
+        let perView = window.innerWidth < 750 ? 1 : window.innerWidth < 990 ? 2 : 3;
+        let pages = Math.ceil(cards.length / perView);
+
+        function update() {
+          const cardWidth = cards[0].offsetWidth + 20;
+          track.style.transform = `translateX(-${index * perView * cardWidth}px)`;
+          dotsContainer.querySelectorAll('.dot').forEach((d, i) => {
+            d.classList.toggle('active', i === index);
+          });
+        }
+
+        for (let i = 0; i < pages; i++) {
+          const dot = document.createElement('button');
+          dot.classList.add('dot');
+          if (i === 0) dot.classList.add('active');
+          dot.addEventListener('click', () => {
+            index = i;
+            update();
+          });
+          dotsContainer.appendChild(dot);
+        }
+
+        prev.addEventListener('click', () => {
+          if (index > 0) {
+            index--;
+            update();
+          }
+        });
+
+        next.addEventListener('click', () => {
+          if (index < pages - 1) {
+            index++;
+            update();
+          }
+        });
+
+        let startX = 0;
+        track.addEventListener('touchstart', (e) => (startX = e.touches[0].clientX));
+        track.addEventListener('touchend', (e) => {
+          let diff = startX - e.changedTouches[0].clientX;
+          if (Math.abs(diff) > 50) {
+            if (diff > 0 && index < pages - 1) index++;
+            else if (diff < 0 && index > 0) index--;
+            update();
+          }
+        });
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Social Media Video Tabs",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Watch Our Stories" },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "Follow us on social media" }
+  ],
+  "blocks": [
+    {
+      "type": "video",
+      "name": "Video",
+      "settings": [
+        {
+          "type": "select",
+          "id": "platform",
+          "label": "Platform",
+          "options": [
+            { "value": "instagram", "label": "Instagram" },
+            { "value": "tiktok", "label": "TikTok" },
+            { "value": "youtube", "label": "YouTube" }
+          ]
+        },
+        { "type": "url", "id": "url", "label": "Post URL" },
+        { "type": "image_picker", "id": "thumbnail", "label": "Thumbnail Image" },
+        { "type": "text", "id": "badge", "label": "Badge Text" },
+        { "type": "text", "id": "title", "label": "Title" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Social Media Video Tabs" }]
+}
+{% endschema %}

@@ -1,0 +1,136 @@
+<section class="soundlife-cta">
+  <div class="soundlife-cta__inner page-width">
+    <div>
+      <div class="soundlife-cta__eyebrow">
+        {{ section.settings.eyebrow }}
+      </div>
+
+      <h2 class="heading heading-left">
+        {{ section.settings.heading }}
+      </h2>
+
+      <div class="soundlife-cta__text">
+        {{ section.settings.description }}
+      </div>
+
+      <div class="soundlife-cta__buttons">
+        {% if section.settings.primary_button_label != blank %}
+          <a href="{{ section.settings.primary_button_link }}" class="soundlife-btn-primary">
+            {{ section.settings.primary_button_label }} <svg class="arrow-svg" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M3.75 9H14.25" stroke="#FCFBF8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M9 3.75L14.25 9L9 14.25" stroke="#FCFBF8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+          </a>
+        {% endif %}
+
+        {% if section.settings.secondary_button_label != blank %}
+          <a href="{{ section.settings.secondary_button_link }}" class="soundlife-btn-secondary">
+            {{ section.settings.secondary_button_label }}
+          </a>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="soundlife-cta__right">
+      <h3>{{ section.settings.right_title }}</h3>
+      <div class="soundlife-cta__list">
+        {% for block in section.blocks %}
+          <div class="soundlife-cta__item">
+            <span>{{ block.settings.number }}</span>
+            <div class="soundlife-cta__item-content">
+              <h4>{{ block.settings.title }}</h4>
+              <p>{{ block.settings.text }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "SoundLife CTA",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "START YOUR JOURNEY"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Main heading",
+      "default": "Ready to hear <em>life again?</em>"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Book your free consultation today. Our experts will guide you through a personalized hearing assessment and help you discover the perfect solution for your lifestyle."
+    },
+    {
+      "type": "text",
+      "id": "primary_button_label",
+      "label": "Primary button label",
+      "default": "Book Consultation"
+    },
+    {
+      "type": "url",
+      "id": "primary_button_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_button_label",
+      "label": "Secondary button label",
+      "default": "Free Hearing Test"
+    },
+    {
+      "type": "url",
+      "id": "secondary_button_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "text",
+      "id": "right_title",
+      "label": "Right column title",
+      "default": "Why SOUNDLIFE?"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Number",
+          "default": "01"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Risk-Free Trial"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Description",
+          "default": "10-day trial with no commitment"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "SoundLife CTA",
+      "category": "footer"
+    }
+  ]
+}
+{% endschema %}

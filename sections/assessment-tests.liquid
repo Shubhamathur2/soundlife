@@ -1,0 +1,91 @@
+<section class="assessment-tests section-space-two">
+  <div class="page-width">
+    <!-- HEADER -->
+    <div class="at-header">
+      <h2 class="heading">{{ section.settings.heading }}</h2>
+      <p class="description description-center">{{ section.settings.subtext }}</p>
+    </div>
+
+    <!-- CARDS -->
+    <div class="at-grid">
+      {% for block in section.blocks %}
+        <div class="at-card">
+          {% if block.settings.image %}
+            <div class="at-img">
+              <img src="{{ block.settings.image | img_url: '600x' }}">
+            </div>
+          {% endif %}
+
+          <div class="at-content">
+            <h3>{{ block.settings.title }}</h3>
+            <p>{{ block.settings.desc }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+  .at-grid {
+  display: grid;
+  grid-template-columns: repeat({{ section.settings.columns }}, 1fr);
+  gap: 25px;
+}
+</style>
+{% schema %}
+{
+  "name": "Assessment Tests",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Assessment & Diagnosis: The Tests You Should Know"
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtext"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "Columns per row",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 4
+    }
+  ],
+  "blocks": [
+    {
+      "type": "test",
+      "name": "Test Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "OAE (Otoacoustic Emissions)"
+        },
+        {
+          "type": "textarea",
+          "id": "desc",
+          "label": "Description"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Assessment Tests"
+    }
+  ]
+}
+{% endschema %}

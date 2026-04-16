@@ -1,0 +1,131 @@
+<section class="contact-options section-space-two">
+  <div class="page-width">
+    {% if section.settings.heading != blank %}
+      <h2 class="heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    <div class="contact-grid">
+      {% for block in section.blocks %}
+        <div class="contact-card {% if block.settings.highlight %}is-active{% endif %}">
+          <div class="contact-icon">
+            {% if block.settings.icon != blank %}
+              <img src="{{ block.settings.icon | image_url: width: 80 }}" alt="">
+            {% endif %}
+          </div>
+
+          {% if block.settings.label != blank %}
+            <p class="contact-label">{{ block.settings.label }}</p>
+          {% endif %}
+
+          {% if block.settings.title != blank %}
+            <h3 class="contact-title">{{ block.settings.title }}</h3>
+          {% endif %}
+
+          {% if block.settings.subtitle != blank %}
+            {% if block.settings.subtitle_link != blank %}
+              <a href="{{ block.settings.subtitle_link }}" class="contact-subtitle">
+                {{ block.settings.subtitle }}
+              </a>
+            {% else %}
+              <p class="contact-subtitle">{{ block.settings.subtitle }}</p>
+            {% endif %}
+          {% endif %}
+
+          {% if block.settings.description != blank %}
+            <p class="contact-desc">{{ block.settings.description }}</p>
+          {% endif %}
+
+          {% if block.settings.button_label != blank %}
+            <a href="{{ block.settings.button_link }}" class="contact-link tech-link">
+              {{ block.settings.button_label }}
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3.3335 8H12.6668" stroke="#005CDE" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M8 3.3335L12.6667 8.00016L8 12.6668" stroke="#005CDE" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Contact Options",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Choose Your Preferred Way"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Contact Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Small Label",
+          "default": "CALL US"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Speak Directly"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle",
+          "default": "(0815) 1353-8888"
+        },
+        {
+          "type": "url",
+          "id": "subtitle_link",
+          "label": "Subtitle Link (Phone, Email, Map etc.)"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Talk to a hearing specialist during business hours"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button Label",
+          "default": "Connect Now"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        },
+        {
+          "type": "checkbox",
+          "id": "highlight",
+          "label": "Highlight this card",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Contact Options",
+      "blocks": [{ "type": "card" }, { "type": "card" }, { "type": "card" }, { "type": "card" }]
+    }
+  ]
+}
+{% endschema %}

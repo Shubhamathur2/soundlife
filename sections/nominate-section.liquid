@@ -1,0 +1,115 @@
+{% schema %}
+{
+  "name": "Nominate Section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Or Nominate Someone You Know Who Needs Hearing Aids"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Sub Heading",
+      "default": "Submit your form and story video. Our team will review every application."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "card_image",
+          "label": "Card Image"
+        },
+        {
+          "type": "text",
+          "id": "card_title",
+          "label": "Card Title",
+          "default": "Golden Period Babies"
+        },
+        {
+          "type": "textarea",
+          "id": "card_text",
+          "label": "Card Description",
+          "default": "Hearing well opens doors to brighter future, bigger dreams"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "Sponsor a Baby"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 2,
+  "presets": [
+    {
+      "name": "Nominate Section",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
+
+<section class="nominate-section">
+  <div class="page-width">
+    
+    <!-- Heading -->
+    <div class="nominate-header">
+      <h2 class="faq-title heading">
+        {{ section.settings.heading }}
+      </h2>
+      <p class="description desc-center">
+        {{ section.settings.subheading }}
+      </p>
+    </div>
+
+    <!-- Cards -->
+    <div class="nominate-grid">
+      {% for block in section.blocks %}
+        <div class="nominate-card">
+          
+          {% if block.settings.card_image != blank %}
+            <div class="card-image">
+              <img 
+                src="{{ block.settings.card_image | image_url: width: 800 }}" 
+                alt="{{ block.settings.card_title }}"
+                loading="lazy"
+              >
+            </div>
+          {% endif %}
+
+         <div class="card-flex">
+             <div class="card-content">
+            <h3>{{ block.settings.card_title }}</h3>
+            <p>{{ block.settings.card_text }}</p>            
+          </div>
+          <div class="card-btn">
+            {% if block.settings.button_text != blank %}
+              <a href="{{ block.settings.button_link }}" class="btn-primary">
+                {{ block.settings.button_text }} <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4.3208 10.3711H16.4196" stroke="white" stroke-width="1.72839" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M10.3706 4.32031L16.42 10.3697L10.3706 16.4191" stroke="white" stroke-width="1.72839" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+              </a>
+            {% endif %}
+          </div>
+         </div>
+
+        </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+

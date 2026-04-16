@@ -1,0 +1,130 @@
+<section class="store-map section-space-two">
+  <div class="page-width">
+    {% if section.settings.heading != blank %}
+      <h2 class="heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    <div class="store-map-wrapper">
+      <!-- MAP -->
+      <div class="store-map-iframe">
+        {% if section.settings.map_embed != blank %}
+          {{ section.settings.map_embed }}
+        {% endif %}
+      </div>
+
+      <!-- INFO CARD -->
+      <div class="store-map-card">
+        {% if section.settings.store_title != blank %}
+          <h3 class="store-title">{{ section.settings.store_title }}</h3>
+        {% endif %}
+        <div class="store-details">
+          <div class="store-address">
+            <span class="store-icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M16.6668 8.33366C16.6668 12.4945 12.051 16.8278 10.501 18.1662C10.3566 18.2747 10.1808 18.3335 10.0002 18.3335C9.8195 18.3335 9.64373 18.2747 9.49933 18.1662C7.94933 16.8278 3.3335 12.4945 3.3335 8.33366C3.3335 6.56555 4.03588 4.86986 5.28612 3.61961C6.53636 2.36937 8.23205 1.66699 10.0002 1.66699C11.7683 1.66699 13.464 2.36937 14.7142 3.61961C15.9645 4.86986 16.6668 6.56555 16.6668 8.33366Z" stroke="#01AD01" stroke-width="1.66667"/>
+                <path d="M10 10.833C11.3807 10.833 12.5 9.71372 12.5 8.33301C12.5 6.9523 11.3807 5.83301 10 5.83301C8.61929 5.83301 7.5 6.9523 7.5 8.33301C7.5 9.71372 8.61929 10.833 10 10.833Z" stroke="#01AD01" stroke-width="1.66667"/>
+              </svg>
+            </span>
+            <div class="store-text">
+              <p>{{ section.settings.address }}</p>
+            </div>
+          </div>
+
+          <div class="store-hours">
+            <span class="store-icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0_2851_1292)">
+                <path d="M9.99984 18.3337C14.6022 18.3337 18.3332 14.6027 18.3332 10.0003C18.3332 5.39795 14.6022 1.66699 9.99984 1.66699C5.39746 1.66699 1.6665 5.39795 1.6665 10.0003C1.6665 14.6027 5.39746 18.3337 9.99984 18.3337Z" stroke="#01AD01" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M10 5V10L13.3333 11.6667" stroke="#01AD01" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+                </g>
+                <defs>
+                <clipPath id="clip0_2851_1292">
+                <rect width="20" height="20" fill="white"/>
+                </clipPath>
+                </defs>
+              </svg>
+            </span>
+            <div class="store-text">
+              {% if section.settings.hours != blank %}
+                <p class="hours">{{ section.settings.hours }}</p>
+              {% endif %}
+
+              {% if section.settings.note != blank %}
+                <p class="store-note">{{ section.settings.note }}</p>
+              {% endif %}
+            </div>
+            
+          </div>
+        </div>
+        {% if section.settings.button_label != blank %}
+          <a href="{{ section.settings.button_link }}" class="btn-primary">
+            {{ section.settings.button_label }}
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3.3335 8H12.6668" stroke="#fff" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M8 3.3335L12.6667 8.00016L8 12.6668" stroke="#fff" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Store Map",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Visit Us in Jakarta"
+    },
+    {
+      "type": "html",
+      "id": "map_embed",
+      "label": "Google Map Embed Code"
+    },
+    {
+      "type": "text",
+      "id": "store_title",
+      "label": "Store Title",
+      "default": "Our Flagship Store"
+    },
+    {
+      "type": "textarea",
+      "id": "address",
+      "label": "Address",
+      "default": "Jalan HR Rasuna Said, Suite #B-308, South Jakarta"
+    },
+    {
+      "type": "textarea",
+      "id": "hours",
+      "label": "Working Hours",
+      "default": "Mon – Fri: 10:00am – 7:00pm\nSaturday: 9:00am – 6:00pm"
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Note",
+      "default": "Sunday/Holiday: Closed"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "Get Directions"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Store Map"
+    }
+  ]
+}
+{% endschema %}

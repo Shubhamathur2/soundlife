@@ -1,0 +1,91 @@
+
+<section class="testi-wrap">
+<div class="page-width">
+  <div class="testi-container">
+
+    <h2 class="heading">{{ section.settings.heading }}</h2>
+
+    <!-- Swiper -->
+    <div class="swiper testiSwiper">
+      <div class="swiper-wrapper">
+
+        {% for block in section.blocks %}
+          <div class="swiper-slide testi-card" {{ block.shopify_attributes }}>
+            <div class="testi-inner">
+
+              <div class="testi-stars">
+                {% for i in (1..block.settings.stars) %}<svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M9.53483 0.70835C9.61247 0.521696 9.87683 0.521696 9.95447 0.70835L12.3364 6.43508C12.3691 6.51376 12.4431 6.56753 12.528 6.57434L18.7106 7.06999C18.912 7.08614 18.9937 7.33762 18.8402 7.46913L14.1298 11.5041C14.0651 11.5595 14.0368 11.6465 14.0567 11.7295L15.4957 17.7625C15.5427 17.9591 15.3287 18.1145 15.1562 18.0092L9.86311 14.7762C9.79038 14.7317 9.69893 14.7317 9.6262 14.7762L4.33312 18.0092C4.1606 18.1145 3.94668 17.9591 3.99359 17.7625L5.43269 11.7295C5.45246 11.6465 5.4242 11.5595 5.35947 11.5041L0.649077 7.46913C0.495546 7.33762 0.577256 7.08614 0.778769 7.06999L6.96124 6.57434C7.0462 6.56753 7.1202 6.51376 7.15292 6.43508L9.53483 0.70835Z" fill="#FFA41D" stroke="#E07C22" stroke-width="1.13636"/>
+</svg>
+{% endfor %}
+              </div>
+
+              <div class="testi-text">
+                {{ block.settings.text }}
+              </div>
+
+              <div class="testi-name">{{ block.settings.name }}</div>
+              <div class="testi-role">{{ block.settings.role }}</div>
+
+            </div>
+          </div>
+        {% endfor %}
+
+      </div>
+
+      <!-- Pagination -->
+      <div class="swiper-pagination"></div>
+
+      <!-- Navigation -->
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+    </div>
+
+  </div>
+  </div>
+</section>
+
+
+{% schema %}
+{
+"name":"Testimonial Slider",
+"settings":[
+{
+  "type":"text",
+  "id":"heading",
+  "label":"Heading",
+  "default":"What Our Patients Say"
+}
+],
+"blocks":[
+{
+"type":"t",
+"name":"Testimonial",
+"settings":[
+{"type":"range",
+  "id":"stars",
+  "label":"Stars",
+  "min":1,
+  "max":5,
+  "default":5
+},
+{
+  "type":"textarea",
+  "id":"text",
+  "label":"Text"
+},
+{
+  "type":"text",
+  "id":"name",
+  "label":"Name"},
+{
+  "type":"text",
+  "id":"role",
+  "label":"Role"
+}
+]
+}
+],
+"presets":[{"name":"Testimonial Slider"}]
+}
+{% endschema %}

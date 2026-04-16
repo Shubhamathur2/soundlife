@@ -1,0 +1,84 @@
+<section class="nhs-section section-space-two">
+  <div class="page-width">
+    
+    {% if section.settings.heading != blank %}
+      <h2 class="heading">
+        {{ section.settings.heading }}
+      </h2>
+    {% endif %}
+
+    <div class="nhs-grid">
+      {% for block in section.blocks %}
+        <div class="nhs-card" {{ block.shopify_attributes }}>
+          
+          <div class="nhs-number">
+            {{ block.settings.number }}
+          </div>
+
+          <div class="nhs-title">
+            {{ block.settings.title }}
+          </div>
+
+          <div class="nhs-text">
+            {{ block.settings.description }}
+          </div>
+
+        </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+
+
+{% schema %}
+{
+  "name": "Newborn Hearing Stats",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading",
+      "default": "Why Newborns Need Hearing Checks?"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Main Number",
+          "default": "95%"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Babies"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Add your description here."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 3,
+  "presets": [
+    {
+      "name": "Newborn Hearing Stats",
+      "blocks": [
+        { "type": "stat" },
+        { "type": "stat" },
+        { "type": "stat" }
+      ]
+    }
+  ]
+}
+{% endschema %}

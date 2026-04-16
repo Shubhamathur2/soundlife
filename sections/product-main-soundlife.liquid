@@ -1,0 +1,453 @@
+<section class="product-main section-space-two">
+  <div class="page-width">
+    <div class="product-layout">
+      <!-- LEFT : GALLERY -->
+      <div class="product-gallery">
+        <div class="gallery-thumbs">
+          {% for media in product.media %}
+            <img src="{% if media.media_type == 'image' %} {{ media | image_url: width: 120 }}
+                {% else %}
+                   {{ media.preview_image | image_url: width: 120 }}
+                {% endif %}
+              "data-media-type="{{ media.media_type }}" 
+              {% if media.media_type == 'image' %}
+                data-media-src="{{ media | image_url: width: 900 }}"
+              {% elsif media.media_type == 'video' %}
+                data-media-src="{{ media.sources[0].url }}"
+              {% elsif media.media_type == 'external_video' %}
+                data-media-src="{{ media.external_id }}"
+              {% endif %}
+              class="thumb-img {% if forloop.first %}active{% endif %}"
+            >
+          {% endfor %}
+        </div>
+
+        <div class="gallery-main">
+          <img
+            id="main-product-image"
+            src="{{ product.featured_image | image_url: width: 900 }}"
+          >
+        </div>
+        <div class="product-features">
+          {% for block in section.blocks %}
+            {% if block.type == 'feature' %}
+              <div class="feature-item" {{ block.shopify_attributes }}>
+                {% if block.settings.icon != blank %}
+                  <img src="{{ block.settings.icon | image_url: width: 40 }}">
+                {% endif %}
+                <p>{{ block.settings.text }}</p>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- RIGHT : PRODUCT DETAILS -->
+      <div class="product-details">
+        <span class="product-badge">
+          {{ section.settings.badge }}
+        </span>
+
+        <div class="details-grid">
+          <!-- LEFT INFO -->
+          <div class="details-left">
+            <div class="details-left-top">
+              <h2 class="product-title">
+                {{ section.settings.title | default: product.title }}
+              </h2>
+
+              {% if section.settings.show_rating %}
+                <div class="product-rating">
+                  {{ section.settings.rating_stars }}
+                  <span>{{ section.settings.rating_value }}</span>
+                  <span>({{ section.settings.review_count }} reviews)</span>
+                </div>
+              {% endif %}
+
+              <div class="product-price">
+                {{ product.selected_or_first_available_variant.price | money }}
+                <span>{{ section.settings.price_suffix }}</span>
+              </div>
+
+              <form method="post" action="/cart/add">
+                <input
+                  type="hidden"
+                  name="id"
+                  value="{{ product.selected_or_first_available_variant.id }}"
+                >
+
+                <button class="btn-primary full-width product-btn">
+                  {{ section.settings.cart_button }}
+                </button>
+              </form>
+
+              <div class="product-extra">
+                {% for block in section.blocks %}
+                  {% if block.type == 'extra_item' %}
+                    <span class="extra-item" {{ block.shopify_attributes }}>
+                      <span class="extra-icon">
+                        <svg width="10" height="8" viewBox="0 0 10 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M9.15993 0.280192C9.06912 0.200749 8.92151 0.212055 8.8421 0.302881L3.39355 6.61409L0.612532 3.83307C0.521705 3.74225 0.38551 3.74225 0.294679 3.83307C0.203857 3.9239 0.203857 4.0601 0.294679 4.15092L3.24597 7.10219C3.29134 7.14759 3.3481 7.17034 3.40485 7.17034H3.41623C3.48437 7.17034 3.54113 7.13629 3.57512 7.09088L9.18258 0.609424C9.262 0.507291 9.25069 0.370928 9.15993 0.280192Z" fill="#01AD01" stroke="#01AD01" stroke-width="0.454044"/>
+                        </svg>
+                      </span>
+
+                      {{ block.settings.extra_text }}
+                    </span>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+            <div class="details-left-bottom">
+              {% if section.settings.phone_heading != blank %}
+                <div class="purchase-phone">
+                  <p class="purchase-phone-title">
+                    {{ section.settings.phone_heading }}
+                  </p>
+
+                  <p class="purchase-phone-text">
+                    {{ section.settings.phone_text }}
+                    <a href="tel:{{ section.settings.phone_number | remove: ' ' }}">
+                      {{ section.settings.phone_number }}
+                    </a>
+                  </p>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- RIGHT INFO -->
+          <div class="details-right">
+            <h3>{{ section.settings.why_title }}</h3>
+            <p class="product-detail-right-desc">{{ section.settings.why_desc }}</p>
+
+            <ul class="why-soundlife">
+              {% for i in (1..5) %}
+                {% assign icon_key = 'why_icon_' | append: i %}
+                {% assign text_key = 'why_text_' | append: i %}
+
+                {% assign icon = product.metafields.custom[icon_key] %}
+                {% assign text = product.metafields.custom[text_key] %}
+
+                {% if text != blank %}
+                  <li class="why-item">
+                    {% if icon %}
+                      <div class="why-icon">
+                        <img src="{{ icon | image_url: width: 40 }}">
+                      </div>
+                    {% endif %}
+
+                    <div class="why-text">
+                      <p>{{ text }}</p>
+                    </div>
+                  </li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+
+        {% if product.description != blank %}
+          <div class="product__description rte">
+            {{ product.description }}
+          </div>
+        {% endif %}
+
+        {% assign pros = product.metafields.custom.product_pro.value %}
+        {% assign cons = product.metafields.custom.product_con.value %}
+
+        {% if pros != blank or cons != blank %}
+          <div class="pros-cons-wrapper">
+            {% if pros != blank %}
+              <div class="pros-box">
+                <h3>
+                  <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0_3145_7248)">
+                    <path d="M5.92285 11.5899L8.75618 13.9873L14.8588 7.23096" stroke="#1A1A1A" stroke-width="1.30769"/>
+                    <path d="M10.4996 19.6539C15.5551 19.6539 19.6534 15.5556 19.6534 10.5C19.6534 5.44451 15.5551 1.34619 10.4996 1.34619C5.44402 1.34619 1.3457 5.44451 1.3457 10.5C1.3457 15.5556 5.44402 19.6539 10.4996 19.6539Z" stroke="#1A1A1A" stroke-width="1.30769"/>
+                    </g>
+                    <defs>
+                    <clipPath id="clip0_3145_7248">
+                    <rect width="21" height="21" fill="white"/>
+                    </clipPath>
+                    </defs>
+                  </svg>
+                  Pros 👍
+                </h3>
+                <ul>
+                  {% for pro in pros %}
+                    <li>{{ pro }}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            {% endif %}
+
+            {% if pros != blank and cons != blank %}
+              <div class="divider"></div>
+            {% endif %}
+
+            {% if cons != blank %}
+              <div class="cons-box">
+                <h3>
+                  <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.11523 14.6219L13.9995 7" stroke="#1A1A1A" stroke-width="1.47521"/>
+                    <path d="M13.8843 14.6219L7 7" stroke="#1A1A1A" stroke-width="1.47521"/>
+                    <path d="M10.4996 19.6539C15.5551 19.6539 19.6534 15.5556 19.6534 10.5C19.6534 5.44451 15.5551 1.34619 10.4996 1.34619C5.44402 1.34619 1.3457 5.44451 1.3457 10.5C1.3457 15.5556 5.44402 19.6539 10.4996 19.6539Z" stroke="#1A1A1A" stroke-width="1.30769"/>
+                  </svg>
+                  Cons 👎
+                </h3>
+                <ul>
+                  {% for con in cons %}
+                    <li>{{ con }}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        <div class="product-faq">
+          <div class="faq-list">
+            {% for faq in product.metafields.custom.product_faqs.value %}
+              <div class="faq-item">
+                <div class="faq-question">
+                  <span>{{ faq.question }}</span>
+                  <span class="faq-icon">+</span>
+                </div>
+
+                <div class="faq-answer">
+                  {{ faq.answer | metafield_tag }}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="price-alert">
+          <h2 class="price-alert-title">
+            {{ section.settings.price_alert_heading }}
+          </h2>
+
+          <form class="price-alert-form">
+            <input
+              type="email"
+              placeholder="{{ section.settings.price_alert_placeholder }}"
+              required
+            >
+
+            <button type="submit" class="price-alert-btn">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <path d="M5 12H19M19 12L13 6M19 12L13 18"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const thumbs = document.querySelectorAll('.thumb-img');
+  const mainContainer = document.querySelector('.gallery-main');
+
+  thumbs.forEach((thumb) => {
+    thumb.addEventListener('click', function () {
+      thumbs.forEach((t) => t.classList.remove('active'));
+      this.classList.add('active');
+
+      const type = this.dataset.mediaType;
+      const src = this.dataset.mediaSrc;
+
+      // 🔥 Switch based on type
+      if (type === 'image') {
+        mainContainer.innerHTML = `
+        <img id="main-product-image" src="${src}">
+      `;
+      } else if (type === 'video') {
+        mainContainer.innerHTML = `
+        <video controls autoplay muted loop playsinline style="width:100%">
+          <source src="${src}" type="video/mp4">
+        </video>
+      `;
+      } else if (type === 'external_video') {
+        mainContainer.innerHTML = `
+        <iframe 
+          src="https://www.youtube.com/embed/${src}" 
+          frameborder="0" 
+          allowfullscreen
+          style="width:100%; height:500px;">
+        </iframe>
+      `;
+      }
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Custom Product Layout",
+  "tag": "section",
+  "class": "section-product-main",
+  "settings": [
+    {
+      "type": "text",
+      "id": "badge",
+      "label": "Product Badge",
+      "default": "BEST SELLER"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Override Product Title"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "label": "Show Rating",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "rating_stars",
+      "label": "Rating Stars",
+      "default": "⭐⭐⭐⭐⭐"
+    },
+    {
+      "type": "text",
+      "id": "rating_value",
+      "label": "Rating Value",
+      "default": "4.8"
+    },
+    {
+      "type": "text",
+      "id": "review_count",
+      "label": "Review Count",
+      "default": "12"
+    },
+    {
+      "type": "text",
+      "id": "price_suffix",
+      "label": "Price Suffix",
+      "default": "/ Pair"
+    },
+    {
+      "type": "text",
+      "id": "cart_button",
+      "label": "Cart Button Text",
+      "default": "Add To Cart"
+    },
+    {
+      "type": "text",
+      "id": "extra_text",
+      "label": "Extra Info Text",
+      "default": "✓ Free Shipping ✓ Free Returns"
+    },
+    {
+      "type": "text",
+      "id": "why_title",
+      "label": "Right Section Title",
+      "default": "Why Buy Through Soundly?"
+    },
+    {
+      "type": "text",
+      "id": "why_desc",
+      "label": "Right Section Description",
+      "default": "You get more than just a device."
+    },
+    {
+      "type": "text",
+      "id": "phone_heading",
+      "label": "Phone Purchase Heading",
+      "default": "Purchase Over the Phone:"
+    },
+    {
+      "type": "text",
+      "id": "phone_text",
+      "label": "Phone Description",
+      "default": "Text or call us at:"
+    },
+    {
+      "type": "text",
+      "id": "phone_number",
+      "label": "Phone Number",
+      "default": "(0815) 1353-8888"
+    },
+    {
+      "type": "text",
+      "id": "price_alert_heading",
+      "label": "Price Alert Heading",
+      "default": "Get Notified When Price Drops"
+    },
+    {
+      "type": "text",
+      "id": "price_alert_placeholder",
+      "label": "Email Placeholder",
+      "default": "Enter Email Here"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "why_item",
+      "name": "Why Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Comprehensive Set-up Service"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Description",
+          "default": "One of our audiologists will assist you remotely."
+        }
+      ]
+    },
+    {
+      "type": "extra_item",
+      "name": "Extra Info Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "extra_text",
+          "label": "Text",
+          "default": "Free Shipping"
+        }
+      ]
+    },
+    {
+      "type": "feature",
+      "name": "Feature Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Feature text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Product Layout",
+      "blocks": [{ "type": "why_item" }, { "type": "why_item" }, { "type": "why_item" }, { "type": "why_item" }]
+    }
+  ]
+}
+{% endschema %}

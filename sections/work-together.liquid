@@ -1,0 +1,113 @@
+<section class="hear-million-footer">
+  <div class="footer-hear-million-overlay"></div>
+  
+  <div class="footer-hear-million-content">
+    <h2 class="heading">
+      {{ section.settings.heading }}
+      <span>{{ section.settings.highlight_text }}</span>
+    </h2>
+    
+    <p class="description">{{ section.settings.subtext }}</p>
+    
+    <div class="footer-hear-million-buttons">
+      <a href="{{ section.settings.button1_link }}" class="btn-primary">
+        {{ section.settings.button1_text }} <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4.3208 10.3711H16.4196" stroke="white" stroke-width="1.72839" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M10.3706 4.32031L16.42 10.3697L10.3706 16.4191" stroke="white" stroke-width="1.72839" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+
+      </a>
+      
+      <a href="{{ section.settings.button2_link }}" class="btn-secondary">
+        {{ section.settings.button2_text }}
+      </a>
+    </div>
+  </div>
+</section>
+<section class="bottom-bar">
+  <div class="page-width">
+      <h3>{{ section.settings.bottom_bar_heading }}</h3>  
+      <p>{{  section.settings.bottom_copyright }}</p>
+  </div>
+</section>
+<style>
+  .hear-million-footer {
+    position: relative;
+    background-image: url({{ section.settings.bg_image | image_url: width: 2000 }});
+    background-size: cover;
+    background-position: center;
+    padding: 120px 20px;
+    text-align: center;
+    color: #fff;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Work Together Section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading Text",
+      "default": "Let's Work Together To Make a"
+    },
+    {
+      "type": "text",
+      "id": "highlight_text",
+      "label": "Highlighted Text",
+      "default": "Difference"
+    },
+    {
+      "type": "text",
+      "id": "subtext",
+      "label": "Sub Text",
+      "default": "A small step from you, a giant leap for someone who receives it."
+    },
+    {
+      "type": "text",
+      "id": "button1_text",
+      "label": "Primary Button Text",
+      "default": "Become a Sponsor"
+    },
+    {
+      "type": "url",
+      "id": "button1_link",
+      "label": "Primary Button Link"
+    },
+    {
+      "type": "text",
+      "id": "button2_text",
+      "label": "Secondary Button Text",
+      "default": "Nominate Someone in Need"
+    },
+    {
+      "type": "url",
+      "id": "button2_link",
+      "label": "Secondary Button Link"
+    },
+    {
+      "type": "text",
+      "id": "bottom_bar_heading",
+      "label": "Bottom Bar Heading",
+      "default": "Hear a Million Dreams",
+    },
+    {
+      "type": "text",
+      "id": "bottom_copyright",
+      "label": "Bottom Bar Copyright",
+      "default": "© 2026 Hear a Million Dreams Campaign. All rights reserved.",
+    },
+  ],
+  "presets": [
+    {
+      "name": "Work Together Section",
+    }
+  ]
+}
+{% endschema %}

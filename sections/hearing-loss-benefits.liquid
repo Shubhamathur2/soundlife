@@ -1,0 +1,110 @@
+<section class="hlb-section section-space-two">
+  <div class="page-width">
+    <div class="heading-section">
+    <!-- Heading -->
+    {% if section.settings.heading != blank %}
+      <h2 class="heading">{{ section.settings.heading }}</h2>
+    {% endif %}
+
+    {% if section.settings.subheading != blank %}
+      <p class="description">{{ section.settings.subheading }}</p>
+    {% endif %}
+</div>
+    <!-- Cards -->
+    <div class="hlb-cards">
+      {% for block in section.blocks %}
+        <div class="hlb-card">
+          
+          {% if block.settings.icon != blank %}
+            <div class="hlb-icon">
+              <img 
+                src="{{ block.settings.icon | image_url: width: 60 }}" 
+                alt="icon"
+                loading="lazy"
+              >
+            </div>
+          {% endif %}
+
+          {% if block.settings.title != blank %}
+            <h3 class="hlb-card-title">
+              {{ block.settings.title }}
+            </h3>
+          {% endif %}
+
+          {% if block.settings.text != blank %}
+            <p class="hlb-card-text">
+              {{ block.settings.text }}
+            </p>
+          {% endif %}
+
+          <span class="hlb-bg-number">
+            {{ block.settings.bg_number }}
+          </span>
+
+        </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+
+{% schema %}
+{
+  "name": "Hearing Loss Benefits",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Hearing Loss ≠ Disability"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Hearing loss is not a limitation — it's a challenge that can be overcome with awareness, technology, and community support."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Benefit Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Card Title",
+          "default": "Hearing Well Is for Everyone"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Card Text"
+        },
+        {
+          "type": "text",
+          "id": "bg_number",
+          "label": "Background Number",
+          "default": "01"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hearing Loss Benefits",
+      "blocks": [
+        { "type": "card" },
+        { "type": "card" },
+        { "type": "card" }
+      ]
+    }
+  ]
+}
+{% endschema %}

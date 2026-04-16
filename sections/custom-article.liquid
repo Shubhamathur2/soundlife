@@ -1,0 +1,372 @@
+<section class="custom-article">
+    <div style="    background: #F7F6F2;
+    padding: 60px 0 1px 0;">
+    <div class="page-width" >
+     <!-- HERO -->
+    <div class="article-hero">
+
+  <!-- LEFT -->
+  <div class="hero-left">
+    {% if article.tags.size > 0 %}
+  <span class="badge-tag">
+    {{ article.tags.first }}
+  </span>
+{% endif %}
+
+    <h1 class="hero-title">{{ article.title }}</h1>
+
+    <p class="hero-desc">
+      {{ article.excerpt | default: article.content | strip_html | truncate: 140 }}
+    </p>
+
+    <div class="hero-meta">
+
+  <!-- DATE -->
+  <div class="meta-item">
+    <div class="meta-icon">
+
+      <svg width="32" height="28" viewBox="0 0 32 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g clip-path="url(#clip0_2983_1540)">
+      <path d="M9.33325 2.3335V7.00016" stroke="#1A1A1A" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M18.6667 2.3335V7.00016" stroke="#1A1A1A" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M22.1667 4.6665H5.83333C4.54467 4.6665 3.5 5.71117 3.5 6.99984V23.3332C3.5 24.6218 4.54467 25.6665 5.83333 25.6665H22.1667C23.4553 25.6665 24.5 24.6218 24.5 23.3332V6.99984C24.5 5.71117 23.4553 4.6665 22.1667 4.6665Z" stroke="#1A1A1A" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M3.5 11.6665H24.5" stroke="#1A1A1A" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <defs>
+      <clipPath id="clip0_2983_1540">
+      <rect width="28" height="28" fill="white"/>
+      </clipPath>
+      </defs>
+      </svg>
+
+    </div>
+    <div class="meta-text">
+      <div class="meta-value">
+        {{ article.published_at | date: "%d %b, %Y" }}
+      </div>
+      <div class="meta-label">Date</div>
+    </div>
+  </div>
+
+  <!-- LOCATION -->
+  {% if article.metafields.custom.location %}
+  <div class="meta-item">
+    <div class="meta-icon">
+      <svg width="32" height="28" viewBox="0 0 32 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g clip-path="url(#clip0_2983_1551)">
+        <path d="M23.3334 11.6668C23.3334 18.6668 14.0001 25.6668 14.0001 25.6668C14.0001 25.6668 4.66675 18.6668 4.66675 11.6668C4.66675 9.19148 5.65008 6.81751 7.40042 5.06717C9.15076 3.31683 11.5247 2.3335 14.0001 2.3335C16.4754 2.3335 18.8494 3.31683 20.5997 5.06717C22.3501 6.81751 23.3334 9.19148 23.3334 11.6668Z" stroke="#1A1A1A" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M14 15.1665C15.933 15.1665 17.5 13.5995 17.5 11.6665C17.5 9.73351 15.933 8.1665 14 8.1665C12.067 8.1665 10.5 9.73351 10.5 11.6665C10.5 13.5995 12.067 15.1665 14 15.1665Z" stroke="#1A1A1A" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+        <defs>
+        <clipPath id="clip0_2983_1551">
+        <rect width="28" height="28" fill="white"/>
+        </clipPath>
+        </defs>
+        </svg>
+
+    </div>
+    <div class="meta-text">
+      <div class="meta-value">
+        {{ article.metafields.custom.location }}
+      </div>
+      <div class="meta-label">Location</div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- CATEGORY -->
+  {% if blog and blog.title != blank %}
+  <div class="meta-item">
+    <div class="meta-icon">
+      <svg width="32" height="28" viewBox="0 0 32 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M14 3.5V23.3333C14 23.6428 13.8771 23.9395 13.6583 24.1583C13.4395 24.3771 13.1428 24.5 12.8333 24.5H5.83333C5.21449 24.5 4.621 24.2542 4.18342 23.8166C3.74583 23.379 3.5 22.7855 3.5 22.1667V5.83333C3.5 5.21449 3.74583 4.621 4.18342 4.18342C4.621 3.74583 5.21449 3.5 5.83333 3.5H22.1667C22.7855 3.5 23.379 3.74583 23.8166 4.18342C24.2542 4.621 24.5 5.21449 24.5 5.83333V12.8333C24.5 13.1428 24.3771 13.4395 24.1583 13.6583C23.9395 13.8771 23.6428 14 23.3333 14H3.5" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M18.6667 22.1665H25.6667" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M22.1667 25.6665V18.6665" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+
+    </div>
+    <div class="meta-text">
+      <div class="meta-value">
+        {{ blog.title }}
+      </div>
+      <div class="meta-label">Category</div>
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="hero-right">
+    {% if article.image %}
+      <img src="{{ article.image | image_url: width: 700 }}">
+    {% endif %}
+  </div>
+
+</div>
+</div>
+</div>
+  <div class="page-width" style="padding-top:80px; padding-bottom:80px;">
+
+   
+
+    <!-- BODY -->
+    <div class="article-body">
+
+      <!-- LEFT SIDEBAR -->
+      <div class="toc">
+        <ul id="toc-list" class="toc-list-items"></ul>
+      </div>
+
+      <!-- RIGHT CONTENT -->
+      <div class="content" id="article-content">
+        {{ article.content }}
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .article-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 60px;
+  margin-bottom: 60px;
+}
+.toc-list-items{position:sticky;top:110px;}
+.hero-left {
+  flex: 1.3;
+  max-width: 600px;
+}
+.content
+{
+  margin-top:0;
+}
+.badge-tag {
+   display: inline-block;
+  background: var(--color-text-primary);
+  color: #fff;
+  font-size: 11px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+  backdrop-filter: blur(4px);
+box-shadow: 0px 0px 25px 0px rgba(0, 0, 0, 0.5);
+
+}
+
+.hero-title {
+  font-size: 36px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  line-height: 1.3;
+  color: var(--color-text-primary);
+}
+
+.hero-desc {
+  font-size: 15px;
+  font-weight:500;
+  color: var(--color-text-primary);
+  margin-bottom: 20px;
+  line-height:normal;
+}
+
+.hero-meta {
+  display: flex;
+  gap: 40px;
+  margin-top: 25px;
+}
+
+.meta-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.meta-icon {
+  font-size: 18px;
+  margin-top: 2px;
+}
+.meta-text {
+  display: flex;
+  flex-direction: column;
+  line-height:2;
+}
+.meta-value {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  line-height:16px;
+}
+.meta-label {
+  font-size: 14px;
+  color:rgb(26, 26, 26, 0.75);
+}
+.hero-right {
+  flex: 1;
+}
+
+.hero-right img {
+  width: 100%;
+  border-radius: 16px;
+  object-fit: cover;
+}
+.article-body {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 40px;
+}
+
+.toc {
+  position: sticky;
+  top: 100px;
+  border-right: 1px solid #eee;
+  padding-right: 40px;
+}
+
+.toc ul {
+  list-style: none;
+  padding: 0;
+}
+
+.toc li {
+  margin-bottom: 20px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.toc a {
+    color: var(--color-text-primary);
+    font-size: 16px;
+     overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display:block;
+}
+.toc a.active {
+  color: var(--color-button-hover);
+  font-weight: 600;
+}
+.toc a:hover {
+  color: var(--color-button-hover);
+}
+
+
+.content h2 {
+  margin-top: 0;
+  font-size:24px;
+  font-weight: 600;
+}
+
+.content p {
+  line-height: 1.7;
+}
+
+@media screen and (max-width: 768px)
+{
+  .article-hero {
+    flex-direction: column;
+  }
+  .hero-meta {
+    flex-direction: column;
+    gap:10px;
+  }
+  .hero-left {
+      flex: 1.3;
+      max-width: 100%;
+      
+  }
+  .article-body
+  {
+        grid-template-columns: 1fr;
+  }
+  .toc
+  {
+    display:none;
+  }
+  .content {
+    margin-top: 0;
+    text-align: left;
+}
+  .content img {
+        width: 100%;
+}
+}
+    </style>
+
+
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+  const content = document.querySelector("#article-content");
+  const tocList = document.querySelector("#toc-list");
+
+  if (!content || !tocList) return;
+
+  const headings = content.querySelectorAll("h2");
+
+  headings.forEach((heading, index) => {
+    const id = "section-" + index;
+    heading.setAttribute("id", id);
+
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+
+    a.textContent = heading.textContent;
+    a.href = "#" + id;
+
+    li.appendChild(a);
+    tocList.appendChild(li);
+  });
+});
+
+// smooth scroll
+// smooth scroll with offset
+document.addEventListener("click", function(e) {
+  if (e.target.tagName === "A" && e.target.closest(".toc")) {
+    e.preventDefault();
+
+    const id = e.target.getAttribute("href").replace("#", "");
+    const element = document.getElementById(id);
+
+    const offset = 130; // adjust if needed
+
+    const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+    const offsetPosition = elementPosition - offset;
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: "smooth"
+    });
+  }
+});
+window.addEventListener("scroll", function () {
+  const sections = document.querySelectorAll("#article-content h2");
+  const links = document.querySelectorAll("#toc-list a");
+
+  let closestSection = null;
+  let minDistance = Infinity;
+
+  sections.forEach(section => {
+    const rect = section.getBoundingClientRect();
+    const distance = Math.abs(rect.top - 140); // offset reference
+
+    if (rect.top <= window.innerHeight && distance < minDistance) {
+      minDistance = distance;
+      closestSection = section;
+    }
+  });
+
+  if (closestSection) {
+    const id = closestSection.getAttribute("id");
+
+    links.forEach(link => {
+      link.classList.remove("active");
+      if (link.getAttribute("href") === "#" + id) {
+        link.classList.add("active");
+      }
+    });
+  }
+});
+</script>

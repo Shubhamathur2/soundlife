@@ -1,0 +1,485 @@
+<div class="custom-blog-page page-width page-padding">
+  <div class="custom-blog-wrapper">
+    <!-- LEFT SIDE -->
+    <div class="custom-blog-grid">
+      {% paginate blog.articles by 9 %}
+        {% for article in blog.articles %}
+          <div class="blog-card">
+            <a href="{{ article.url }}">
+              <div class="blog-image">
+                {% if article.tags.size > 0 %}
+                  <span class="badge-float">
+                    {{ article.tags.first }}
+                  </span>
+                {% endif %}
+
+                {% if article.image %}
+                  {{ article.image | image_url: width: 600 | image_tag: alt: article.title }}
+                {% endif %}
+              </div>
+            </a>
+
+            <div class="blog-content">
+              <h3>
+                <a href="{{ article.url }}">{{ article.title | truncate: 40}}</a>
+              </h3>
+              <!-- DATE + READ TIME -->
+              <span class="blog-date">
+                {{ article.published_at | date: '%B %d, %Y' }}
+                •
+                {% assign words = article.content | strip_html | split: ' ' %}
+                {{ words.size | divided_by: 200 | plus: 1 }} min read
+              </span>
+              <p class="blog-desc">
+                {% if article.excerpt != blank %}
+                  {{ article.excerpt | strip_html }}
+                {% else %}
+                  {{ article.content | strip_html }}
+                {% endif %}
+              </p>
+
+              <a class="read-btn" href="{{ article.url }}">
+                Read Full Blog
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3.3335 8H12.6668" stroke="#2FB215" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M8 3.3335L12.6667 8.00016L8 12.6668" stroke="#2FB215" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        {% endfor %}
+
+        <!-- PAGINATION -->
+        <div class="custom-pagination">
+          {% if paginate.previous %}
+            <a href="{{ paginate.previous.url }}">← Previous</a>
+          {% endif %}
+
+          {% for part in paginate.parts %}
+            {% if part.is_link %}
+              <a href="{{ part.url }}">{{ part.title }}</a>
+            {% else %}
+              <span class="active">{{ part.title }}</span>
+            {% endif %}
+          {% endfor %}
+
+          {% if paginate.next %}
+            <a href="{{ paginate.next.url }}">Next →</a>
+          {% endif %}
+        </div>
+      {% endpaginate %}
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <div class="custom-blog-sidebar">
+      <!-- SEARCH (WORKING) -->
+      <div class="sidebar-box">
+        <form action="/search" method="get" class="search-wrap">
+          <input type="text" name="q" placeholder="Search here..." class="blog-search">
+          <button type="submit" class="search-btn">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9.16667 15.8333C12.8486 15.8333 15.8333 12.8486 15.8333 9.16667C15.8333 5.48477 12.8486 2.5 9.16667 2.5C5.48477 2.5 2.5 5.48477 2.5 9.16667C2.5 12.8486 5.48477 15.8333 9.16667 15.8333Z" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M17.4998 17.4998L13.9165 13.9165" stroke="white" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <input type="hidden" name="type" value="article">
+        </form>
+      </div>
+
+      <!-- CATEGORIES WITH COUNT -->
+      <div class="sidebar-box">
+        <h4>Categories</h4>
+        <ul>
+          {% for tag in blog.all_tags %}
+            {% assign tag_count = 0 %}
+            {% for article in blog.articles %}
+              {% if article.tags contains tag %}
+                {% assign tag_count = tag_count | plus: 1 %}
+              {% endif %}
+            {% endfor %}
+
+            <li>
+              <a href="{{ blog.url }}/tagged/{{ tag | handleize }}">
+                {{ tag }}
+              </a>
+              <span>({{ tag_count }})</span>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <!-- RELATED POSTS (WITH IMAGE) -->
+      <div class="sidebar-box">
+        <h4>Related Posts</h4>
+
+        {% for article in blog.articles limit: 4 %}
+          <div class="related-post">
+            <a href="{{ article.url }}">
+              {% if article.image %}
+                <img src="{{ article.image | image_url: width: 80 }}">
+              {% endif %}
+            </a>
+            <div>
+              <a href="{{ article.url }}">{{ article.title | truncate: 40 }}</a>
+              <p class="related-date">
+                {{ article.published_at | date: '%b %d, %Y' }}
+              </p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- POPULAR TAGS -->
+      <div class="sidebar-box">
+        <h4>Popular Topics</h4>
+        <div class="tag-list">
+          {% for tag in blog.all_tags limit: 6 %}
+            <a href="{{ blog.url }}/tagged/{{ tag | handleize }}">
+              {{ tag }}
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+    .page-padding{margin:100px auto}
+      /* =========================
+     BLOG LAYOUT WRAPPER
+  ========================= */
+  .custom-blog-wrapper {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 40px;
+    margin-top: 40px;
+  }
+
+  /* =========================
+     BLOG GRID
+  ========================= */
+  .custom-blog-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  /* =========================
+     BLOG CARD
+  ========================= */
+  .blog-card {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .blog-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+  }
+
+  /* =========================
+     BLOG IMAGE
+  ========================= */
+  .blog-image {
+    position: relative;
+  }
+
+  .blog-image img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* =========================
+     BADGE (FEATURED)
+  ========================= */
+  .badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: #000;
+    color: #fff;
+    font-size: 11px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  /* =========================
+     BLOG CONTENT
+  ========================= */
+  .blog-content {
+    padding: 20px 12px;
+  }
+
+  .blog-date {
+    font-size: 13px;
+    color: var(--color-text-gray);
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .blog-content h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 8px 0;
+    line-height: 1.4;
+    min-height: 50px;
+  }
+
+  .blog-content h3 a {
+    color: var(--color-para-text);
+    text-decoration: none;
+  {% comment %} 
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* 👈 2 lines */
+    -webkit-box-orient: vertical; {% endcomment %}
+    overflow: hidden;
+
+    line-height: 1.4;
+    max-height: 50px; /* 👈 equal height cards */
+  }
+
+
+  .blog-content p {
+    font-size: 14px;
+    color: var(--color-para-text);
+    line-height: 1.6;
+    min-height: 45px;
+  }
+
+  /* =========================
+     READ BUTTON
+  ========================= */
+  .read-btn {
+       display: inline-block;
+      margin-top: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-primary);
+      text-decoration: none;
+      padding: 8px;
+      border: 1px solid var(--color-primary);
+      width: 100%;
+      text-align: center;
+      border-radius: 24px;
+  }
+
+  .read-btn:hover {
+    background:var(--color-button-hover);
+    color:#fff;
+    border: 1px solid var(--color-button-hover);
+  }
+  .read-btn svg{
+    vertical-align: middle;
+  }
+  .read-btn:hover svg path{
+      stroke: #fff;}
+  /* =========================
+     SIDEBAR
+  ========================= */
+  .custom-blog-sidebar {
+     background: #fff;
+    height: fit-content;
+  }
+
+  /* SIDEBAR BOX */
+  .sidebar-box {
+    margin-bottom: 25px;
+  }
+
+  .sidebar-box h4 {
+    font-size: 24px;
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+
+  /* SEARCH */
+  .blog-search {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    outline: none;
+  }
+
+  .blog-search:focus {
+    border-color: var(--color-primary);
+  }
+
+  /* CATEGORY LIST */
+  .sidebar-box ul{padding:0}
+  .sidebar-box ul li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .sidebar-box ul li a {
+    color: var(--color-para-text);
+    font-size: 14px;
+    text-transform: capitalize;
+  }
+
+  .sidebar-box ul li span {
+    color: #999;
+    font-size: 13px;
+  }
+
+  .sidebar-box ul li a:hover {
+    color: var(--color-primary);
+  }
+
+  /* =========================
+     RELATED POSTS
+  ========================= */
+  .related-post {
+        display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+      padding: 12px;
+      background: #F7F6F2;
+      border-radius: 10px;
+      align-items: center;
+      border: 1px solid #E5E2DC;
+  }
+
+  .related-post img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+  }
+
+  .related-post a {
+       font-size: 14px;
+      color: #1A1A1A;
+      text-decoration: none;
+      line-height: 1.3;
+      display: block;
+      font-weight: 600;
+  }
+
+  .related-post a:hover {
+    color: var(--color-primary);
+  }
+
+  /* =========================
+     PAGINATION
+  ========================= */
+  .custom-pagination {
+    margin-top: 40px;
+    text-align: center;
+  }
+
+  .custom-pagination a,
+  .custom-pagination span {
+    display: inline-block;
+    margin: 0 5px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    background: #f1f1f1;
+    font-size: 14px;
+    text-decoration: none;
+    color: #333;
+  }
+
+  .custom-pagination a:hover {
+    background: var(--color-primary);
+    color: #fff;
+  }
+
+  .custom-pagination .active {
+    background: var(--color-primary);
+    color: #fff;
+  }
+
+  /* TAG LIST */
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tag-list a {
+    background: #F7F6F2;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    text-decoration: none;
+    color: var(--color-para-text);
+    text-transform: capitalize;
+  }
+
+  .tag-list a:hover {
+    background: var(--color-primary);
+    color: #fff;
+  }
+
+  /* RELATED DATE */
+  .related-date {
+        font-size: 12px;
+      color: #737373;
+      margin-top: 0;
+      font-weight: 600;
+  }
+
+  /* BADGE IMPROVEMENT */
+  .badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: #111;
+    color: #fff;
+    font-size: 11px;
+    padding: 5px 10px;
+    border-radius: 20px;
+  }
+  .search-wrap {
+    display: flex;
+  }
+
+  .blog-search {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #73737380;
+    border-radius: 20px 0 0 20px;
+  }
+
+  .search-btn {
+    background: var(--color-primary);
+    color: #fff;
+    border: none;
+    padding: 9px 12px;
+    border-radius: 0 20px 20px 0;
+    cursor: pointer;
+  }
+  /* =========================
+     RESPONSIVE
+  ========================= */
+  @media (max-width: 1024px) {
+    .custom-blog-wrapper {
+      grid-template-columns: 1fr;
+    }
+
+    .custom-blog-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .custom-blog-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .blog-image img {
+      height: 200px;
+    }
+  }
+</style>

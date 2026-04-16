@@ -1,0 +1,192 @@
+<section class="people-carousel full-width">
+  <div class="people-carousel__wrapper">
+    
+    <div class="heading-section center">
+      {% if section.settings.heading != blank %}
+        <h2 class="heading">{{ section.settings.heading }}</h2>
+      {% endif %}
+      {% if section.settings.subheading != blank %}
+        <p class="description">{{ section.settings.subheading }}</p>
+      {% endif %}
+    </div>
+
+   <div class="carousel">
+  <button class="arrow prev">&#10094;</button>
+
+  <div class="track people-slick-slider">
+  {% for block in section.blocks %}
+    <div class="card" {{ block.shopify_attributes }}>
+      <div class="card-inner">
+        
+        {% if block.settings.image != blank %}
+          <div class="image-wrap">
+            <img
+              src="{{ block.settings.image | image_url: width: 800 }}"
+              alt="{{ block.settings.name }}"
+              loading="lazy"
+            >
+          </div>
+        {% endif %}
+
+        <div class="content">
+          {% if block.settings.name != blank %}
+            <h3 class="name">{{ block.settings.name }}</h3>
+          {% endif %}
+
+          {% if block.settings.description != blank %}
+            <p class="desc">{{ block.settings.description }}</p>
+          {% endif %}
+        </div>
+
+      </div>
+    </div>
+  {% endfor %}
+</div>
+  <button class="arrow next">&#10095;</button>
+</div>
+
+
+    {% if section.settings.button_text != blank %}
+      <div class="cta-wrap">
+        <a href="{{ section.settings.button_link }}" class="btn-primary">
+          {{ section.settings.button_text }} <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4.3208 10.3711H16.4196" stroke="white" stroke-width="1.72839" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M10.3706 4.32031L16.42 10.3697L10.3706 16.4191" stroke="white" stroke-width="1.72839" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </a>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
+<script>
+(function() {
+  function initPeopleSlider() {
+    if (typeof jQuery === 'undefined' || typeof jQuery.fn.slick === 'undefined') {
+      console.warn('Slick or jQuery not loaded yet');
+      return;
+    }
+
+    var $ = jQuery;
+
+    $('.people-slick-slider').each(function() {
+      var $slider = $(this);
+
+      // Prevent double init (Shopify sections reload)
+      if ($slider.hasClass('slick-initialized')) {
+        $slider.slick('unslick');
+      }
+
+      var $wrapper = $slider.closest('.people-carousel__wrapper');
+      var $prev = $wrapper.find('.prev');
+      var $next = $wrapper.find('.next');
+      var $dots = $wrapper.find('.dots');
+
+      $slider.slick({
+        slidesToShow: 4,
+        slidesToScroll: 1,
+        infinite: true,
+        autoplay: false,
+        speed: 500,
+        arrows: true,
+        dots: true,
+        swipe: true,
+        draggable: true,
+        touchMove: true,
+        swipeToSlide: true,
+        variableWidth: false, 
+        cssEase: 'ease',
+        prevArrow: $prev,
+        nextArrow: $next,
+        appendDots: $dots,
+
+        responsive: [
+          {
+            breakpoint: 1200,
+            settings: { slidesToShow: 3 }
+          },
+          {
+            breakpoint: 992,
+            settings: { slidesToShow: 2 }
+          },
+          {
+            breakpoint: 768,
+            settings: {slidesToShow: 1,
+      slidesToScroll: 1,
+      centerMode: false,
+      variableWidth: false }
+          }
+        ]
+      });
+    });
+  }
+
+  // Run after everything is loaded (ensures jQuery + Slick ready)
+  window.addEventListener('load', initPeopleSlider);
+
+  // Shopify section reload support
+  document.addEventListener('shopify:section:load', initPeopleSlider);
+})();
+</script>
+
+{% schema %}
+{
+  "name": "People Carousel",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Meet the People Waiting to Be Heard"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Our collective giving means children can chase dreams, and seniors can remain part of their families’ lives."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Donate Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "person",
+      "name": "Person Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Person Image"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Leslie Alexander"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Short Description",
+          "default": "Hearing challenges during learning activities"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "People Carousel"
+    }
+  ]
+}
+{% endschema %}

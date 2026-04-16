@@ -1,0 +1,77 @@
+{% schema %}
+{
+  "name": "Hearing Loss Types",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "main_image",
+      "label": "Right Image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "type",
+      "name": "Type Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Sensorineural"
+        },
+        {
+          "type": "textarea",
+          "id": "desc",
+          "label": "Description"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 5,
+  "presets": [
+    {
+      "name": "Hearing Loss Types"
+    }
+  ]
+}
+{% endschema %}
+
+<section class="hearing-loss section-space-two">
+  <div class="page-width">
+    
+   <div class="hearing-flex">
+         <!-- LEFT CONTENT -->
+        <div class="hl-left">
+        <h2 class="heading heading-left">Types of Hearing Loss</h2>
+        <p class="subtitle">
+            Understanding the different types of hearing loss helps guide the right care for your child.
+        </p>
+
+        <div class="hl-tabs">
+            {% for block in section.blocks %}
+            <div class="hl-tab">
+                <h3>{{ block.settings.title }}</h3>
+                <p>{{ block.settings.desc }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        </div>
+
+        <!-- RIGHT IMAGE -->
+        <div class="hl-right">
+        {% if section.settings.main_image %}
+            <img src="{{ section.settings.main_image | img_url: '600x' }}" alt="hearing aid">
+        {% endif %}
+
+            <div class="content">
+                <img src="//soundlifedemo.myshopify.com/cdn/shop/files/green-star.svg?v=15182388839296315071">
+                <div class="des">Premium Quality</div>
+                <div class="author">Medical Grade</div>
+            </div>
+        </div>
+
+    </div>
+
+  </div>
+</section>
+

@@ -1,0 +1,140 @@
+<section class="help-mom section-space-two">
+  <div class="page-width">
+    <div class="hearing-flex">
+      <!-- LEFT CONTENT -->
+      <div class="hm-left">
+        <h2 class="heading heading-left">{{ section.settings.heading }}</h2>
+
+        <p class="desc">{{ section.settings.description }}</p>
+
+        <h4>{{  section.settings.service_heading }}Our Services</h4>
+
+        <ul class="services">
+          {% for block in section.blocks %}
+            <li>
+              <span class="dot"></span>
+              {{ block.settings.text }}
+            </li>
+          {% endfor %}
+        </ul>
+
+        <h4>{{ section.settings.sub_heading }}</h4>
+
+        {% if section.settings.button_text != blank %}
+          <a href="{{ section.settings.button_link }}" class="btn-primary"> {{ section.settings.button_text }} → </a>
+        {% endif %}
+
+        {% if section.settings.note_text != blank %}
+          <p class="note">
+            <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M13.6554 9.10368C14.7858 7.99608 15.9313 6.66849 15.9313 4.93123C15.9313 3.82463 15.4917 2.76336 14.7092 1.98087C13.9268 1.19838 12.8655 0.758789 11.7589 0.758789C10.4237 0.758789 9.48299 1.1381 8.34505 2.27604C7.20711 1.1381 6.26642 0.758789 4.93123 0.758789C3.82463 0.758789 2.76336 1.19838 1.98087 1.98087C1.19838 2.76336 0.758789 3.82463 0.758789 4.93123C0.758789 6.67607 1.89673 8.00367 3.03467 9.10368L8.34505 14.4141L13.6554 9.10368Z" fill="#FFD1D1" stroke="#FF9090" stroke-width="1.51725" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            {{ section.settings.note_text }}
+          </p>
+        {% endif %}
+      </div>
+
+      <!-- RIGHT IMAGES -->
+      <div class="hm-right">
+        {% if section.settings.img1 %}
+          <img class="img1" src="{{ section.settings.img1 | img_url: '600x' }}">
+        {% endif %}
+
+        {% if section.settings.img2 %}
+          <img class="img2" src="{{ section.settings.img2 | img_url: '600x' }}">
+        {% endif %}
+      </div>
+    </div>
+    <p class="mt-40">
+      {{ section.settings.sub_description }}
+    </p>
+    <blockquote class="mt-20">
+    {{  section.settings.blockquote}}
+  </blockquote>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Help Mom CTA",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Need help, Mom?"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "image_picker",
+      "id": "img1",
+      "label": "First Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "img2",
+      "label": "Second Image"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Book Appointment"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "text",
+      "id": "sub_heading",
+      "label": "Sub Heading",
+      "default": "Consultation & Hearing Tests:"
+    },
+    {
+      "type": "text",
+      "id": "service_heading",
+      "label": "Service Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "note_text",
+      "label": "Note Text",
+      "default": "We’ll walk with you and your baby, step by step."
+    },
+    {
+      "type": "textarea",
+      "id": "sub_description",
+      "label": "Sub Description"
+    },
+    {
+      "type": "textarea",
+      "id": "blockquote",
+      "label": "Blockquote"
+    },
+  ],
+  "blocks": [
+    {
+      "type": "service",
+      "name": "Service Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Service"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Help Mom CTA"
+    }
+  ]
+}
+{% endschema %}

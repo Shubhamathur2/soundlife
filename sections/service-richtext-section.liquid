@@ -1,0 +1,84 @@
+<section class="faq-wrap richtext-wrap">
+  <div class="page-width">
+    <h2 class="faq-title heading">{{ section.settings.faq_heading }}</h2>
+    <p class="description desc-center">{{ section.settings.faq_desc }}</p>
+
+    <div class="faq-grid">
+      <div>
+        {% for block in section.blocks %}
+          <div class="faq-q">
+            {{ block.settings.q }}
+          </div>
+
+          <div class="faq-a">
+            <div class="faq-a-inner">
+              {{ block.settings.a }}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    <p class="description desc-center mt-40">{{ section.settings.faq_desc_2 }}</p>
+    <blockquote>{{ section.settings.faq_blockquote }}</blockquote>
+  </div>
+</section>
+<style>
+    .richtext-wrap .faq-q{
+        border: none;
+        padding: 22px 0 10px;
+        font-weight:600;
+        cursor: auto;
+    }
+    .richtext-wrap .faq-a{
+        max-height: fit-content;
+        overflow: auto;
+        border-bottom: 1px solid #ccc;
+  }
+   .richtext-wrap .faq-grid{
+        margin: 40px auto 0;
+  }
+</style>
+{% schema %}
+{
+  "name": "Section Rich Text",
+  "settings": [
+    {
+      "type": "text",
+      "id": "faq_heading",
+      "label": "Heading",
+      "default": "Questions?"
+    },
+    {
+      "type": "text",
+      "id": "faq_desc",
+      "label": "Description",
+      "default": "We’ve got the answers you’re looking for."
+    },
+    {
+      "type": "text",
+      "id": "faq_desc_2",
+      "label": "Description"
+    },
+    {
+      "type": "text",
+      "id": "faq_blockquote",
+      "label": "Blockquote"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "Points",
+      "settings": [
+        { "type": "text", "id": "q", "label": "Highlight" },
+        { "type": "textarea", "id": "a", "label": "Description" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Section Rich Text"
+    }
+  ]
+}
+{% endschema %}

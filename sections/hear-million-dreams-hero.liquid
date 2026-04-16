@@ -1,0 +1,320 @@
+<section class="top-bar">
+  <div class="page-width">
+    <p>{{  section.settings.top_bar_text }}</p>
+  </div>
+</section>
+<section class="hmd-hero section-space-two">
+  <div class="hmd-container page-width">
+    
+    <!-- Left Content -->
+    <div class="hmd-content">
+      {% if section.settings.tagline != blank %}
+        <p class="eyebrow">{{ section.settings.tagline }}</p>
+      {% endif %}
+
+      {% if section.settings.heading != blank %}
+        <h1 class="hero-heading heading-left"><em> {{ section.settings.heading }} </em></h1>
+      {% endif %}
+
+      {% if section.settings.description != blank %}
+        <p class="description">{{ section.settings.description }}</p>
+      {% endif %}
+      {% if section.settings.description2 != blank %}
+        <p class="description sub-description">{{ section.settings.description2 }}</p>
+      {% endif %}
+
+      {% if section.settings.play_inpiration-btn != blank %}
+        <a href="{{section.settings.play_inpiration-btn_link }}" target="_blank"><p class="play-inspiration"> <svg width="19" height="21" viewBox="0 0 19 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1.1001 3.1002C1.09999 2.74829 1.19274 2.40259 1.36898 2.09799C1.54522 1.7934 1.79871 1.54069 2.10385 1.3654C2.40899 1.1901 2.75498 1.09843 3.10689 1.09962C3.45879 1.10082 3.80415 1.19484 4.1081 1.3722L16.1051 8.3702C16.4079 8.54588 16.6592 8.79795 16.834 9.10121C17.0089 9.40447 17.101 9.7483 17.1013 10.0983C17.1016 10.4484 17.0101 10.7924 16.8358 11.0959C16.6615 11.3995 16.4106 11.652 16.1081 11.8282L4.1081 18.8282C3.80415 19.0056 3.45879 19.0996 3.10689 19.1008C2.75498 19.102 2.40899 19.0103 2.10385 18.835C1.79871 18.6597 1.54522 18.407 1.36898 18.1024C1.19274 17.7978 1.09999 17.4521 1.1001 17.1002V3.1002Z" stroke="#01AD01" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        {{ section.settings.play_inpiration-btn }}</p></a>
+      {% endif %}
+
+      <div class="hmd-buttons">
+        <div class="btn-content btn-content-give">
+                {% if section.settings.primary_btn_text != blank %}
+                    <p>{{ section.settings.primary_button_upper_text }}</p>
+                    <a href="{{ section.settings.primary_btn_link }}" class="btn-primary hmd-primary-btn">
+                    {{ section.settings.primary_btn_text }}
+                </a>
+                    <p>{{ section.settings.primary_button_below_text }}</p>
+            {% endif %}
+        </div>
+        <div class="btn-content btn-content-receive">
+            {% if section.settings.secondary_btn_text != blank %}
+                    <p>{{ section.settings.secondary_button_upper_text }}</p>
+                    <a href="{{ section.settings.secondary_btn_link }}" class="hear-btn-secondary hmd-secondary-btn">
+                        {{ section.settings.secondary_btn_text }}
+                    </a>
+                    <p>{{ section.settings.secondary_button_below_text }}</p>
+            {% endif %}
+        </div>
+      </div>
+
+      {% if section.settings.logos_title != blank %}
+        <p class="hmd-logos-title">{{ section.settings.logos_title }}</p>
+      {% endif %}
+
+      <div class="hmd-logos">
+        {% for block in section.blocks %}
+          {% if block.settings.logo != blank %}
+            <img 
+              src="{{ block.settings.logo | image_url: width: 180 }}" 
+              alt="logo" 
+              loading="lazy"
+            >
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Right Image -->
+    <div class="hmd-image">
+      {% if section.settings.hero_image != blank %}
+        <img 
+          src="{{ section.settings.hero_image | image_url: width: 900 }}" 
+          alt="Hero Image" 
+          loading="eager"
+        >
+      {% endif %}
+
+      <!-- Progress Card -->
+        <div class="hmd-progress-card">
+            <div class="hmd-progress-top">
+            <span class="hmd-progress-value">
+                {{ section.settings.progress_percentage }}%
+            </span><svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="25" height="25" fill="#01AD01"/>
+                    <path d="M12.8707 5.58881C12.8138 5.53194 12.7367 5.5 12.6562 5.5C12.5758 5.5 12.4987 5.53194 12.4418 5.58881L7.58881 10.4418C7.53194 10.4987 7.5 10.5758 7.5 10.6563C7.5 10.7367 7.53194 10.8138 7.58881 10.8707L8.80206 12.0839C8.85894 12.1408 8.93607 12.1727 9.0165 12.1727C9.09693 12.1727 9.17406 12.1408 9.23094 12.0839L11.443 9.87188V18.5424C11.443 18.6228 11.475 18.7 11.5318 18.7569C11.5887 18.8137 11.6659 18.8457 11.7463 18.8457H13.5662C13.6466 18.8457 13.7238 18.8137 13.7807 18.7569C13.8375 18.7 13.8695 18.6228 13.8695 18.5424V9.87188L16.0816 12.0839C16.1384 12.1408 16.2156 12.1727 16.296 12.1727C16.3764 12.1727 16.4536 12.1408 16.5104 12.0839L17.7237 10.8707C17.7806 10.8138 17.8125 10.7367 17.8125 10.6563C17.8125 10.5758 17.7806 10.4987 17.7237 10.4418L12.8707 5.58881Z" fill="white"/>
+            </svg>
+            </div>
+            <p class="hmd-progress-text">
+            {{ section.settings.progress_text }}
+            </p>
+        </div>
+
+        <!-- Campaign Card -->
+        <div class="hmd-campaign-card">
+            <h4>{{ section.settings.campaign_title }}</h4>
+            <p class="hmd-campaign-desc">
+            {{ section.settings.campaign_description }}
+            </p>
+
+            <ul class="hmd-campaign-list">
+            {% if section.settings.point_1 != blank %}
+                <li><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18.3332 9.23355V10.0002C18.3321 11.7972 17.7503 13.5458 16.6743 14.9851C15.5983 16.4244 14.0859 17.4773 12.3626 17.9868C10.6394 18.4963 8.79755 18.4351 7.1119 17.8124C5.42624 17.1896 3.98705 16.0386 3.00897 14.5311C2.03089 13.0236 1.56633 11.2403 1.68457 9.44714C1.80281 7.65402 2.49751 5.94715 3.66507 4.58111C4.83263 3.21506 6.41049 2.26303 8.16333 1.867C9.91617 1.47097 11.7501 1.65216 13.3915 2.38355" stroke="#01AD01" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M7.5 9.16732L10 11.6673L18.3333 3.33398" stroke="#01AD01" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                {{ section.settings.point_1 }}</li>
+            {% endif %}
+            {% if section.settings.point_2 != blank %}
+                <li><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18.3332 9.23355V10.0002C18.3321 11.7972 17.7503 13.5458 16.6743 14.9851C15.5983 16.4244 14.0859 17.4773 12.3626 17.9868C10.6394 18.4963 8.79755 18.4351 7.1119 17.8124C5.42624 17.1896 3.98705 16.0386 3.00897 14.5311C2.03089 13.0236 1.56633 11.2403 1.68457 9.44714C1.80281 7.65402 2.49751 5.94715 3.66507 4.58111C4.83263 3.21506 6.41049 2.26303 8.16333 1.867C9.91617 1.47097 11.7501 1.65216 13.3915 2.38355" stroke="#01AD01" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M7.5 9.16732L10 11.6673L18.3333 3.33398" stroke="#01AD01" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                {{ section.settings.point_2 }}</li>
+            {% endif %}
+            {% if section.settings.point_3 != blank %}
+                <li><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18.3332 9.23355V10.0002C18.3321 11.7972 17.7503 13.5458 16.6743 14.9851C15.5983 16.4244 14.0859 17.4773 12.3626 17.9868C10.6394 18.4963 8.79755 18.4351 7.1119 17.8124C5.42624 17.1896 3.98705 16.0386 3.00897 14.5311C2.03089 13.0236 1.56633 11.2403 1.68457 9.44714C1.80281 7.65402 2.49751 5.94715 3.66507 4.58111C4.83263 3.21506 6.41049 2.26303 8.16333 1.867C9.91617 1.47097 11.7501 1.65216 13.3915 2.38355" stroke="#01AD01" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M7.5 9.16732L10 11.6673L18.3333 3.33398" stroke="#01AD01" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                {{ section.settings.point_3 }}</li>
+            {% endif %}
+            </ul>
+
+            {% if section.settings.campaign_link_text != blank %}
+            <a href="{{ section.settings.campaign_link }}" class="hmd-campaign-link">
+                {{ section.settings.campaign_link_text }} <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3.3335 8H12.6668" stroke="#005CDE" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M8 3.33398L12.6667 8.00065L8 12.6673" stroke="#005CDE" stroke-width="1.33333" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    
+
+    
+  </div>
+</section>
+
+
+{% schema %}
+{
+  "name": "Hear Million Dreams Hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "top_bar_text",
+      "label": "Top Bar Text",
+      "default": "✨ Give the priceless gift of hearing and help someone experience the world in sound again. ✨"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "RESTORING SOUND. REBUILDING CONFIDENCE."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Hear a Million Dreams"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "textarea",
+      "id": "description2",
+      "label": "Description2"
+    },
+    {
+      "type": "text",
+      "id": "play_inpiration-btn",
+      "label": "Play Inspiration Button"
+    },
+    {
+      "type": "url",
+      "id": "play_inpiration-btn_link",
+      "label": "Play Inspiration Button Link"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Right Hero Image"
+    },
+    {
+      "type": "text",
+      "id": "primary_btn_text",
+      "label": "Primary Button Text",
+      "default": "Become a Donor"
+    },
+    {
+      "type": "url",
+      "id": "primary_btn_link",
+      "label": "Primary Button Link"
+    },
+    {
+        "type": "text",
+        "id": "primary_button_upper_text",
+        "label": "Primary Button Upper Text",
+        "default": "Become a donor to"
+    },
+    {
+        "type": "text",
+        "id": "primary_button_below_text",
+        "label": "Primary Button Below Text",
+        "default": "the gift of hearing"
+    },
+    {
+      "type": "text",
+      "id": "secondary_btn_text",
+      "label": "Secondary Button Text",
+      "default": "Apply for Hearing Support"
+    },
+    {
+      "type": "url",
+      "id": "secondary_btn_link",
+      "label": "Secondary Button Link"
+    },
+    {
+        "type": "text",
+        "id": "secondary_button_upper_text",
+        "label": "Secondary Button Upper Text",
+        "default": "Apply to"
+    },
+    {
+        "type": "text",
+        "id": "secondary_button_below_text",
+        "label": "Secondary Button Below Text",
+        "default": "the gift of hearing"
+    },
+    {
+      "type": "text",
+      "id": "logos_title",
+      "label": "Logos Title",
+      "default": "Recognised by Trusted News Platforms"
+    },
+    {
+    "type": "range",
+    "id": "progress_percentage",
+    "label": "Progress Percentage",
+    "min": 0,
+    "max": 100,
+    "step": 1,
+    "default": 41
+    },
+    {
+    "type": "text",
+    "id": "progress_text",
+    "label": "Progress Text",
+    "default": "Closer to Our Goal, Let’s reach 100% together"
+    },
+    {
+    "type": "text",
+    "id": "campaign_title",
+    "label": "Campaign Title",
+    "default": "The Hear a Million Dreams Campaign"
+    },
+    {
+    "type": "textarea",
+    "id": "campaign_description",
+    "label": "Campaign Description"
+    },
+    {
+    "type": "text",
+    "id": "point_1",
+    "label": "Point 1",
+    "default": "Verified recipients"
+    },
+    {
+    "type": "text",
+    "id": "point_2",
+    "label": "Point 2",
+    "default": "Direct sponsorship"
+    },
+    {
+    "type": "text",
+    "id": "point_3",
+    "label": "Point 3",
+    "default": "Measurable impact"
+    },
+    {
+    "type": "text",
+    "id": "campaign_link_text",
+    "label": "Campaign Link Text",
+    "default": "Join The Movement"
+    },
+    {
+    "type": "url",
+    "id": "campaign_link",
+    "label": "Campaign Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "logo",
+      "name": "Logo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "logo",
+          "label": "Logo Image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hear Million Dreams Hero"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,359 @@
+{% comment %}
+  Hear Better Application Form Section
+{% endcomment %}
+
+{% comment %}
+  Hear Better Application Form Section (Fully Translatable)
+{% endcomment %}
+
+<section class="hear-form-section">
+  <div class="page-width">
+    <div class="hear-form-wrapper">
+
+      {% if section.settings.heading != blank %}
+        <h2 class="hear-form-heading">{{ section.settings.heading }}</h2>
+      {% endif %}
+
+      {% if section.settings.subheading != blank %}
+        <p class="hear-form-subheading">{{ section.settings.subheading }}</p>
+      {% endif %}
+
+      {% form 'contact', id: 'HearBetterForm', class: 'hear-form' %}
+        <div class="form-grid">
+
+          <!-- Recipient Type -->
+          <div class="form-field">
+            <label>{{ section.settings.recipient_type_label }}</label>
+            <select name="contact[Recipient Type]" required>
+              <option value="">{{ section.settings.recipient_type_placeholder }}</option>
+              <option>{{ section.settings.option_seniors }}</option>
+              <option>{{ section.settings.option_children }}</option>
+              <option>{{ section.settings.option_adults }}</option>
+              <option>{{ section.settings.option_others }}</option>
+            </select>
+          </div>
+
+          <!-- Name -->
+          <div class="form-field">
+            <label>{{ section.settings.name_label }}</label>
+            <input
+              type="text"
+              name="contact[Name]"
+              placeholder="{{ section.settings.name_placeholder }}"
+              required
+            >
+          </div>
+
+          <!-- Email -->
+          <div class="form-field">
+            <label>{{ section.settings.email_label }}</label>
+            <input
+              type="email"
+              name="contact[email]"
+              placeholder="{{ section.settings.email_placeholder }}"
+              autocomplete="email"
+              required
+            >
+          </div>
+
+          <!-- Date of Birth -->
+          <div class="form-field">
+            <label>{{ section.settings.dob_label }}</label>
+            <input
+              type="date"
+              name="contact[Date of Birth]"
+              required
+            >
+          </div>
+
+          <!-- Residence -->
+          <div class="form-field">
+            <label>{{ section.settings.residence_label }}</label>
+            <input
+              type="text"
+              name="contact[Residence]"
+              placeholder="{{ section.settings.residence_placeholder }}"
+              required
+            >
+          </div>
+
+          <!-- WhatsApp -->
+          <div class="form-field">
+            <label>{{ section.settings.whatsapp_label }}</label>
+            <input
+              type="tel"
+              id="whatsapp"
+              name="contact[WhatsApp]"
+              placeholder="{{ section.settings.whatsapp_placeholder }}"
+              inputmode="numeric"
+              autocomplete="off"
+              required
+            >
+          </div>
+
+          <!-- Story Video -->
+          <div class="form-field">
+            <label>{{ section.settings.story_label }}</label>
+            <input
+              type="url"
+              name="contact[Story Video]"
+              placeholder="{{ section.settings.story_placeholder }}"
+            >
+          </div>
+
+        </div>
+
+        <!-- Terms Checkbox -->
+        <div class="form-terms">
+          <input type="checkbox" id="terms" required>
+          <label for="terms">
+            {{ section.settings.terms_text }}
+            <a href="{{ section.settings.terms_link }}" target="_blank">
+              {{ section.settings.terms_link_text }}
+            </a>
+            {{ section.settings.terms_text_after }}
+          </label>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn-primary">
+          {{ section.settings.button_text }}
+          <svg width="21" height="21" viewBox="0 0 21 21" fill="none">
+            <path d="M4.32098 10.3711H16.4197" stroke="white" stroke-width="1.72839" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M10.3704 4.32031L16.4197 10.3697L10.3704 16.4191" stroke="white" stroke-width="1.72839" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        {% if form.posted_successfully? %}
+          <p class="form-success">{{ section.settings.success_message }}</p>
+        {% endif %}
+
+        {% if form.errors %}
+          <div class="form-error">
+            {{ form.errors | default_errors }}
+          </div>
+        {% endif %}
+
+      {% endform %}
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const phoneInput = document.getElementById('whatsapp');
+
+    if (!phoneInput) return;
+
+    // 1. Block alphabets while typing (keypress)
+    phoneInput.addEventListener('keypress', function (e) {
+      const char = String.fromCharCode(e.which);
+      // Allow only numbers, + and space
+      if (!/[0-9+ ]/.test(char)) {
+        e.preventDefault();
+      }
+    });
+
+    // 2. Clean any invalid characters (covers mobile + autofill)
+    phoneInput.addEventListener('input', function () {
+      this.value = this.value.replace(/[^0-9+ ]/g, '');
+    });
+
+    // 3. Block pasting alphabets
+    phoneInput.addEventListener('paste', function (e) {
+      const pasteData = (e.clipboardData || window.clipboardData).getData('text');
+      if (/[^0-9+ ]/.test(pasteData)) {
+        e.preventDefault();
+      }
+    });
+
+    // 4. Block drag & drop text (edge case)
+    phoneInput.addEventListener('drop', function (e) {
+      e.preventDefault();
+    });
+  });
+</script>
+
+
+{% schema %}
+{
+  "name": "Hear Better Form",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Take the First Step to Hear Better"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Submit your form and story video. Our team will review every application."
+    },
+
+    {
+      "type": "header",
+      "content": "Form Labels"
+    },
+    {
+      "type": "text",
+      "id": "recipient_type_label",
+      "label": "Recipient Type Label",
+      "default": "Recipient Type"
+    },
+    {
+      "type": "text",
+      "id": "recipient_type_placeholder",
+      "label": "Recipient Type Placeholder",
+      "default": "Select Recipient Type"
+    },
+    {
+      "type": "text",
+      "id": "name_label",
+      "label": "Name Label",
+      "default": "Recipient's Name"
+    },
+    {
+      "type": "text",
+      "id": "email_label",
+      "label": "Email Label",
+      "default": "Email Address"
+    },
+    {
+      "type": "text",
+      "id": "dob_label",
+      "label": "Date of Birth Label",
+      "default": "Recipient's Date Of Birth"
+    },
+    {
+      "type": "text",
+      "id": "residence_label",
+      "label": "Residence Label",
+      "default": "Recipient's Place Of Residence (City + Province)"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_label",
+      "label": "WhatsApp Label",
+      "default": "WhatsApp (Must Be Contactable)"
+    },
+    {
+      "type": "text",
+      "id": "story_label",
+      "label": "Story Video Label",
+      "default": "Story Video Link On YouTube/IG/TikTok"
+    },
+
+    {
+      "type": "header",
+      "content": "Placeholders"
+    },
+    {
+      "type": "text",
+      "id": "name_placeholder",
+      "label": "Name Placeholder",
+      "default": "John Doe"
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Email Placeholder",
+      "default": "example@email.com"
+    },
+    {
+      "type": "text",
+      "id": "residence_placeholder",
+      "label": "Residence Placeholder",
+      "default": "City, Province"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_placeholder",
+      "label": "WhatsApp Placeholder",
+      "default": "+62 XX XXXX XXXX"
+    },
+    {
+      "type": "text",
+      "id": "story_placeholder",
+      "label": "Story Placeholder",
+      "default": "https://example.com"
+    },
+
+    {
+      "type": "header",
+      "content": "Dropdown Options"
+    },
+    {
+      "type": "text",
+      "id": "option_seniors",
+      "label": "Option - Seniors",
+      "default": "Seniors above 60 years old"
+    },
+    {
+      "type": "text",
+      "id": "option_children",
+      "label": "Option - Children",
+      "default": "Children"
+    },
+    {
+      "type": "text",
+      "id": "option_adults",
+      "label": "Option - Adults",
+      "default": "Adults"
+    },
+    {
+      "type": "text",
+      "id": "option_others",
+      "label": "Option - Others",
+      "default": "Others"
+    },
+
+    {
+      "type": "header",
+      "content": "Terms & Button"
+    },
+    {
+      "type": "text",
+      "id": "terms_text",
+      "label": "Terms Text (Before Link)",
+      "default": "By submitting this form, I acknowledge and agree to the"
+    },
+    {
+      "type": "text",
+      "id": "terms_link_text",
+      "label": "Terms Link Text",
+      "default": "terms and conditions"
+    },
+    {
+      "type": "text",
+      "id": "terms_text_after",
+      "label": "Terms Text (After Link)",
+      "default": "of this campaign."
+    },
+    {
+      "type": "url",
+      "id": "terms_link",
+      "label": "Terms & Conditions Link"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Submit Button Text",
+      "default": "SUBMIT MY APPLICATION"
+    },
+
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success Message",
+      "default": "Your application has been submitted successfully."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hear Better Form"
+    }
+  ]
+}
+{% endschema %}

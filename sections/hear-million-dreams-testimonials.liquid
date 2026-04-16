@@ -1,0 +1,110 @@
+<section class="hmd-testimonials">
+  <div class="page-width">
+
+    {% if section.settings.heading != blank %}
+      <h2 class="heading">
+        {{ section.settings.heading }}
+      </h2>
+    {% endif %}
+
+    {% if section.settings.subheading != blank %}
+      <p class="description">
+        {{ section.settings.subheading }}
+      </p>
+    {% endif %}
+
+    <div class="hmd-testimonials-grid">
+      {% for block in section.blocks %}
+        <div class="hmd-testimonial-item hmd-size-{{ block.settings.size }}">
+          {% if block.settings.image != blank %}
+            <img
+              src="{{ block.settings.image | image_url: width: 800 }}"
+              alt="{{ block.settings.alt_text | escape }}"
+              loading="lazy"
+            >
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+    {% if section.settings.button_text != blank %}
+      <div class="hmd-testimonials-btn-wrap">
+        <a href="{{ section.settings.button_link }}" class="btn-primary">
+          {{ section.settings.button_text }} <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M4.3208 10.3711H16.4196" stroke="white" stroke-width="1.72839" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M10.3706 4.32031L16.42 10.3697L10.3706 16.4191" stroke="white" stroke-width="1.72839" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
+        </a>
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
+
+{% schema %}
+{
+  "name": "HMD Testimonials Grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Good Hearing for All"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "From babies to adults to seniors, everyone deserves to be heard and connected."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "View Testimonial"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image / Video Thumbnail"
+        },
+        {
+          "type": "text",
+          "id": "alt_text",
+          "label": "Alt Text"
+        },
+        {
+          "type": "select",
+          "id": "size",
+          "label": "Grid Size",
+          "default": "normal",
+          "options": [
+            { "value": "normal", "label": "Normal" },
+            { "value": "wide", "label": "Wide (2 columns)" },
+            { "value": "tall", "label": "Tall (2 rows)" },
+            { "value": "large", "label": "Large (2x2 featured)" }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "HMD Testimonials Grid"
+    }
+  ]
+}
+{% endschema %}

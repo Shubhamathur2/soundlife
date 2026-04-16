@@ -1,0 +1,107 @@
+<section class="core-values section-space-two">
+  <div class="page-width">
+    <h2 class="heading">{{ section.settings.faq_heading }}</h2>
+    <p class="description desc-center">{{ section.settings.faq_desc }}</p>
+
+    <div class="value-grid">
+      <div>
+        {% for block in section.blocks %}
+          <div class="value-q {% if forloop.first %}first{% endif %} {% if forloop.last %}last{% endif %}">
+            {% if block.settings.q != blank %}
+              <div>
+                <span class="highlight">{{ block.settings.q | slice: 0, 1 }}</span>
+                {{- block.settings.q | slice: 1, 100 }}
+              </div>
+            {% endif %}
+
+            <span class="value-icon">+</span>
+          </div>
+
+          <div class="value-a {% if forloop.last %}last{% endif %}">
+            <div class="value-a-inner">
+              {{ block.settings.a }}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Our Core Value Section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "faq_heading",
+      "label": "FAQ Heading",
+      "default": "Questions?"
+    },
+    {
+      "type": "text",
+      "id": "faq_desc",
+      "label": "Value Description",
+      "default": "Our core values, embodied in the acronym <span class='highlight'>S.O.U.N.D.</span>, act as a guiding compass for our attitudes and behaviors - shaping how we work, how we serve, and how we build lasting trust every day."
+    },
+    {
+      "type": "image_picker",
+      "id": "qr",
+      "label": "WhatsApp QR Image"
+    },
+    {
+      "type": "text",
+      "id": "explore_btn",
+      "label": "Explore Button Text",
+      "default": "All FAQ here"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "FAQ Item",
+      "settings": [
+        { "type": "text", "id": "q", "label": "Question" },
+        { "type": "textarea", "id": "a", "label": "Answer" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Our Core Value Section"
+    }
+  ]
+}
+{% endschema %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const questions = document.querySelectorAll('.value-q');
+
+    questions.forEach((q) => {
+      q.addEventListener('click', function () {
+        const answer = this.nextElementSibling;
+        const icon = this.querySelector('.faq-icon');
+
+        // Close all others
+        document.querySelectorAll('.value-a').forEach((a) => {
+          if (a !== answer) {
+            a.style.maxHeight = null;
+            a.previousElementSibling.classList.remove('open');
+            a.previousElementSibling.querySelector('.value-icon').textContent = '+';
+          }
+        });
+
+        if (answer.style.maxHeight) {
+          answer.style.maxHeight = null;
+          icon.textContent = '+';
+        } else {
+          answer.style.maxHeight = answer.scrollHeight + 'px';
+          icon.textContent = '-';
+        }
+
+        this.classList.toggle('open');
+      });
+    });
+  });
+</script>

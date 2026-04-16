@@ -1,0 +1,252 @@
+<footer class="footer-section">
+  <!-- TOP BAR -->
+  <div class="footer-topbar page-width">
+    <div class="footer-follow">
+      <span>Follow us</span>
+      <div class="footer-socials">
+        {% for block in section.blocks %}
+          {% if block.type == 'social' %}
+            <a href="{{ block.settings.link }}" target="_blank" aria-label="{{ block.settings.label }}">
+              <img src="{{ block.settings.icon | image_url: width: 40 }}" alt="{{ block.settings.label }}">
+            </a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="header__icons{% if section.settings.enable_country_selector or section.settings.enable_language_selector %} header__icons--localization header-localization{% endif %}">
+      <div class="desktop-localization-wrapper">
+        {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
+          <localization-form class="small-hide medium-hide" data-prevent-hide>
+            {%- form 'localization', id: 'HeaderCountryForm', class: 'localization-form' -%}
+              <div>
+                <h2 class="visually-hidden" id="HeaderCountryLabel">{{ 'localization.country_label' | t }}</h2>
+                {%- render 'country-localization', localPosition: 'HeaderCountry' -%}
+              </div>
+            {%- endform -%}
+          </localization-form>
+        {% endif %}
+
+        {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
+          <localization-form class="small-hide medium-hide" data-prevent-hide>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M21.54 15H17C16.4696 15 15.9609 15.2107 15.5858 15.5858C15.2107 15.9609 15 16.4696 15 17V21.54" stroke="#1A1A1A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M7 3.33984V4.99984C7 5.79549 7.31607 6.55855 7.87868 7.12116C8.44129 7.68377 9.20435 7.99984 10 7.99984C10.5304 7.99984 11.0391 8.21056 11.4142 8.58563C11.7893 8.9607 12 9.46941 12 9.99984C12 11.0998 12.9 11.9998 14 11.9998C14.5304 11.9998 15.0391 11.7891 15.4142 11.4141C15.7893 11.039 16 10.5303 16 9.99984C16 8.89984 16.9 7.99984 18 7.99984H21.17" stroke="#1A1A1A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M10.9998 21.95V18C10.9998 17.4696 10.7891 16.9609 10.414 16.5858C10.0389 16.2107 9.53024 16 8.9998 16C8.46937 16 7.96066 15.7893 7.58559 15.4142C7.21052 15.0391 6.9998 14.5304 6.9998 14V13C6.9998 12.4696 6.78909 11.9609 6.41402 11.5858C6.03895 11.2107 5.53024 11 4.9998 11H2.0498" stroke="#1A1A1A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#1A1A1A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            {%- form 'localization', id: 'HeaderLanguageForm', class: 'localization-form' -%}
+              <div>
+                <h2 class="visually-hidden" id="HeaderLanguageLabel">{{ 'localization.language_label' | t }}</h2>
+                {%- render 'language-localization', localPosition: 'HeaderLanguage' -%}
+              </div>
+            {%- endform -%}
+          </localization-form>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN FOOTER -->
+  <div class="footer-container page-width">
+    <!-- BRAND -->
+    <div class="footer-col footer-brand">
+      <h4>{{ section.settings.brand_title }}</h4>
+      <p>{{ section.settings.brand_text }}</p>
+      <img class="sound-fan-club" src="{{ section.settings.footer_club_logo | image_url }}" alt="Soundlife Fan Club">
+      {% comment %} <p class="newsletter-title">Join SoundLife Friends Club</p> {% endcomment %}
+      {% form 'customer', class: 'newsletter-form' %}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <input type="email" name="contact[email]" placeholder="Enter Email Here" required>
+        <button type="submit" class="submit-btn">
+          <svg
+            class="arrow-svg white-svg"
+            width="18"
+            height="18"
+            viewBox="0 0 18 18"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M3.75 9H14.25" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9 3.75L14.25 9L9 14.25" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      {% endform %}
+    </div>
+
+    <!-- ABOUT -->
+    <div class="footer-col">
+      {% if section.settings.menu_1.links %}
+        <h4>{{ section.settings.menu_1_title }}</h4>
+        <ul>
+          {% for link in section.settings.menu_1.links %}
+            <li>
+              <a href="{{ link.url }}">
+                {{- link.title }}
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M7 7H17V17" stroke="#1A1A1A" stroke-opacity="0.7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M7 17L17 7" stroke="#1A1A1A" stroke-opacity="0.7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+
+    <!-- QUICK LINKS -->
+    <div class="footer-col">
+      {% if section.settings.menu_2.links %}
+        <h4>{{ section.settings.menu_2_title }}</h4>
+        <ul>
+          {% for link in section.settings.menu_2.links %}
+            <li>
+              <a href="{{ link.url }}">
+                {{- link.title }}
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M7 7H17V17" stroke="#1A1A1A" stroke-opacity="0.7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M7 17L17 7" stroke="#1A1A1A" stroke-opacity="0.7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+
+    <!-- ONLINE SHOPS -->
+    <div class="footer-col">
+      {% if section.settings.menu_3.links %}
+        <h4>{{ section.settings.menu_3_title }}</h4>
+        <ul>
+          {% for link in section.settings.menu_3.links %}
+            <li>
+              <a href="{{ link.url }}">
+                {{- link.title }}
+                <svg
+                  class="arrow-svg green-svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 18 18"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M3.75 9H14.25" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M9 3.75L14.25 9L9 14.25" stroke="#1A1A1A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      <!-- CONNECT -->
+      <div class="footer-col">
+        <h4>{{ section.settings.menu_4_title }}</h4>
+        <p>{{ section.settings.address }}</p>
+        <div class="phone-no">
+          <a href="tel:{{ section.settings.phone_1 }}">
+            <p>{{ section.settings.phone_1 }}</p>
+          </a>
+
+          <a href="tel:{{ section.settings.phone_2 }}">
+            <p>{{ section.settings.phone_2 }}</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="footer-bottom page-width">
+    <div class="footer-bottom-left">
+      {% if section.settings.footer_logo %}
+        <img src="{{ section.settings.footer_logo | image_url: width: 200 }}" alt="Soundlife">
+      {% endif %}
+    </div>
+
+    <div class="footer-bottom-links">
+      <a href="{{ section.settings.privacy_url }}">{{ section.settings.privacy_name }}</a>
+      <a href="{{ section.settings.terms_url }}">{{section.settings.terms_name }}</a>
+    </div>
+
+    <div class="footer-bottom-right">© {{ 'now' | date: '%Y' }}, {{section.settings.copyright_content }}</div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    { "type": "image_picker", "id": "footer_logo", "label": "Footer Logo" },
+    { "type": "range", "id": "logo_width", "min": 80, "max": 300, "step": 10, "default": 180, "label": "Logo Width" },
+    {
+      "type": "textarea",
+      "id": "brand_text",
+      "label": "Brand Description",
+      "default": "Your hearing health is our #1 priority..."
+    },
+    {
+      "type": "text",
+      "label": "Brand Title",
+      "id": "brand_title"
+    },
+    { "type": "image_picker", "id": "footer_club_logo", "label": "Footer Club Logo" },
+    { "type": "text", "id": "menu_1_title", "default": "About Us", "label": "Menu 1 Title" },
+    { "type": "link_list", "id": "menu_1", "label": "About Menu" },
+    { "type": "text", "id": "menu_2_title", "default": "Quick Links", "label": "Menu 2 Title" },
+    {
+      "type": "link_list",
+      "id": "menu_2",
+      "label": "Quick Links Menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_country_selector",
+      "default": true,
+      "label": "t:sections.header.settings.enable_country_selector.label",
+      "info": "t:sections.header.settings.enable_country_selector.info"
+    },
+    {
+      "type": "text",
+      "id": "menu_3_title",
+      "default": "Online Shops",
+      "label": "Menu 3 Title"
+    },
+    { "type": "link_list", "id": "menu_3", "label": "Online Shops Menu" },
+    {
+      "type": "text",
+      "id": "menu_4_title",
+      "label": "Menu 4 Title",
+      "default": "Connect with Us"
+    },
+    { "type": "textarea", "id": "address", "label": "Address" },
+    { "type": "text", "id": "phone_1", "label": "Phone 1" },
+    { "type": "text", "id": "phone_2", "label": "Phone 2" },
+    { "type": "url", "id": "privacy_url", "label": "Privacy Policy Link" },
+    { "type": "text", "id": "privacy_name", "label": "Privacy Policy" },
+    { "type": "url", "id": "terms_url", "label": "Terms Link" },
+    { "type": "text", "id": "terms_name", "label": "Terms" },
+    { "type": "text", "id": "copyright_content", "label": "Copyright" },
+    { "type": "checkbox", "id": "show_language", "default": true, "label": "Show Language Selector" },
+    {
+      "type": "checkbox",
+      "id": "enable_language_selector",
+      "default": true,
+      "label": "t:sections.header.settings.enable_language_selector.label",
+      "info": "t:sections.header.settings.enable_language_selector.info"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "social",
+      "name": "Social Icon",
+      "settings": [
+        { "type": "image_picker", "id": "icon", "label": "Icon" },
+        { "type": "url", "id": "link", "label": "Link" },
+        { "type": "text", "id": "label", "label": "Social", "default": "Social" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Footer" }]
+}
+{% endschema %}
